@@ -308,8 +308,8 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     }
   }
 
-  Widget _getAppointmentEditor(
-      BuildContext context, Color backgroundColor, Color defaultColor) {
+  Widget _getAppointmentEditor(BuildContext context, Color backgroundColor,
+      Color defaultColor, DateTime date, String time) {
     return Container(
         color: backgroundColor,
         child: ListView(
@@ -321,11 +321,36 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               title: DropdownButton(
                 value: dropdownValue,
                 items: widget.firebaseEvents,
-                onChanged: (String? newValue) {
+                onChanged: (String? newValue) async {
                   setState(() {
                     dropdownValue = newValue!;
                     _subject = newValue;
                   });
+                  DateFormat formatter = DateFormat("MM-dd-yy");
+                  String _date = formatter.format(date);
+                  //SOMEWHERE WHERE APP STATE CAN BE USED
+
+                  CollectionReference schedules =
+                      FirebaseFirestore.instance.collection("schedules");
+                  final snapshot = await schedules.get();
+
+                  //CHECK EACH EVENT AT THE SPECIFIC TIME SLOT
+                  if (snapshot.size > 0) {
+                    List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
+                    for (var element in data) {
+                      if (_date == element.id) {
+                        for (Event e in dbEvents) {
+                          var tmp = element.data() as Map;
+                          for (String team in tmp[e][time]) {
+                            Group? g = indexGroups(team);
+                            _items.remove(MultiSelectItem<Group>(g!, g.name));
+                          }
+                        }
+                      }
+                    }
+                  } else {
+                    print('No data available.1');
+                  }
                 },
               ),
             ),
@@ -1118,7 +1143,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
               child: Stack(
                 children: <Widget>[
-                  _getAppointmentEditor(context, (Colors.white), Colors.black87)
+                  _getAppointmentEditor(
+                      context,
+                      (Colors.white),
+                      Colors.black87,
+                      widget.selectedAppointment?.startTime ?? DateTime.now(),
+                      "${widget.selectedAppointment?.startTime.hour}")
                 ],
               ),
             ),
