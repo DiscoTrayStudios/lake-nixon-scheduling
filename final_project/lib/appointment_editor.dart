@@ -198,12 +198,18 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   _SelectRule? _rule = _SelectRule.doesNotRepeat;
 
-  final _items =
+  var _items =
       groups.map((group) => MultiSelectItem<Group>(group, group.name)).toList();
 
   List<Group> _selectedGroups = [];
 
   final _multiSelectKey = GlobalKey<FormFieldState>();
+
+  void create_items(List<Group> groups) {
+    _items = groups
+        .map((group) => MultiSelectItem<Group>(group, group.name))
+        .toList();
+  }
 
   @override
   void initState() {
@@ -339,17 +345,28 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
                     for (var element in data) {
                       if (_date == element.id) {
+                        List<Group> _groups = new List.from(groups);
                         for (Event e in dbEvents) {
                           var tmp = element.data() as Map;
-                          for (String team in tmp[e][time]) {
-                            Group? g = indexGroups(team);
-                            _items.remove(MultiSelectItem<Group>(g!, g.name));
+                          // print("1 ${e.name}");
+                          // print("2 ${time}");
+                          // print("3 ${tmp[e.name]}");
+                          // print("4 ${tmp[e.name][time]}");
+                          if (tmp[e.name] != null && tmp[e.name][time] != null) {
+                            for (String team in tmp[e.name][time]) {
+                              Group? g = indexGroups(team);
+                              var index = _groups.indexOf(g!);
+                              _groups.removeAt(index);
+                              //_items.ind
+                              //_items.remove(MultiSelectItem<Group>(g!, g.name));
+                            }
                           }
                         }
+                        create_items(_groups);
                       }
                     }
                   } else {
-                    print('No data available.1');
+                    print('No data available.');
                   }
                 },
               ),
@@ -1144,11 +1161,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               child: Stack(
                 children: <Widget>[
                   _getAppointmentEditor(
-                      context,
-                      (Colors.white),
-                      Colors.black87,
-                      widget.selectedAppointment?.startTime ?? DateTime.now(),
-                      "${widget.selectedAppointment?.startTime.hour}")
+                    context,
+                    (Colors.white),
+                    Colors.black87,
+                    widget.selectedDate,
+                    "${widget.selectedDate.hour}",
+                  )
                 ],
               ),
             ),
