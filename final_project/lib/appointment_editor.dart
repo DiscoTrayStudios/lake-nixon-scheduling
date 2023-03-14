@@ -343,17 +343,20 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   //CHECK EACH EVENT AT THE SPECIFIC TIME SLOT
                   if (snapshot.size > 0) {
                     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-                    for (var element in data) {
-                      if (_date == element.id) {
+                    for (var date in data) {
+                      if (_date == date.id) {
                         List<Group> _groups = new List.from(groups);
-                        for (Event e in dbEvents) {
-                          var tmp = element.data() as Map;
+                        for (Event event in dbEvents) {
+                          var data = date.data() as Map;
+                          // Schedule schedule = Schedule(
+                          //     eventName: event.name, times: data[event.name]);
                           // print("1 ${e.name}");
                           // print("2 ${time}");
                           // print("3 ${tmp[e.name]}");
                           // print("4 ${tmp[e.name][time]}");
-                          if (tmp[e.name] != null && tmp[e.name][time] != null) {
-                            for (String team in tmp[e.name][time]) {
+                          if (data[event.name] != null &&
+                              data[event.name][time] != null) {
+                            for (String team in data[event.name][time]) {
                               Group? g = indexGroups(team);
                               var index = _groups.indexOf(g!);
                               _groups.removeAt(index);
@@ -886,6 +889,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                               : SfCalendar.generateRRule(
                                   _recurrenceProperties!, _startDate, _endDate),
                         );
+                        CollectionReference appoint = FirebaseFirestore.instance
+                            .collection("appointments");
+
+                        final appSnap = await appoint.get();
 
                         var test = {};
                         for (Group g in _selectedGroups) {
@@ -914,22 +921,37 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                         _startDate,
                                         _endDate),
                           );
+
+                          //original map
+                          // Map<String, dynamic> appMap = {
+                          //   "appointment": [
+                          //     tmpApp.startTime,
+                          //     tmpApp.endTime,
+                          //     tmpApp.color.toString(),
+                          //     tmpApp.startTimeZone,
+                          //     tmpApp.endTimeZone,
+                          //     tmpApp.notes,
+                          //     tmpApp.isAllDay,
+                          //     tmpApp.subject,
+                          //     tmpApp.resourceIds,
+                          //     tmpApp.recurrenceRule
+                          //   ]
+                          // };
+                          var start_time = tmpApp.startTime;
                           Map<String, dynamic> appMap = {
-                            "appointment": [
-                              tmpApp.startTime,
-                              tmpApp.endTime,
-                              tmpApp.color.toString(),
-                              tmpApp.startTimeZone,
-                              tmpApp.endTimeZone,
-                              tmpApp.notes,
-                              tmpApp.isAllDay,
-                              tmpApp.subject,
-                              tmpApp.resourceIds,
-                              tmpApp.recurrenceRule
-                            ]
+                            "start_time": start_time,
+                            "end_time": tmpApp.endTime,
+                            "color": tmpApp.color.toString(),
+                            "notes": tmpApp.notes,
+                            "subject": tmpApp.subject,
+                            "group": g.name,
+                            "start_hour": "${start_time.hour}"
                           };
                           test[g.name] = appMap;
                           appointment.add(tmpApp);
+                          if (appSnap.size > 0) {
+                            appoint.doc().set(appMap);
+                          }
                         }
 
                         var time = app.startTime;
@@ -984,7 +1006,8 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                         return v.toString();
                                       }).toList());
                                 }));
-                                schedule = Schedule(name: name, times: times);
+                                schedule =
+                                    Schedule(eventName: name, times: times);
                               }
                             }
                           });
@@ -996,10 +1019,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           if (created) {
                             int groupAmount = _selectedGroups.length;
                             if (schedule != null &&
-                                schedule!.times[hour] != null) {
-                              int i = indexEvents(schedule!.name);
+                                schedule!.times?[hour] != null) {
+                              int i = indexEvents(schedule!.eventName);
                               int max = dbEvents[i].groupMax;
-                              int current = schedule!.getList(hour);
+                              int current = schedule!.getList(hour)!;
                               if (max < current + groupAmount) {
                                 Fluttertoast.showToast(
                                     msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
@@ -1026,7 +1049,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                 }
 
                                 schedules.doc(docName).update({
-                                  "${schedule!.name}.${hour}":
+                                  "${schedule!.eventName}.${hour}":
                                       FieldValue.arrayUnion(names)
                                 });
 
@@ -1053,7 +1076,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                 }
 
                                 schedules.doc(docName).update({
-                                  "${schedule!.name}.${hour}":
+                                  "${schedule!.eventName}.${hour}":
                                       FieldValue.arrayUnion(names)
                                 });
                                 widget.events.notifyListeners(
