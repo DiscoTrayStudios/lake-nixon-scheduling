@@ -1,5 +1,6 @@
-import 'package:final_project/globals.dart';
 import 'package:flutter/material.dart';
+
+import 'Globals.dart';
 
 class Group {
   const Group({required this.name, required this.color, required this.age});
@@ -56,6 +57,7 @@ class GroupItem extends StatelessWidget {
     return Card(
       elevation: 10.0,
       child: ListTile(
+        //group.color
         tileColor: nixonyellow,
         iconColor: nixonblue,
         shape: RoundedRectangleBorder(

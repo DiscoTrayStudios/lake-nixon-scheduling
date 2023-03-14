@@ -1,23 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Group.dart';
-import 'package:final_project/GroupPage.dart';
-import 'package:final_project/globals.dart';
+import 'package:final_project/Objects/Group.dart';
+import 'package:final_project/Pages/GroupPage.dart';
+import 'package:final_project/Pages/CalendarPage.dart';
+import 'package:final_project/Pages/LoginPage.dart';
+import 'package:final_project/Pages/MasterPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import '../Objects/AppState.dart';
 
-import 'login_page.dart';
+import '../Objects/Globals.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class StartPage extends StatefulWidget {
+  const StartPage({Key? key}) : super(key: key);
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<StartPage> createState() => _StartPageState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _StartPageState extends State<StartPage> {
   @override
   void initState() {
     for (Group g in groups) {
@@ -25,6 +27,35 @@ class _SplashScreenState extends State<SplashScreen> {
     }
     getSavedEvents();
     super.initState();
+  }
+
+  Future<void> groupPagePush() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => GroupPage(title: "List of groups"),
+      ),
+    );
+  }
+
+  Future<void> masterCalendar(Group group) async {
+    //print("Chat");
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => MasterPage(),
+      ),
+    );
+  }
+
+  Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+  Future<void> logoutScreenPush() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const LoginScreen(),
+      ),
+    );
   }
 
   Future<void> getSavedEvents() async {
@@ -44,7 +75,6 @@ class _SplashScreenState extends State<SplashScreen> {
             String valueString = test.split('(0x')[1].split(')')[0];
             int value = int.parse(valueString, radix: 16);
             Color color = new Color(value);
-            print(app[6]);
             Appointment tmp = Appointment(
                 startTime: app[0].toDate(),
                 endTime: app[1].toDate(),
@@ -62,28 +92,8 @@ class _SplashScreenState extends State<SplashScreen> {
         });
       });
     } else {
-      print('No data available.');
+      print('No data available.2');
     }
-  }
-
-  Future<void> groupPagePush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => GroupPage(title: "List of groups"),
-      ),
-    );
-  }
-
-  Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
-  }
-
-  Future<void> logoutScreenPush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
   }
 
   @override
@@ -91,32 +101,30 @@ class _SplashScreenState extends State<SplashScreen> {
     // TODO: implement build
     return Scaffold(
         appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: const Text(
-          "Welcome to Lake Nixon!",
-          style:
-              TextStyle(fontFamily: 'Fruit', color: Colors.white, fontSize: 35),
-        )),
+          title: const Text(
+            "Action Page",
+            style: TextStyle(
+                //check here later --- can't insert nixonbrown for some reason?
+                color: Color.fromRGBO(137, 116, 73, 1),
+                fontFamily: 'Fruit'),
+          ),
+          backgroundColor: nixonblue,
+        ),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(
               children: <Widget>[
-                // Container(
-                //     alignment: Alignment.center,
-                //     padding: const EdgeInsets.all(10),
-                //     child: const Text(
-                //       'Welcome to Lake Nixon!',
-                //       style: TextStyle(
-                //           //nixonblue
-                //           color: Color.fromRGBO(165, 223, 249, 1),
-                //           fontFamily: 'Fruit',
-                //           fontWeight: FontWeight.w500,
-                //           fontSize: 35),
-                //     )),
                 Container(
-                    child: const Image(
-                  image: AssetImage('images/lakenixonlogo.png'),
-                )),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(10),
+                    child: const Text(
+                      'Lake Nixon Admin',
+                      style: TextStyle(
+                          //nixonbrown
+                          color: Color.fromRGBO(137, 116, 73, 1),
+                          fontFamily: 'Fruit',
+                          fontSize: 30),
+                    )),
                 Container(
                     padding: const EdgeInsets.all(10),
                     child: SizedBox(
@@ -125,15 +133,29 @@ class _SplashScreenState extends State<SplashScreen> {
                         style: ButtonStyle(
                             backgroundColor:
                                 MaterialStatePropertyAll<Color>(nixongreen)),
-                        child: const Text(
-                          'Select Group',
-                          style: TextStyle(fontSize: 60, fontFamily: 'Fruit'),
-                        ),
+                        child: const Text("Groups",
+                            style:
+                                TextStyle(fontSize: 40, fontFamily: 'Fruit')),
                         onPressed: () {
                           groupPagePush();
                         },
                       ),
                     )),
+                Container(
+                  height: 100,
+                  padding: const EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStatePropertyAll<Color>(nixongreen)),
+                    child: const Text("Master Calendar",
+                        style: TextStyle(fontSize: 40, fontFamily: 'Fruit')),
+                    onPressed: () {
+                      masterCalendar(const Group(
+                          name: "Admin", color: Color(0xFFFFFFFF), age: 99999));
+                    },
+                  ),
+                ),
                 Container(
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),

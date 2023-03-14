@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import 'package:final_project/Group.dart';
+import 'package:final_project/Objects/Group.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
