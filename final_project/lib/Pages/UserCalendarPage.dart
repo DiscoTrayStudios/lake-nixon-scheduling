@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Event.dart';
-import 'package:final_project/Group.dart';
-import 'package:final_project/LakeNixonEvent.dart';
-import 'package:final_project/appointment_editor.dart';
+import 'package:final_project/Objects/Event.dart';
+import 'package:final_project/Objects/Group.dart';
+import 'package:final_project/Objects/LakeNixonEvent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:final_project/globals.dart';
+import '../Appointment Editor/AppointmentEditor.dart';
+import '../Objects/Globals.dart';
 
 List<LakeNixonEvent> appointments = <LakeNixonEvent>[];
 

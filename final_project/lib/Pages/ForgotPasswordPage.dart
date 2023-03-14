@@ -1,12 +1,13 @@
-import 'package:final_project/globals.dart';
-import 'package:final_project/login_page.dart';
+import 'package:final_project/Pages/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:final_project/globals.dart';
+
+import '../Objects/AppState.dart';
+import '../Objects/Globals.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
