@@ -7,8 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import '../Pages/CalendarPage.dart';
 import '../firebase_options.dart';
-import 'Group.dart';
+import 'package:final_project/Objects/Group.dart';
 
 /// to do:
 /// move colors from globals
@@ -20,8 +21,8 @@ class AppState extends ChangeNotifier {
   List<Event> _events = [];
   List<Event> get events => _events;
 
-  List<Appointment> _appointments = [];
-  List<Appointment> get appointments => _appointments;
+  List<LakeAppointment> _appointments = [];
+  List<LakeAppointment> get appointments => _appointments;
 
   List<Group> _groups = [];
   List<Group> get groups => _groups;
@@ -47,6 +48,7 @@ class AppState extends ChangeNotifier {
         print("starting to listen");
         getEvents();
         getAppointments();
+        //createGroups();
         getGroups();
         firstSnapshot = false;
         notifyListeners();
@@ -65,15 +67,50 @@ class AppState extends ChangeNotifier {
         .listen((snapshot) {
       print("in appointment snapshot");
       snapshot.docs.forEach((document) {
+        String valueString =
+            document.data()['color'].split("(0x")[1].split(")")[0];
+        int value = int.parse(valueString, radix: 16);
+        Color color = new Color(value);
         _appointments.add(LakeAppointment(
-            color: document.data()['color'],
-            endTime: document.data()['end_time'],
+            color: color,
+            endTime: document.data()['end_time'].toDate(),
             group: document.data()['group'],
             notes: document.data()['notes'],
-            startTime: document.data()['start_time'],
-            subject: document.data()['subject']));
+            startTime: document.data()['start_time'].toDate(),
+            subject: document.data()['subject'],
+            startHour: document.data()['start_hour']));
       });
     });
+  }
+
+  List<Appointment> appointmentsByGroup(String group) {
+    List<Appointment> apps = [];
+    for (LakeAppointment app in _appointments) {
+      if (app.group?.name == group) {
+        apps.add(createApp(app.startTime, app.endTime, app.color, app.subject));
+      }
+    }
+    return apps;
+  }
+
+  List<Appointment> allAppointments() {
+    List<Appointment> apps = [];
+    for (LakeAppointment app in _appointments) {
+      apps.add(createApp(app.startTime, app.endTime, app.color, app.subject));
+    }
+    return apps;
+  }
+
+  Future<void> addAppointments(Map<String, Map<String, dynamic>> events) async {
+    var apps = FirebaseFirestore.instance.collection("appointments");
+    for (Map<String, dynamic> app in events.values) {
+      apps.doc().set(app);
+    }
+  }
+
+  Appointment createApp(startTime, endTime, color, subject) {
+    return Appointment(
+        startTime: startTime, endTime: endTime, color: color, subject: subject);
   }
 
 // was getEvents in Calendar Page
@@ -99,15 +136,13 @@ class AppState extends ChangeNotifier {
         .listen((snapshot) {
       print("in groups snapshot");
       snapshot.docs.forEach((document) {
-        String colorString = document.data()['color'];
-        var colorList = colorString.split(',');
+        String valueString =
+            document.data()['color'].split("(0x")[1].split(")")[0];
+        int value = int.parse(valueString, radix: 16);
+        Color color = new Color(value);
         _groups.add(Group(
             name: document.data()['name'],
-            color: Color.fromARGB(
-                int.parse(colorList[0]),
-                int.parse(colorList[1]),
-                int.parse(colorList[2]),
-                int.parse(colorList[3])),
+            color: color,
             age: document.data()['age']));
       });
     });
@@ -125,6 +160,17 @@ class AppState extends ChangeNotifier {
     return -1;
   }
 }
+
+// Future<void> createGroups() async {
+//   var groups = FirebaseFirestore.instance.collection("groups");
+//   for (Group group in _groups) {
+//     groups.doc(group.name).set({
+//       "name": group.name,
+//       "color": group.color.toString(),
+//       "age": group.age,
+//     });
+//   }
+// }
 
 // List<Group> _groups = <Group>[
 //   const Group(name: "Chipmunks", color: Color(0xFF0F8644), age: 1),

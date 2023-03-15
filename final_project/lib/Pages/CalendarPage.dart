@@ -7,6 +7,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../Appointment Editor/AppointmentEditor.dart';
@@ -171,6 +172,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _timeZoneCollection.add("Central Standard Time");
 
     _timeZoneCollection.add('Central Standard Time');
+
     if (widget.master) {
       List<Appointment> appointments = <Appointment>[];
       events.forEach((key, value) {
@@ -225,29 +227,41 @@ class _CalendarPageState extends State<CalendarPage> {
       Navigator.push<Widget>(
         context,
         MaterialPageRoute<Widget>(
-            builder: (BuildContext context) => AppointmentEditor(
-                _selectedAppointment,
-                targetElement,
-                selectedDate,
-                _colorCollection,
-                _colorNames,
-                _events,
-                _timeZoneCollection,
-                widget.group,
-                firebaseEvents)),
+            builder: (BuildContext context) => ChangeNotifierProvider(
+                create: (context) => AppState(),
+                child: AppointmentEditor(
+                    _selectedAppointment,
+                    targetElement,
+                    selectedDate,
+                    _colorCollection,
+                    _colorNames,
+                    _events,
+                    _timeZoneCollection,
+                    widget.group,
+                    firebaseEvents))),
       ).then((value) {
         setState(() {});
       });
     }
   }
 
-  Widget _getCalendar() {
+  Widget _getCalendar(BuildContext context, String group) {
     if (widget.master) {
-      return _getMasterCalender(
-          _calendarController, _events, _onViewChanged, _onCalendarTapped);
+      return Consumer<AppState>(builder: (context, appState, child) {
+        return _getMasterCalender(
+            _calendarController,
+            AppointmentDataSource(appState.allAppointments()),
+            _onViewChanged,
+            _onCalendarTapped);
+      });
     } else {
-      return _getLakeNixonCalender(
-          _calendarController, _events, _onViewChanged, _onCalendarTapped);
+      return Consumer<AppState>(builder: (context, appState, child) {
+        return _getLakeNixonCalender(
+            _calendarController,
+            AppointmentDataSource(appState.appointmentsByGroup(group)),
+            _onViewChanged,
+            _onCalendarTapped);
+      });
     }
   }
 
@@ -264,7 +278,9 @@ class _CalendarPageState extends State<CalendarPage> {
             backgroundColor: theme,
           ),
         ),
-        child: _getCalendar());
+        child: ChangeNotifierProvider(
+            create: (context) => AppState(),
+            child: _getCalendar(context, widget.group.name)));
 
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(

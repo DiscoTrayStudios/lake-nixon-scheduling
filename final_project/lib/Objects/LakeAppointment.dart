@@ -4,13 +4,21 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:final_project/Objects/Group.dart';
 
 // this is basically LakeNixonEvent but with only the stuff in Firebase
-class LakeAppointment extends Appointment {
+class LakeAppointment {
+  DateTime? startTime;
+  DateTime? endTime;
+  Color? color;
+  Group? group;
+  String? notes;
+  int? startHour; //do we need this?
+  String? subject;
+
   LakeAppointment(
-      {required super.startTime,
-      required super.endTime,
+      {required startTime,
+      required endTime,
       Color? color,
-      Group? group,
+      String? group,
       String? notes,
-      int? startHour, //do we need this?
+      String? startHour, //do we need this?
       String? subject});
 }
