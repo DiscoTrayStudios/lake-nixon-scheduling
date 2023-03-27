@@ -71,14 +71,20 @@ class AppState extends ChangeNotifier {
             document.data()['color'].split("(0x")[1].split(")")[0];
         int value = int.parse(valueString, radix: 16);
         Color color = new Color(value);
-        _appointments.add(LakeAppointment(
+        Timestamp start = document.data()['start_time'];
+        Timestamp end = document.data()['end_time'];
+        // print("COLOR : $color");
+        // print("start TIME : ${start.toDate()}");
+        var lake = LakeAppointment(
             color: color,
-            endTime: document.data()['end_time'].toDate(),
+            endTime: end.toDate(),
             group: document.data()['group'],
             notes: document.data()['notes'],
-            startTime: document.data()['start_time'].toDate(),
+            startTime: start.toDate(),
             subject: document.data()['subject'],
-            startHour: document.data()['start_hour']));
+            startHour: document.data()['start_hour']);
+        print(lake);
+        _appointments.add(lake);
       });
     });
   }
@@ -86,7 +92,7 @@ class AppState extends ChangeNotifier {
   List<Appointment> appointmentsByGroup(String group) {
     List<Appointment> apps = [];
     for (LakeAppointment app in _appointments) {
-      if (app.group?.name == group) {
+      if (app.group == group) {
         apps.add(createApp(app.startTime, app.endTime, app.color, app.subject));
       }
     }
@@ -95,8 +101,12 @@ class AppState extends ChangeNotifier {
 
   List<Appointment> allAppointments() {
     List<Appointment> apps = [];
-    for (LakeAppointment app in _appointments) {
-      apps.add(createApp(app.startTime, app.endTime, app.color, app.subject));
+    if (_appointments.isNotEmpty) {
+      print(_appointments);
+      for (LakeAppointment app in _appointments) {
+        print(app);
+        apps.add(createApp(app.startTime, app.endTime, app.color, app.subject));
+      }
     }
     return apps;
   }
@@ -109,8 +119,30 @@ class AppState extends ChangeNotifier {
   }
 
   Appointment createApp(startTime, endTime, color, subject) {
+    if (color.runtimeType == String) {
+      String valueString = color.split("(0x")[1].split(")")[0];
+      int value = int.parse(valueString, radix: 16);
+      color = Color(value);
+    }
+    print("Create app : ${startTime}");
     return Appointment(
         startTime: startTime, endTime: endTime, color: color, subject: subject);
+  }
+
+  bool checkEvent(String event, String start_hour, int groupCount) {
+    var current = 0;
+    var _event = indexEvents(event);
+    for (LakeAppointment app in _appointments) {
+      // If the event capacity is not filled up, the current app is this event and they start at the same hour
+      if (app.subject == event && app.startHour == start_hour) {
+        current += 1;
+      }
+    }
+    if (current + groupCount < _event.groupMax) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
 // was getEvents in Calendar Page
@@ -149,15 +181,15 @@ class AppState extends ChangeNotifier {
   }
 
   // from globals (not sure this is ever called/will be needed after changing database)
-  int indexEvents(String name) {
-    int count = 0;
+  Event indexEvents(String name) {
+    //int count = 0;
     for (Event element in _events) {
       if (element.name == name) {
-        return count;
+        return element;
       }
-      count++;
+      //count++;
     }
-    return -1;
+    return const Event(name: "error", ageMin: 0, groupMax: 0);
   }
 }
 

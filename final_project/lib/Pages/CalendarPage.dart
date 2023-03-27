@@ -281,7 +281,6 @@ class _CalendarPageState extends State<CalendarPage> {
         child: ChangeNotifierProvider(
             create: (context) => AppState(),
             child: _getCalendar(context, widget.group.name)));
-
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(

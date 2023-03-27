@@ -808,7 +808,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             groupToApp[g.name] = appMap;
                             appointment.add(tmpApp);
                           }
-                          appState.addAppointments(groupToApp);
+                          //appState.addAppointments(groupToApp);
 
                           var time = app.startTime;
                           String hour = "${time.hour}";
@@ -830,46 +830,37 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
                           final eventSnapshot = await events2.get();
 
-                          // if (eventSnapshot.size > 0) {
-                          //   List<QueryDocumentSnapshot<Object?>> data =
-                          //       eventSnapshot.docs;
-                          //   data.forEach((element) {
-                          //     var tmp = element.data() as Map;
-                          //     if (tmp[name] != null) {
-                          //       event = Event(
-                          //           name: name,
-                          //           ageMin: tmp['ageMin'],
-                          //           groupMax: tmp['groupMax']);
-                          //     }
-                          //   });
-                          // } else {
-                          //   print("You can't code");
-                          // }
-
-                          // if (snapshot.size > 0) {
-                          //   List<QueryDocumentSnapshot<Object?>> data =
-                          //       snapshot.docs;
-                          //   data.forEach((element) {
-                          //     if (docName == element.id) {
-                          //       created = true;
-                          //       var tmp = element.data() as Map;
-                          //       if (tmp[name] != null) {
-                          //         Map<String, List<dynamic>> times =
-                          //             Map.from(tmp[name].map((key, value) {
-                          //           List<dynamic> values = List.from(value);
-                          //           return MapEntry(
-                          //               key.toString(),
-                          //               values.map((v) {
-                          //                 return v.toString();
-                          //               }).toList());
-                          //         }));
-                          //         schedule = Schedule(name: name, times: times);
-                          //       }
-                          //     }
-                          //   });
-                          // } else {
-                          //   print('No data available.1');
-                          // }
+                          if (_selectedGroups.iterator.moveNext()) {
+                            int groupAmount = _selectedGroups.length;
+                            if (appState.checkEvent(name, hour, groupAmount)) {
+                              appState.addAppointments(groupToApp);
+                              for (Map<String, dynamic> app
+                                  in groupToApp.values) {
+                                widget.events.notifyListeners(
+                                    CalendarDataSourceAction.add,
+                                    [appState.createApp(
+                                        app["start_time"],
+                                        app["end_time"],
+                                        app["color"],
+                                        app["subject"])]);
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
+                                  toastLength: Toast.LENGTH_LONG,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              print("CANT ADD EVENT DUE TO RESTRICTIONS");
+                            }
+                            //check event restriction
+                            //if not full
+                            //add
+                            //else
+                            //dont
+                          }
 
                           // if (_selectedGroups.iterator.moveNext()) {
                           //   if (created) {
