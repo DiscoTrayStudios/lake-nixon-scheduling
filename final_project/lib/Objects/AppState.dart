@@ -6,6 +6,7 @@ import 'package:final_project/Objects/LakeAppointment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../Pages/CalendarPage.dart';
 import '../firebase_options.dart';
@@ -60,6 +61,13 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<MultiSelectItem<Group>> createCheckboxGroups() {
+    var _items = groups
+        .map((group) => MultiSelectItem<Group>(group, group.name))
+        .toList();
+    return _items;
+  }
+
   Future<void> getAppointments() async {
     appointmentSubscription = FirebaseFirestore.instance
         .collection('appointments')
@@ -99,15 +107,30 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-  List<Appointment> allAppointments() {
+  List<Appointment> allAppointments(List<Group> selectedGroups) {
     List<Appointment> apps = [];
-    if (_appointments.isNotEmpty) {
-      print(_appointments);
-      for (LakeAppointment app in _appointments) {
-        print(app);
-        apps.add(createApp(app.startTime, app.endTime, app.color, app.subject));
+    if (selectedGroups.isEmpty) {
+      if (_appointments.isNotEmpty) {
+        for (LakeAppointment app in _appointments) {
+          apps.add(
+              createApp(app.startTime, app.endTime, app.color, app.subject));
+        }
+      }
+    } else {
+      if (_appointments.isNotEmpty) {
+        var groupNames = [];
+        for (Group group in selectedGroups) {
+          groupNames.add(group.name);
+        }
+        for (LakeAppointment app in _appointments) {
+          if (groupNames.contains(app.group)) {
+            apps.add(
+                createApp(app.startTime, app.endTime, app.color, app.subject));
+          }
+        }
       }
     }
+
     return apps;
   }
 

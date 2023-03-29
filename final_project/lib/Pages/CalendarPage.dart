@@ -7,6 +7,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
@@ -67,10 +69,10 @@ class _CalendarPageState extends State<CalendarPage> {
   late AppointmentDataSource _events;
   List<DropdownMenuItem<String>> firebaseEvents = [];
   List<Appointment> savedEvents = [];
+  List<Group> _selectedGroups = [];
 
   //bool get user => widget.isUser;
   //bool user = widget.isUser;
-
   @override
   void initState() {
     _currentView = CalendarView.workWeek;
@@ -250,7 +252,7 @@ class _CalendarPageState extends State<CalendarPage> {
       return Consumer<AppState>(builder: (context, appState, child) {
         return _getMasterCalender(
             _calendarController,
-            AppointmentDataSource(appState.allAppointments()),
+            AppointmentDataSource(appState.allAppointments(_selectedGroups)),
             _onViewChanged,
             _onCalendarTapped,
             appState);
@@ -269,12 +271,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    const items = [
-      DropdownMenuItem(value: "1", child: Text("1")),
-      DropdownMenuItem(value: "2", child: Text("2")),
-      DropdownMenuItem(value: "3", child: Text("3")),
-      DropdownMenuItem(value: "4", child: Text("4")),
-    ];
+    //var test = [MultiSelectItem("test", "test")];
     final Widget calendar = Theme(
 
         /// The key set here to maintain the state, when we change
@@ -290,26 +287,35 @@ class _CalendarPageState extends State<CalendarPage> {
             create: (context) => AppState(),
             child: _getCalendar(context, widget.group.name)));
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("${widget.group.name} calendar",
-            style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
-        backgroundColor: nixonblue,
-        actions: [
-          DropdownButton(
-              value: "1",
-              items: items,
-              onChanged: (String? newValue) {
-                print("MADE IT");
-              })
-        ],
-      ),
-      body: Row(children: <Widget>[
-        Expanded(
-          child: Container(color: theme, child: calendar),
-        ),
-      ]),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => AppState(),
+        child: Consumer<AppState>(builder: (context, appState, child) {
+          return Scaffold(
+            appBar: AppBar(
+              flexibleSpace: FlexibleSpaceBar(),
+              title: Text("${widget.group.name} calendar",
+                  style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
+              backgroundColor: nixonblue,
+              actions: [
+                MultiSelectDialogField(
+                  items: appState.createCheckboxGroups(),
+                  initialValue: _selectedGroups,
+                  onConfirm: (results) {
+                    setState(() {
+                      _selectedGroups = results;
+                      //assignments[widget.group] = _selectedGroups;
+                    });
+                  },
+                ),
+              ],
+            ),
+            body: Row(children: <Widget>[
+              Expanded(
+                child: Container(color: theme, child: calendar),
+              ),
+            ]),
+          );
+        }));
   }
 }
 
