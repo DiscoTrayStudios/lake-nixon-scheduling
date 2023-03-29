@@ -118,6 +118,31 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  String getCurrentAmount(String event, start_time) {
+    var apps = getAppsAtTime(start_time);
+    var count = 0;
+    var total = indexEvents(event).groupMax;
+    for (LakeAppointment app in apps) {
+      if (app.subject == event) {
+        count++;
+      }
+    }
+    return "${count}/${total}";
+  }
+
+  //FIX THE START TIME ISSUE AND MAKE IT DAY SPECIFIC NOT TIME SPECIFIC
+  List<DropdownMenuItem<String>> createDropdown(
+      List<DropdownMenuItem> items, start_time) {
+    List<DropdownMenuItem<String>> newItems = [];
+    for (DropdownMenuItem item in items) {
+      var event = item.value;
+      var currentAmount = getCurrentAmount(event, start_time);
+      newItems.add(DropdownMenuItem(
+          value: event, child: Text("$event  $currentAmount")));
+    }
+    return newItems;
+  }
+
   Appointment createApp(startTime, endTime, color, subject) {
     if (color.runtimeType == String) {
       String valueString = color.split("(0x")[1].split(")")[0];
@@ -138,11 +163,31 @@ class AppState extends ChangeNotifier {
         current += 1;
       }
     }
-    if (current + groupCount < _event.groupMax) {
+    if (current + groupCount <= _event.groupMax) {
       return true;
     } else {
       return false;
     }
+  }
+
+  List<LakeAppointment> getAppsAtTime(start_time) {
+    List<LakeAppointment> apps = [];
+    for (LakeAppointment app in _appointments) {
+      if (app.startTime! == start_time) {
+        apps.add(app);
+      }
+    }
+    return apps;
+  }
+
+  List<String> getGroupsAtTime(start_time) {
+    List<String> groups = [];
+    for (LakeAppointment app in _appointments) {
+      if (app.startTime! == start_time) {
+        groups.add(app.group!);
+      }
+    }
+    return groups;
   }
 
 // was getEvents in Calendar Page

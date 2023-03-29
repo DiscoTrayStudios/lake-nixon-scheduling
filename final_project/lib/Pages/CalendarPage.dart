@@ -252,21 +252,29 @@ class _CalendarPageState extends State<CalendarPage> {
             _calendarController,
             AppointmentDataSource(appState.allAppointments()),
             _onViewChanged,
-            _onCalendarTapped);
+            _onCalendarTapped,
+            appState);
       });
     } else {
       return Consumer<AppState>(builder: (context, appState, child) {
         return _getLakeNixonCalender(
-            _calendarController,
-            AppointmentDataSource(appState.appointmentsByGroup(group)),
-            _onViewChanged,
-            _onCalendarTapped);
+          _calendarController,
+          AppointmentDataSource(appState.appointmentsByGroup(group)),
+          _onViewChanged,
+          _onCalendarTapped,
+        );
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    const items = [
+      DropdownMenuItem(value: "1", child: Text("1")),
+      DropdownMenuItem(value: "2", child: Text("2")),
+      DropdownMenuItem(value: "3", child: Text("3")),
+      DropdownMenuItem(value: "4", child: Text("4")),
+    ];
     final Widget calendar = Theme(
 
         /// The key set here to maintain the state, when we change
@@ -287,11 +295,19 @@ class _CalendarPageState extends State<CalendarPage> {
         title: Text("${widget.group.name} calendar",
             style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
         backgroundColor: nixonblue,
+        actions: [
+          DropdownButton(
+              value: "1",
+              items: items,
+              onChanged: (String? newValue) {
+                print("MADE IT");
+              })
+        ],
       ),
       body: Row(children: <Widget>[
         Expanded(
           child: Container(color: theme, child: calendar),
-        )
+        ),
       ]),
     );
   }
@@ -332,7 +348,8 @@ SfCalendar _getMasterCalender(
     [CalendarController? calendarController,
     CalendarDataSource? calendarDataSource,
     ViewChangedCallback? viewChangedCallback,
-    dynamic calendarTapCallback]) {
+    dynamic calendarTapCallback,
+    AppState? appState]) {
   return SfCalendar(
     controller: calendarController,
     dataSource: calendarDataSource,
