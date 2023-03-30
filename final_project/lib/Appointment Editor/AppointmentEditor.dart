@@ -249,7 +249,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       dropdownValue = newValue!;
                       _subject = newValue;
                     });
-                    var excluded_groups = appState.getGroupsAtTime(_startTime);
+                    var excluded_groups = appState.getGroupsAtTime(_startDate);
                     List<Group> show_groups = [];
                     for (Group group in appState.groups) {
                       if (excluded_groups.contains(group.name)) {
