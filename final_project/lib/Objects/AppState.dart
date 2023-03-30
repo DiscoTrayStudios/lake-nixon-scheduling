@@ -68,6 +68,13 @@ class AppState extends ChangeNotifier {
     return _items;
   }
 
+  List<MultiSelectItem<String>> createCheckboxEvents() {
+    var _items = events
+        .map((event) => MultiSelectItem<String>(event.name, event.name))
+        .toList();
+    return _items;
+  }
+
   Future<void> getAppointments() async {
     appointmentSubscription = FirebaseFirestore.instance
         .collection('appointments')
@@ -107,16 +114,17 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-  List<Appointment> allAppointments(List<Group> selectedGroups) {
+  List<Appointment> allAppointments(
+      List<Group> selectedGroups, List<String> selectedEvents) {
     List<Appointment> apps = [];
-    if (selectedGroups.isEmpty) {
+    if (selectedGroups.isEmpty && selectedEvents.isEmpty) {
       if (_appointments.isNotEmpty) {
         for (LakeAppointment app in _appointments) {
           apps.add(
               createApp(app.startTime, app.endTime, app.color, app.subject));
         }
       }
-    } else {
+    } else if (selectedGroups.isNotEmpty) {
       if (_appointments.isNotEmpty) {
         var groupNames = [];
         for (Group group in selectedGroups) {
@@ -127,6 +135,13 @@ class AppState extends ChangeNotifier {
             apps.add(
                 createApp(app.startTime, app.endTime, app.color, app.subject));
           }
+        }
+      }
+    } else {
+      for (LakeAppointment app in _appointments) {
+        if (selectedEvents.contains(app.subject)) {
+          apps.add(
+              createApp(app.startTime, app.endTime, app.color, app.subject));
         }
       }
     }

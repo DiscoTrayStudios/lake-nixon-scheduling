@@ -70,6 +70,7 @@ class _CalendarPageState extends State<CalendarPage> {
   List<DropdownMenuItem<String>> firebaseEvents = [];
   List<Appointment> savedEvents = [];
   List<Group> _selectedGroups = [];
+  List<String> _selectedEvents = [];
 
   //bool get user => widget.isUser;
   //bool user = widget.isUser;
@@ -252,7 +253,8 @@ class _CalendarPageState extends State<CalendarPage> {
       return Consumer<AppState>(builder: (context, appState, child) {
         return _getMasterCalender(
             _calendarController,
-            AppointmentDataSource(appState.allAppointments(_selectedGroups)),
+            AppointmentDataSource(
+                appState.allAppointments(_selectedGroups, _selectedEvents)),
             _onViewChanged,
             _onCalendarTapped,
             appState);
@@ -298,11 +300,23 @@ class _CalendarPageState extends State<CalendarPage> {
               backgroundColor: nixonblue,
               actions: [
                 MultiSelectDialogField(
+                  title: const Text("Filter Groups"),
                   items: appState.createCheckboxGroups(),
                   initialValue: _selectedGroups,
                   onConfirm: (results) {
                     setState(() {
                       _selectedGroups = results;
+                      //assignments[widget.group] = _selectedGroups;
+                    });
+                  },
+                ),
+                MultiSelectDialogField(
+                  title: const Text("Filter Events"),
+                  items: appState.createCheckboxEvents(),
+                  initialValue: _selectedEvents,
+                  onConfirm: (results) {
+                    setState(() {
+                      _selectedEvents = results;
                       //assignments[widget.group] = _selectedGroups;
                     });
                   },
