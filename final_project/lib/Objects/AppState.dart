@@ -49,6 +49,7 @@ class AppState extends ChangeNotifier {
         print("starting to listen");
         getEvents();
         getAppointments();
+        print("Finished appointments ${_appointments.length}");
         //createGroups();
         getGroups();
         firstSnapshot = false;

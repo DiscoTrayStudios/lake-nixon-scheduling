@@ -230,18 +230,16 @@ class _CalendarPageState extends State<CalendarPage> {
       Navigator.push<Widget>(
         context,
         MaterialPageRoute<Widget>(
-            builder: (BuildContext context) => ChangeNotifierProvider(
-                create: (context) => AppState(),
-                child: AppointmentEditor(
-                    _selectedAppointment,
-                    targetElement,
-                    selectedDate,
-                    _colorCollection,
-                    _colorNames,
-                    _events,
-                    _timeZoneCollection,
-                    widget.group,
-                    firebaseEvents))),
+            builder: (BuildContext context) => AppointmentEditor(
+                _selectedAppointment,
+                targetElement,
+                selectedDate,
+                _colorCollection,
+                _colorNames,
+                _events,
+                _timeZoneCollection,
+                widget.group,
+                firebaseEvents)),
       ).then((value) {
         setState(() {});
       });
@@ -285,51 +283,47 @@ class _CalendarPageState extends State<CalendarPage> {
             backgroundColor: theme,
           ),
         ),
-        child: ChangeNotifierProvider(
-            create: (context) => AppState(),
-            child: _getCalendar(context, widget.group.name)));
+        child: _getCalendar(context, widget.group.name));
     final double screenHeight = MediaQuery.of(context).size.height;
-    return ChangeNotifierProvider(
-        create: (context) => AppState(),
-        child: Consumer<AppState>(builder: (context, appState, child) {
-          return Scaffold(
-            appBar: AppBar(
-              flexibleSpace: FlexibleSpaceBar(),
-              title: Text("${widget.group.name} calendar",
-                  style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
-              backgroundColor: nixonblue,
-              actions: [
-                MultiSelectDialogField(
-                  title: const Text("Filter Groups"),
-                  items: appState.createCheckboxGroups(),
-                  initialValue: _selectedGroups,
-                  onConfirm: (results) {
-                    setState(() {
-                      _selectedGroups = results;
-                      //assignments[widget.group] = _selectedGroups;
-                    });
-                  },
-                ),
-                MultiSelectDialogField(
-                  title: const Text("Filter Events"),
-                  items: appState.createCheckboxEvents(),
-                  initialValue: _selectedEvents,
-                  onConfirm: (results) {
-                    setState(() {
-                      _selectedEvents = results;
-                      //assignments[widget.group] = _selectedGroups;
-                    });
-                  },
-                ),
-              ],
+    return Consumer<AppState>(builder: (context, appState, child) {
+      return Scaffold(
+        appBar: AppBar(
+          flexibleSpace: FlexibleSpaceBar(),
+          title: Text("${widget.group.name} calendar",
+              style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
+          backgroundColor: nixonblue,
+          actions: [
+            MultiSelectDialogField(
+              title: const Text("Filter Groups"),
+              items: appState.createCheckboxGroups(),
+              initialValue: _selectedGroups,
+              onConfirm: (results) {
+                setState(() {
+                  _selectedGroups = results;
+                  //assignments[widget.group] = _selectedGroups;
+                });
+              },
             ),
-            body: Row(children: <Widget>[
-              Expanded(
-                child: Container(color: theme, child: calendar),
-              ),
-            ]),
-          );
-        }));
+            MultiSelectDialogField(
+              title: const Text("Filter Events"),
+              items: appState.createCheckboxEvents(),
+              initialValue: _selectedEvents,
+              onConfirm: (results) {
+                setState(() {
+                  _selectedEvents = results;
+                  //assignments[widget.group] = _selectedGroups;
+                });
+              },
+            ),
+          ],
+        ),
+        body: Row(children: <Widget>[
+          Expanded(
+            child: Container(color: theme, child: calendar),
+          ),
+        ]),
+      );
+    });
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:final_project/Pages/MasterPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../Objects/AppState.dart';
 
@@ -26,6 +27,7 @@ class _StartPageState extends State<StartPage> {
       createGroup(g);
     }
     getSavedEvents();
+    Provider.of<AppState>(context, listen: false);
     super.initState();
   }
 
