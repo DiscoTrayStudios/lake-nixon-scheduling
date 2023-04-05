@@ -1,15 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Event.dart';
-import 'package:final_project/Group.dart';
-import 'package:final_project/LakeNixonEvent.dart';
-import 'package:final_project/appointment_editor.dart';
+import 'package:final_project/Objects/Event.dart';
+import 'package:final_project/Objects/Group.dart';
+import 'package:final_project/Objects/LakeNixonEvent.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:final_project/globals.dart';
+
+import '../Appointment Editor/AppointmentEditor.dart';
+import '../Objects/AppState.dart';
+import '../Objects/Globals.dart';
 
 List<LakeNixonEvent> appointments = <LakeNixonEvent>[];
 
@@ -64,10 +69,11 @@ class _CalendarPageState extends State<CalendarPage> {
   late AppointmentDataSource _events;
   List<DropdownMenuItem<String>> firebaseEvents = [];
   List<Appointment> savedEvents = [];
+  List<Group> _selectedGroups = [];
+  List<String> _selectedEvents = [];
 
   //bool get user => widget.isUser;
   //bool user = widget.isUser;
-
   @override
   void initState() {
     _currentView = CalendarView.workWeek;
@@ -169,6 +175,7 @@ class _CalendarPageState extends State<CalendarPage> {
     _timeZoneCollection.add("Central Standard Time");
 
     _timeZoneCollection.add('Central Standard Time');
+
     if (widget.master) {
       List<Appointment> appointments = <Appointment>[];
       events.forEach((key, value) {
@@ -223,34 +230,50 @@ class _CalendarPageState extends State<CalendarPage> {
       Navigator.push<Widget>(
         context,
         MaterialPageRoute<Widget>(
-            builder: (BuildContext context) => AppointmentEditor(
-                _selectedAppointment,
-                targetElement,
-                selectedDate,
-                _colorCollection,
-                _colorNames,
-                _events,
-                _timeZoneCollection,
-                widget.group,
-                firebaseEvents)),
+            builder: (BuildContext context) => ChangeNotifierProvider(
+                create: (context) => AppState(),
+                child: AppointmentEditor(
+                    _selectedAppointment,
+                    targetElement,
+                    selectedDate,
+                    _colorCollection,
+                    _colorNames,
+                    _events,
+                    _timeZoneCollection,
+                    widget.group,
+                    firebaseEvents))),
       ).then((value) {
         setState(() {});
       });
     }
   }
 
-  Widget _getCalendar() {
+  Widget _getCalendar(BuildContext context, String group) {
     if (widget.master) {
-      return _getMasterCalender(
-          _calendarController, _events, _onViewChanged, _onCalendarTapped);
+      return Consumer<AppState>(builder: (context, appState, child) {
+        return _getMasterCalender(
+            _calendarController,
+            AppointmentDataSource(
+                appState.allAppointments(_selectedGroups, _selectedEvents)),
+            _onViewChanged,
+            _onCalendarTapped,
+            appState);
+      });
     } else {
-      return _getLakeNixonCalender(
-          _calendarController, _events, _onViewChanged, _onCalendarTapped);
+      return Consumer<AppState>(builder: (context, appState, child) {
+        return _getLakeNixonCalender(
+          _calendarController,
+          AppointmentDataSource(appState.appointmentsByGroup(group)),
+          _onViewChanged,
+          _onCalendarTapped,
+        );
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    //var test = [MultiSelectItem("test", "test")];
     final Widget calendar = Theme(
 
         /// The key set here to maintain the state, when we change
@@ -262,21 +285,51 @@ class _CalendarPageState extends State<CalendarPage> {
             backgroundColor: theme,
           ),
         ),
-        child: _getCalendar());
-
+        child: ChangeNotifierProvider(
+            create: (context) => AppState(),
+            child: _getCalendar(context, widget.group.name)));
     final double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("${widget.group.name} calendar",
-            style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
-        backgroundColor: nixonblue,
-      ),
-      body: Row(children: <Widget>[
-        Expanded(
-          child: Container(color: theme, child: calendar),
-        )
-      ]),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => AppState(),
+        child: Consumer<AppState>(builder: (context, appState, child) {
+          return Scaffold(
+            appBar: AppBar(
+              flexibleSpace: FlexibleSpaceBar(),
+              title: Text("${widget.group.name} calendar",
+                  style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
+              backgroundColor: nixonblue,
+              actions: [
+                MultiSelectDialogField(
+                  title: const Text("Filter Groups"),
+                  items: appState.createCheckboxGroups(),
+                  initialValue: _selectedGroups,
+                  onConfirm: (results) {
+                    setState(() {
+                      _selectedGroups = results;
+                      //assignments[widget.group] = _selectedGroups;
+                    });
+                  },
+                ),
+                MultiSelectDialogField(
+                  title: const Text("Filter Events"),
+                  items: appState.createCheckboxEvents(),
+                  initialValue: _selectedEvents,
+                  onConfirm: (results) {
+                    setState(() {
+                      _selectedEvents = results;
+                      //assignments[widget.group] = _selectedGroups;
+                    });
+                  },
+                ),
+              ],
+            ),
+            body: Row(children: <Widget>[
+              Expanded(
+                child: Container(color: theme, child: calendar),
+              ),
+            ]),
+          );
+        }));
   }
 }
 
@@ -315,7 +368,8 @@ SfCalendar _getMasterCalender(
     [CalendarController? calendarController,
     CalendarDataSource? calendarDataSource,
     ViewChangedCallback? viewChangedCallback,
-    dynamic calendarTapCallback]) {
+    dynamic calendarTapCallback,
+    AppState? appState]) {
   return SfCalendar(
     controller: calendarController,
     dataSource: calendarDataSource,

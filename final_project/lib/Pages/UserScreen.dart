@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/globals.dart';
-import 'package:final_project/start_page.dart';
-import 'package:final_project/userSplashScreen.dart';
+import 'package:final_project/Pages/StartPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import '../Objects/Globals.dart';
+import 'UserSplashScreen.dart';
 
 class UserSplashScreen extends StatefulWidget {
   const UserSplashScreen({super.key});

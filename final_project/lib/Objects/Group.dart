@@ -1,5 +1,6 @@
-import 'package:final_project/globals.dart';
 import 'package:flutter/material.dart';
+
+import 'Globals.dart';
 
 class Group {
   const Group({required this.name, required this.color, required this.age});

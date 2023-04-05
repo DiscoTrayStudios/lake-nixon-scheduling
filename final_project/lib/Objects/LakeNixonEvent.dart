@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:final_project/Group.dart';
+import 'package:final_project/Objects/Group.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class LakeNixonEvent extends Appointment {
