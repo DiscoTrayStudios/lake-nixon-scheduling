@@ -99,7 +99,8 @@ class _CalendarPageState extends State<CalendarPage> {
         var tmp = Event(
             name: event["name"],
             ageMin: event["ageMin"],
-            groupMax: event["groupMax"]);
+            groupMax: event["groupMax"],
+            desc: event["desc"]);
         dbEvents.add(tmp);
       });
     } else {

@@ -626,22 +626,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   Icons.subject,
                   color: defaultColor,
                 ),
-                title: TextField(
-                  controller: TextEditingController(text: _notes),
-                  cursorColor: const Color(0xff4169e1),
-                  onChanged: (String value) {
-                    _notes = value;
-                  },
-                  keyboardType: TextInputType.multiline,
-                  maxLines: 1,
+                title: Text(
+                  appState.indexEvents(_subject).desc,
                   style: TextStyle(
                       fontSize: 18,
                       color: defaultColor,
                       fontWeight: FontWeight.w400),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Add description',
-                  ),
                 ),
               ),
             ],
