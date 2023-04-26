@@ -49,6 +49,7 @@ class AppState extends ChangeNotifier {
         print("starting to listen");
         getEvents();
         getAppointments();
+        print("Finished appointments ${_appointments.length}");
         //createGroups();
         getGroups();
         firstSnapshot = false;
@@ -239,7 +240,8 @@ class AppState extends ChangeNotifier {
         _events.add(Event(
             ageMin: document.data()['ageMin'],
             groupMax: document.data()['groupMax'],
-            name: document.data()['name']));
+            name: document.data()['name'],
+            desc: document.data()['desc']));
       });
     });
   }
@@ -268,13 +270,28 @@ class AppState extends ChangeNotifier {
     //int count = 0;
     for (Event element in _events) {
       if (element.name == name) {
+        print(element.desc);
         return element;
       }
       //count++;
     }
-    return const Event(name: "error", ageMin: 0, groupMax: 0);
+    return const Event(name: "error", ageMin: 0, groupMax: 0, desc: "");
   }
+
+  // Future<void> createEvents() async {
+  //   var events = FirebaseFirestore.instance.collection("events");
+  //   for (Event event in _events) {
+  //     events.doc(event.name).set({
+  //       "name": event.name,
+  //       "ageMin": event.ageMin,
+  //       "groupMax": event.groupMax,
+  //       "desc": ""
+  //     });
+  //   }
+  // }
 }
+
+
 
 // Future<void> createGroups() async {
 //   var groups = FirebaseFirestore.instance.collection("groups");

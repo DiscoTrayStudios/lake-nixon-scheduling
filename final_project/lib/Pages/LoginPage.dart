@@ -8,6 +8,7 @@ import 'package:final_project/Pages/UserScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import '../Objects/Globals.dart';
 import 'GroupPage.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() {
     if (FirebaseAuth.instance.currentUser != null) {
       //groupPagePush();
+      Provider.of<AppState>(context, listen: false);
       startPagePush();
     }
   }
@@ -39,9 +41,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> startPagePush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const UserSplashScreen()),
-    );
+    await Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => UserSplashScreen()));
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);
@@ -162,8 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             print('Wrong password provided for that user.');
                           }
                         }
-                        print(emailController.text);
-                        print(passwordController.text);
+
                         login();
                       },
                     )),

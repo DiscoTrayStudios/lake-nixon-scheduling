@@ -8,10 +8,14 @@ import 'package:final_project/Pages/LoginPage.dart';
 
 class Event {
   const Event(
-      {required this.name, required this.ageMin, required this.groupMax});
+      {required this.name,
+      required this.ageMin,
+      required this.groupMax,
+      required this.desc});
   final String name;
   final int ageMin;
   final int groupMax;
+  final String desc;
 
   @override
   String toString() {
@@ -40,7 +44,7 @@ class Schedule {
   void newGroup(String time, String groupName) {
     times?[time] = [groupName];
   }
-  
+
   void addGroup(String time, String groupName) {
     times?[time]!.add(groupName);
   }

@@ -128,6 +128,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     _updateAppointmentProperties();
     _selectedGroups;
     //getEvents();
+    print(widget.selectedAppointment);
+    if (widget.selectedAppointment != null) {
+      dropdownValue = widget.selectedAppointment!.subject;
+    } else {}
     _subject = dropdownValue;
     super.initState();
     updateDropdown();
@@ -616,6 +620,20 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               ),
               Container(),
               Container(),
+              ListTile(
+                contentPadding: const EdgeInsets.all(5),
+                leading: Icon(
+                  Icons.subject,
+                  color: defaultColor,
+                ),
+                title: Text(
+                  appState.indexEvents(_subject).desc,
+                  style: TextStyle(
+                      fontSize: 18,
+                      color: defaultColor,
+                      fontWeight: FontWeight.w400),
+                ),
+              ),
             ],
           ));
     });

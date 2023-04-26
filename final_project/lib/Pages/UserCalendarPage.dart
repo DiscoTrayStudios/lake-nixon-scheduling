@@ -87,7 +87,8 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
         var tmp = Event(
             name: event["name"],
             ageMin: event["ageMin"],
-            groupMax: event["groupMax"]);
+            groupMax: event["groupMax"],
+            desc: event["desc"]);
         dbEvents.add(tmp);
 
         firebaseEvents.add(

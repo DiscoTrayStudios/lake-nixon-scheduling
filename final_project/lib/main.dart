@@ -1,7 +1,9 @@
+import 'package:final_project/Objects/AppState.dart';
 import 'package:final_project/Pages/CalendarPage.dart';
 import 'package:final_project/Pages/StartPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'Pages/GroupPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -10,9 +12,10 @@ import 'package:final_project/Pages/LoginPage.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  runApp(
-    const MyApp(),
-  );
+  runApp(ChangeNotifierProvider(
+    create: ((context) => AppState()),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -37,6 +40,5 @@ class MyApp extends StatelessWidget {
         //home: CalendarPage(title: 'Calendar Page'),
         //home: GroupPage(title: "List of groups"),
         home: checkLogin());
-        
   }
 }
