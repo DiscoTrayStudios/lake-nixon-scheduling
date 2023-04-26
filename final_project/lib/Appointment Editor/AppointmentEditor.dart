@@ -244,6 +244,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
                 leading: const Text("Events"),
+                //This is the groups dropdown button
+                //A current issue is that for the group filtering to work we have to click within this box to
+                //get the filtering to work.
                 title: DropdownButton(
                   value: dropdownValue,
                   items: appState.createDropdown(
@@ -268,6 +271,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               ListTile(
                 contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
                 leading: const Text("Assign Groups"),
+                //This is where the group select field is
                 title: MultiSelectDialogField(
                   items: _items,
                   initialValue: _selectedGroups,
@@ -833,6 +837,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                           _startDate,
                                           _endDate),
                             );
+                            //Turning the already created appointment into something we can put into firebase
                             var start_time = tmpApp.startTime;
                             Map<String, dynamic> appMap = {
                               "start_time": start_time,
@@ -843,7 +848,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                               "group": g.name,
                               "start_hour": "${start_time.hour}"
                             };
+                            //associating a group with a specific appointment
                             groupToApp[g.name] = appMap;
+                            //adding here it what actually puts in on the calendar
                             appointment.add(tmpApp);
                           }
                           //appState.addAppointments(groupToApp);
@@ -852,10 +859,15 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           String hour = "${time.hour}";
                           var name = app.subject;
 
+                          //Checking if we have groups to look through
                           if (_selectedGroups.iterator.moveNext()) {
                             int groupAmount = _selectedGroups.length;
+                            //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
+                            //If it does, it takes us to the else statement
                             if (appState.checkEvent(name, hour, groupAmount)) {
+                              //If it doesnt we come in here and we add the appoinments to the app state
                               appState.addAppointments(groupToApp);
+                              //This for loop adds all of the appointments to the calendar backend which separate from ours.
                               for (Map<String, dynamic> app
                                   in groupToApp.values) {
                                 widget.events.notifyListeners(
@@ -902,7 +914,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           if (widget.selectedAppointment!.appointmentType ==
                               AppointmentType.normal) {
                             //Another Potential Fix?
-
+                            //THIS ALL CAN MOST LIKELY BE DELETED
+                            //WAS CODE FROM OLD DB
+                            //MIGHT HAVE SOME HELPFUL FEATURES FOR DELETION
                             Map<String, dynamic> appMap = {
                               "appointment": [
                                 widget.selectedAppointment?.startTime,

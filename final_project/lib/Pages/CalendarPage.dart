@@ -80,7 +80,6 @@ class _CalendarPageState extends State<CalendarPage> {
     _calendarController.view = _currentView;
     bool user = widget.isUser;
     //_checkAuth();
-    //PRoblem of having to back out seems to come from these being futures
     getEvents();
     //getSavedEvents();
     _events = AppointmentDataSource(_getDataSource(widget.group));
@@ -88,6 +87,7 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
   }
 
+// Gets all of the events from firebase
   Future<void> getEvents() async {
     CollectionReference events =
         FirebaseFirestore.instance.collection("events");
@@ -113,6 +113,7 @@ class _CalendarPageState extends State<CalendarPage> {
     print(dbEvents);
   }
 
+// This helps initalize the calendars data source
   List<Appointment> _getDataSource(Group group) {
     _colorNames.add('Green');
     _colorNames.add('Purple');
@@ -188,6 +189,7 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
+//This is what handles changing the calendar view
   void _onViewChanged(ViewChangedDetails viewChangedDetails) {
     if (_currentView != CalendarView.month &&
         _calendarController.view != CalendarView.month) {
@@ -203,6 +205,7 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
+// Handles when you click calendar events
   void _onCalendarTapped(CalendarTapDetails calendarTapDetails) {
     /// Condition added to open the editor, when the calendar elements tapped
     /// other than the header.
@@ -228,6 +231,7 @@ class _CalendarPageState extends State<CalendarPage> {
 
       final DateTime selectedDate = calendarTapDetails.date!;
       final CalendarElement targetElement = calendarTapDetails.targetElement;
+      //This is what takes you to the appointment editor
       Navigator.push<Widget>(
         context,
         MaterialPageRoute<Widget>(
@@ -247,6 +251,8 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
+
+// This determines if we send the user to the master calendar or user calendar
   Widget _getCalendar(BuildContext context, String group) {
     if (widget.master) {
       return Consumer<AppState>(builder: (context, appState, child) {
