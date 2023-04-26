@@ -62,6 +62,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+//Used to create the group checkboxes for appointment editor
   List<MultiSelectItem<Group>> createCheckboxGroups() {
     var _items = groups
         .map((group) => MultiSelectItem<Group>(group, group.name))
@@ -69,6 +70,7 @@ class AppState extends ChangeNotifier {
     return _items;
   }
 
+//Used to create the checkbox events for the appointment editor
   List<MultiSelectItem<String>> createCheckboxEvents() {
     var _items = events
         .map((event) => MultiSelectItem<String>(event.name, event.name))
@@ -76,12 +78,12 @@ class AppState extends ChangeNotifier {
     return _items;
   }
 
+//Takes the appointments from firebase and turns them into a class called LakeAppointment and puts them in a list we can use throughout the program
   Future<void> getAppointments() async {
     appointmentSubscription = FirebaseFirestore.instance
         .collection('appointments')
         .snapshots()
         .listen((snapshot) {
-      print("in appointment snapshot");
       snapshot.docs.forEach((document) {
         String valueString =
             document.data()['color'].split("(0x")[1].split(")")[0];
@@ -89,8 +91,6 @@ class AppState extends ChangeNotifier {
         Color color = new Color(value);
         Timestamp start = document.data()['start_time'];
         Timestamp end = document.data()['end_time'];
-        // print("COLOR : $color");
-        // print("start TIME : ${start.toDate()}");
         var lake = LakeAppointment(
             color: color,
             endTime: end.toDate(),
@@ -105,6 +105,7 @@ class AppState extends ChangeNotifier {
     });
   }
 
+//Returns a list of appointments for the group you give as a parameter
   List<Appointment> appointmentsByGroup(String group) {
     List<Appointment> apps = [];
     for (LakeAppointment app in _appointments) {
@@ -115,6 +116,8 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
+//Returns all appointments in a way the calendar can use them
+//It also has parameters that allow for the appointments to be filtered by events or groups
   List<Appointment> allAppointments(
       List<Group> selectedGroups, List<String> selectedEvents) {
     List<Appointment> apps = [];
@@ -150,6 +153,7 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
+// This function takes in appointments formatted to be put into firebase and puts them into firebase
   Future<void> addAppointments(Map<String, Map<String, dynamic>> events) async {
     var apps = FirebaseFirestore.instance.collection("appointments");
     for (Map<String, dynamic> app in events.values) {
@@ -157,6 +161,8 @@ class AppState extends ChangeNotifier {
     }
   }
 
+// Gets the amount of groups in an event at a specific time and returns that as a value that shows how many are in the event
+// out of how many can be in the event. This is used in the event dropdown so you can see when selecting how full they are.
   String getCurrentAmount(String event, start_time) {
     var apps = getAppsAtTime(start_time);
     var count = 0;
@@ -170,6 +176,8 @@ class AppState extends ChangeNotifier {
   }
 
   //FIX THE START TIME ISSUE AND MAKE IT DAY SPECIFIC NOT TIME SPECIFIC
+  //^^ I think this has been fixed but I'll keep that there just to make sure its not forgotten if I didn't fix it
+  // This creates the event dropdown with the amount of groups in each event
   List<DropdownMenuItem<String>> createDropdown(
       List<DropdownMenuItem> items, start_time) {
     List<DropdownMenuItem<String>> newItems = [];
@@ -182,6 +190,7 @@ class AppState extends ChangeNotifier {
     return newItems;
   }
 
+  //Takes a firebase appointment and turns it into a calendar appointment
   Appointment createApp(startTime, endTime, color, subject) {
     if (color.runtimeType == String) {
       String valueString = color.split("(0x")[1].split(")")[0];
@@ -193,6 +202,8 @@ class AppState extends ChangeNotifier {
         startTime: startTime, endTime: endTime, color: color, subject: subject);
   }
 
+  //Checks how many groups are in an event and a specific time and then checks to see if the amount the user wanted
+  //to add is more than the limit and returns true or false.
   bool checkEvent(String event, String start_hour, int groupCount) {
     var current = 0;
     var _event = indexEvents(event);
@@ -209,6 +220,7 @@ class AppState extends ChangeNotifier {
     }
   }
 
+//Returns the appointments happening at a certain time
   List<LakeAppointment> getAppsAtTime(start_time) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
@@ -219,6 +231,7 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
+// Gets the groups in events at certain time
   List<String> getGroupsAtTime(start_time) {
     List<String> groups = [];
     for (LakeAppointment app in _appointments) {
@@ -229,7 +242,7 @@ class AppState extends ChangeNotifier {
     return groups;
   }
 
-// was getEvents in Calendar Page
+// get all of the events from firebase
   Future<void> getEvents() async {
     eventSubscription = FirebaseFirestore.instance
         .collection('events')
@@ -246,6 +259,7 @@ class AppState extends ChangeNotifier {
     });
   }
 
+//gets all of the groups from firebase
   Future<void> getGroups() async {
     groupSubscription = FirebaseFirestore.instance
         .collection('groups')
@@ -265,7 +279,8 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  // from globals (not sure this is ever called/will be needed after changing database)
+  // give this function an event name and it will give you the index for event in the global list
+  //so that you can extract other information
   Event indexEvents(String name) {
     //int count = 0;
     for (Event element in _events) {
@@ -290,8 +305,6 @@ class AppState extends ChangeNotifier {
   //   }
   // }
 }
-
-
 
 // Future<void> createGroups() async {
 //   var groups = FirebaseFirestore.instance.collection("groups");
