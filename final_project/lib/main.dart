@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:final_project/Pages/LoginPage.dart';
 
+// Initialize firebase and run the app
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -18,9 +19,12 @@ Future<void> main() async {
   ));
 }
 
+// Main app class
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
+  // check if user is logged in. If so, send to start page
+  // else, send to login screen
   Widget checkLogin() {
     if (FirebaseAuth.instance.currentUser != null) {
       return const StartPage();
@@ -30,6 +34,7 @@ class MyApp extends StatelessWidget {
     }
   }
 
+  // builds the app, calling check login to determine what page to use
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
