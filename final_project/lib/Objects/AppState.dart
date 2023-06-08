@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:html';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/Objects/Event.dart';
 import 'package:final_project/Objects/LakeAppointment.dart';
