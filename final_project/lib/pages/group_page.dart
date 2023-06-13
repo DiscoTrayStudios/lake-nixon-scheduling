@@ -106,7 +106,7 @@ class _GroupPageState extends State<GroupPage> {
             children: groups.map((group) {
               return GroupItem(
                 group: group,
-                onListChanged: _handleCalendar,
+                onTap: _handleCalendar,
               );
             }).toList(),
           )),
