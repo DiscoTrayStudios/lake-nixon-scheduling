@@ -24,14 +24,6 @@ class MyApp extends StatelessWidget {
 
   // check if user is logged in. If so, send to start page
   // else, send to login screen
-  Widget checkLogin() {
-    if (FirebaseAuth.instance.currentUser != null) {
-      return const StartPage();
-      //return GroupPage(title: "List of groups");
-    } else {
-      return const LoginScreen();
-    }
-  }
 
   // builds the app, calling check login to determine what page to use
   @override
@@ -43,6 +35,15 @@ class MyApp extends StatelessWidget {
         ),
         //home: CalendarPage(title: 'Calendar Page'),
         //home: GroupPage(title: "List of groups"),
-        home: checkLogin());
+        home: checkLogin(FirebaseAuth.instance));
+  }
+}
+
+Widget checkLogin(auth) {
+  if (auth.currentUser != null) {
+    return const StartPage();
+    //return GroupPage(title: "List of groups");
+  } else {
+    return const LoginScreen();
   }
 }
