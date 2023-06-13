@@ -1,15 +1,14 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart' show DateFormat;
- import 'package:syncfusion_flutter_core/core.dart';
+import 'package:syncfusion_flutter_core/core.dart';
 
-import '../Objects/Globals.dart';
+import '../Objects/globals.dart';
 
 class CustomRule extends StatefulWidget {
   const CustomRule(this.selectedAppointment, this.appointmentColor, this.events,
-      this.recurrenceProperties);
+      this.recurrenceProperties, {super.key});
 
   final Appointment selectedAppointment;
 
@@ -52,13 +51,12 @@ class CustomRuleState extends State<CustomRule> {
     _selectedRecurrenceType = _selectedRecurrenceType ?? 'day';
     _dayOfMonth = _startDate.day;
     _dayOfWeek = _startDate.weekday;
-    _monthlyRule = 'Monthly on day ' + _startDate.day.toString() + 'th';
+    _monthlyRule = 'Monthly on day ${_startDate.day}th';
     _endRule = EndRule.never;
     _month = _startDate.month;
     _weekNumber = _getWeekNumber(_startDate);
-    _weekNumberDay = weekDayPosition[_weekNumber == -1 ? 4 : _weekNumber - 1] +
-        ' ' +
-        weekDay[_dayOfWeek - 1];
+    _weekNumberDay =
+        '${weekDayPosition[_weekNumber == -1 ? 4 : _weekNumber - 1]} ${weekDay[_dayOfWeek - 1]}';
     if (_days == null) {
       _mobileInitialWeekdays(_startDate.weekday);
     }
@@ -207,7 +205,7 @@ class CustomRuleState extends State<CustomRule> {
 
   void _monthlyWeek() {
     setState(() {
-      _monthlyRule = 'Monthly on the ' + _weekNumberDay!;
+      _monthlyRule = 'Monthly on the ${_weekNumberDay!}';
       _recurrenceProperties!.week = _weekNumber;
       _recurrenceProperties!.dayOfWeek = _dayOfWeek;
     });
@@ -215,7 +213,7 @@ class CustomRuleState extends State<CustomRule> {
 
   void _monthlyDay() {
     setState(() {
-      _monthlyRule = 'Monthly on day ' + _startDate.day.toString() + 'th';
+      _monthlyRule = 'Monthly on day ${_startDate.day}th';
       _recurrenceProperties!.dayOfWeek = 0;
       _recurrenceProperties!.week = 0;
       _recurrenceProperties!.dayOfMonth = _dayOfMonth;
@@ -382,7 +380,7 @@ class CustomRuleState extends State<CustomRule> {
                                   offset: _interval.toString().length))),
                       cursorColor: const Color(0xff4169e1),
                       onChanged: (String value) {
-                        if (value != null && value.isNotEmpty) {
+                        if (value.isNotEmpty) {
                           _interval = int.parse(value);
                           if (_interval == 0) {
                             _interval = 1;
@@ -391,7 +389,7 @@ class CustomRuleState extends State<CustomRule> {
                               _interval = 999;
                             });
                           }
-                        } else if (value.isEmpty || value == null) {
+                        } else if (value.isEmpty) {
                           _interval = 1;
                         }
                         _recurrenceProperties!.interval = _interval!;
@@ -666,16 +664,12 @@ class CustomRuleState extends State<CustomRule> {
                         value: _monthlyRule,
                         items: <DropdownMenuItem<String>>[
                           DropdownMenuItem<String>(
-                            value: 'Monthly on day ' +
-                                _startDate.day.toString() +
-                                'th',
-                            child: Text('Monthly on day ' +
-                                _startDate.day.toString() +
-                                'th'),
+                            value: 'Monthly on day ${_startDate.day}th',
+                            child: Text('Monthly on day ${_startDate.day}th'),
                           ),
                           DropdownMenuItem<String>(
-                            value: 'Monthly on the ' + _weekNumberDay!,
-                            child: Text('Monthly on the ' + _weekNumberDay!),
+                            value: 'Monthly on the ${_weekNumberDay!}',
+                            child: Text('Monthly on the ${_weekNumberDay!}'),
                           ),
                           const DropdownMenuItem<String>(
                             value: 'Last day of month',
@@ -684,18 +678,14 @@ class CustomRuleState extends State<CustomRule> {
                         ],
                         onChanged: (String? value) {
                           setState(() {
-                            if (value ==
-                                'Monthly on day ' +
-                                    _startDate.day.toString() +
-                                    'th') {
-                              _width = _textSize('Monthly on day ' +
-                                  _startDate.day.toString() +
-                                  'th');
+                            if (value == 'Monthly on day ${_startDate.day}th') {
+                              _width = _textSize(
+                                  'Monthly on day ${_startDate.day}th');
                               _monthlyDay();
                             } else if (value ==
-                                'Monthly on the ' + _weekNumberDay!) {
+                                'Monthly on the ${_weekNumberDay!}') {
                               _width = _textSize(
-                                  'Monthly on the ' + _weekNumberDay!);
+                                  'Monthly on the ${_weekNumberDay!}');
                               _monthlyWeek();
                             } else if (value == 'Last day of month') {
                               _width = _textSize('Last day of month');
@@ -881,7 +871,7 @@ class CustomRuleState extends State<CustomRule> {
                               });
                             },
                             onChanged: (String value) async {
-                              if (value != null && value.isNotEmpty) {
+                              if (value.isNotEmpty) {
                                 _count = int.parse(value);
                                 if (_count == 0) {
                                   _count = 1;
@@ -890,7 +880,7 @@ class CustomRuleState extends State<CustomRule> {
                                     _count = 999;
                                   });
                                 }
-                              } else if (value.isEmpty || value == null) {
+                              } else if (value.isEmpty) {
                                 _count = 1;
                               }
                               _endRule = EndRule.count;

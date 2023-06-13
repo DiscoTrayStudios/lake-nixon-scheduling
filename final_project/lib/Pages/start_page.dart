@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Objects/Group.dart';
-import 'package:final_project/Pages/GroupPage.dart';
-import 'package:final_project/Pages/CalendarPage.dart';
-import 'package:final_project/Pages/LoginPage.dart';
-import 'package:final_project/Pages/MasterPage.dart';
+import 'package:final_project/Objects/group.dart';
+import 'package:final_project/Pages/group_page.dart';
+import 'package:final_project/Pages/login_page.dart';
+import 'package:final_project/Pages/master_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../Objects/AppState.dart';
+import '../Objects/app_state.dart';
 
-import '../Objects/Globals.dart';
+import '../Objects/globals.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
@@ -34,16 +32,16 @@ class _StartPageState extends State<StartPage> {
   Future<void> groupPagePush() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => GroupPage(title: "List of groups"),
+        builder: (context) => const GroupPage(title: "List of groups"),
       ),
     );
   }
 
   Future<void> masterCalendar(Group group) async {
-    //print("Chat");
+    //debugPrint("Chat");
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => MasterPage(),
+        builder: (context) => const MasterPage(),
       ),
     );
   }
@@ -66,17 +64,17 @@ class _StartPageState extends State<StartPage> {
     final snapshot = await schedules.get();
     if (snapshot.size > 0) {
       List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      data.forEach((element) {
+      for (var element in data) {
         var event = element.data() as Map;
         Map apps = event["appointments"];
 
         apps.forEach((key, value) {
-          for (var _app in value) {
-            var app = _app["appointment"];
+          for (var appt in value) {
+            var app = appt["appointment"];
             var test = app[2];
             String valueString = test.split('(0x')[1].split(')')[0];
             int value = int.parse(valueString, radix: 16);
-            Color color = new Color(value);
+            Color color = Color(value);
             Appointment tmp = Appointment(
                 startTime: app[0].toDate(),
                 endTime: app[1].toDate(),
@@ -92,15 +90,14 @@ class _StartPageState extends State<StartPage> {
             events[group]!.add(tmp);
           }
         });
-      });
+      }
     } else {
-      print('No data available.2');
+      debugPrint('No data available.2');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
           title: const Text(

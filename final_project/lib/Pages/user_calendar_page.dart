@@ -1,22 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Objects/Event.dart';
-import 'package:final_project/Objects/Group.dart';
-import 'package:final_project/Objects/LakeNixonEvent.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:final_project/Objects/event.dart';
+import 'package:final_project/Objects/group.dart';
+import 'package:final_project/Objects/lake_nixon_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../Appointment Editor/AppointmentEditor.dart';
-import '../Objects/Globals.dart';
+import '../Appointment Editor/appointment_editor.dart';
+import '../Objects/globals.dart';
 
 List<LakeNixonEvent> appointments = <LakeNixonEvent>[];
 
 //late bool isUser;
 
 class UserCalendarPage extends StatefulWidget {
-  UserCalendarPage(
+  const UserCalendarPage(
       {super.key,
       required this.title,
       required this.group,
@@ -71,7 +68,7 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
     getEvents();
     getSavedEvents();
     _events = AppointmentDataSource(_getDataSource(widget.group));
-    print(_events);
+    debugPrint(_events.toString());
 
     super.initState();
   }
@@ -82,7 +79,7 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
     final snapshot = await events.get();
     if (snapshot.size > 0) {
       List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      data.forEach((element) {
+      for (var element in data) {
         var event = element.data() as Map;
         var tmp = Event(
             name: event["name"],
@@ -93,11 +90,11 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
 
         firebaseEvents.add(
             DropdownMenuItem(value: event["name"], child: Text(event["name"])));
-      });
+      }
     } else {
-      print('No data available.');
+      debugPrint('No data available.');
     }
-    print(dbEvents);
+    debugPrint(dbEvents.toString());
   }
 
   Future<void> getSavedEvents() async {
@@ -106,18 +103,18 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
     final snapshot = await schedules.get();
     if (snapshot.size > 0) {
       List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      data.forEach((element) {
+      for (var element in data) {
         var event = element.data() as Map;
         Map apps = event["appointments"];
 
         apps.forEach((key, value) {
-          for (var _app in value) {
-            var app = _app["appointment"];
+          for (var appt in value) {
+            var app = appt["appointment"];
             var test = app[2];
             String valueString = test.split('(0x')[1].split(')')[0];
             int value = int.parse(valueString, radix: 16);
-            Color color = new Color(value);
-            print(app[6]);
+            Color color = Color(value);
+            debugPrint(app[6]);
             Appointment tmp = Appointment(
                 startTime: app[0].toDate(),
                 endTime: app[1].toDate(),
@@ -133,9 +130,9 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
             events[group]!.add(tmp);
           }
         });
-      });
+      }
     } else {
-      print('No data available.');
+      debugPrint('No data available.');
     }
   }
 

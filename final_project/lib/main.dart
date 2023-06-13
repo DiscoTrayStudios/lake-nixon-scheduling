@@ -1,13 +1,11 @@
-import 'package:final_project/Objects/AppState.dart';
-import 'package:final_project/Pages/CalendarPage.dart';
-import 'package:final_project/Pages/StartPage.dart';
+import 'package:final_project/Objects/app_state.dart';
+import 'package:final_project/Pages/start_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'Pages/GroupPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:final_project/Pages/LoginPage.dart';
+import 'package:final_project/Pages/login_page.dart';
 
 // Initialize firebase and run the app
 Future<void> main() async {

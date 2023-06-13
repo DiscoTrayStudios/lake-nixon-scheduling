@@ -1,19 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Objects/Event.dart';
-import 'package:final_project/Objects/Group.dart';
-import 'package:final_project/Pages/CalendarPage.dart';
+import 'package:final_project/Objects/group.dart';
+import 'package:final_project/Pages/calendar_page.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart' show DateFormat;
-import '../Objects/AppState.dart';
-import 'CalendarTimeZonePicker.dart';
-import 'DeleteDialog.dart';
-import 'EditDialog.dart';
-import 'ResourcePicker.dart';
-import 'SelectRuleDialog.dart';
-import '../Objects/Globals.dart';
+import '../Objects/app_state.dart';
+import 'calendar_time_zone_picker.dart';
+import 'delete_dialog.dart';
+import 'edit_dialog.dart';
+import 'resource_picker.dart';
+import 'select_rule_dialog.dart';
+import '../Objects/globals.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -33,7 +32,8 @@ class AppointmentEditor extends StatefulWidget {
       this.timeZoneCollection,
       this.group,
       this.firebaseEvents,
-      [this.selectedResource]);
+      {this.selectedResource,
+      super.key});
 
   /// Selected appointment
   final Appointment? selectedAppointment;
@@ -65,11 +65,10 @@ class AppointmentEditor extends StatefulWidget {
 
   final List<DropdownMenuItem<String>> firebaseEvents;
   @override
-  _AppointmentEditorState createState() => _AppointmentEditorState();
+  State<AppointmentEditor> createState() => _AppointmentEditorState();
 }
 
 Future<List<DropdownMenuItem<String>>> createDropdown() async {
-  int count = 0;
   List<DropdownMenuItem<String>> menuItems = [
     const DropdownMenuItem(value: "Swimming", child: Text("Swimming"))
   ];
@@ -80,7 +79,6 @@ Future<List<DropdownMenuItem<String>>> createDropdown() async {
     Map? test = snapshot.value as Map?;
     test?.forEach((key, value) {
       menuItems.add(DropdownMenuItem(value: value, child: Text("$value")));
-      count++;
     });
   }
   return menuItems;
@@ -96,7 +94,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   bool _isAllDay = false;
 
   String? _notes;
-  String? _location;
+  //String? _location;
   List<Object>? _resourceIds;
   List<CalendarResource> _selectedResources = <CalendarResource>[];
   List<CalendarResource> _unSelectedResources = <CalendarResource>[];
@@ -113,7 +111,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   var _items =
       groups.map((group) => MultiSelectItem<Group>(group, group.name)).toList();
 
-  void create_items(List<Group> groups) {
+  void createItems(List<Group> groups) {
     _items = groups
         .map((group) => MultiSelectItem<Group>(group, group.name))
         .toList();
@@ -128,7 +126,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     _updateAppointmentProperties();
     _selectedGroups;
     //getEvents();
-    print(widget.selectedAppointment);
     if (widget.selectedAppointment != null) {
       dropdownValue = widget.selectedAppointment!.subject;
     } else {}
@@ -164,7 +161,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
           ? ''
           : widget.selectedAppointment!.subject;
       _notes = widget.selectedAppointment!.notes;
-      _location = widget.selectedAppointment!.location;
+      //_location = widget.selectedAppointment!.location;
       _resourceIds = widget.selectedAppointment!.resourceIds?.sublist(0);
       _recurrenceProperties =
           widget.selectedAppointment!.recurrenceRule != null &&
@@ -183,7 +180,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       _selectedTimeZoneIndex = 0;
       _subject = '';
       _notes = '';
-      _location = '';
+      //_location = '';
 
       final DateTime date = widget.selectedDate;
       _startDate = date;
@@ -256,15 +253,15 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       dropdownValue = newValue!;
                       _subject = newValue;
                     });
-                    var excluded_groups = appState.getGroupsAtTime(_startDate);
-                    List<Group> show_groups = [];
+                    var excludedGroups = appState.getGroupsAtTime(_startDate);
+                    List<Group> showGroups = [];
                     for (Group group in appState.groups) {
-                      if (excluded_groups.contains(group.name)) {
+                      if (excludedGroups.contains(group.name)) {
                       } else {
-                        show_groups.add(group);
+                        showGroups.add(group);
                       }
                     }
-                    create_items(show_groups);
+                    createItems(showGroups);
                   },
                 ),
               ),
@@ -838,15 +835,15 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                           _endDate),
                             );
                             //Turning the already created appointment into something we can put into firebase
-                            var start_time = tmpApp.startTime;
+                            var startTime = tmpApp.startTime;
                             Map<String, dynamic> appMap = {
-                              "start_time": start_time,
+                              "start_time": startTime,
                               "end_time": tmpApp.endTime,
                               "color": tmpApp.color.toString(),
                               "notes": tmpApp.notes,
                               "subject": tmpApp.subject,
                               "group": g.name,
-                              "start_hour": "${start_time.hour}"
+                              "start_hour": "${startTime.hour}"
                             };
                             //associating a group with a specific appointment
                             groupToApp[g.name] = appMap;
@@ -888,7 +885,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                   backgroundColor: Colors.red,
                                   textColor: Colors.white,
                                   fontSize: 16.0);
-                              print("CANT ADD EVENT DUE TO RESTRICTIONS");
                             }
                           }
 
@@ -937,8 +933,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             var name = widget.selectedAppointment?.subject;
                             DateFormat formatter = DateFormat("MM-dd-yy");
                             var docName = formatter.format(time!);
-                            bool created = false;
-                            Schedule? schedule;
 
                             db.collection("schedules").doc(docName).update({
                               "appointments.${widget.group.name}":
@@ -990,7 +984,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   }
 
   Widget _getResourceEditor(TextStyle hintTextStyle) {
-    if (_selectedResources == null || _selectedResources.isEmpty) {
+    if (_selectedResources.isEmpty) {
       return Text('Add people', style: hintTextStyle);
     }
 

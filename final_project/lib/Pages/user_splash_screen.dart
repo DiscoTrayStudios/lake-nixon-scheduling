@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Objects/Group.dart';
-import 'package:final_project/Pages/GroupPage.dart';
+import 'package:final_project/Objects/group.dart';
+import 'package:final_project/Pages/group_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../Objects/Globals.dart';
-import 'LoginPage.dart';
-import '../Objects/AppState.dart';
+import '../Objects/globals.dart';
+import 'login_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -34,18 +31,18 @@ class _SplashScreenState extends State<SplashScreen> {
     final snapshot = await schedules.get();
     if (snapshot.size > 0) {
       List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      data.forEach((element) {
+      for (var element in data) {
         var event = element.data() as Map;
         Map apps = event["appointments"];
 
         apps.forEach((key, value) {
-          for (var _app in value) {
-            var app = _app["appointment"];
+          for (var appt in value) {
+            var app = appt["appointment"];
             var test = app[2];
             String valueString = test.split('(0x')[1].split(')')[0];
             int value = int.parse(valueString, radix: 16);
-            Color color = new Color(value);
-            print(app[6]);
+            Color color = Color(value);
+            debugPrint(app[6]);
             Appointment tmp = Appointment(
                 startTime: app[0].toDate(),
                 endTime: app[1].toDate(),
@@ -61,16 +58,16 @@ class _SplashScreenState extends State<SplashScreen> {
             events[group]!.add(tmp);
           }
         });
-      });
+      }
     } else {
-      print('No data available.');
+      debugPrint('No data available.');
     }
   }
 
   Future<void> groupPagePush() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => GroupPage(title: "List of groups"),
+        builder: (context) => const GroupPage(title: "List of groups"),
       ),
     );
   }
@@ -89,7 +86,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -102,22 +98,9 @@ class _SplashScreenState extends State<SplashScreen> {
             padding: const EdgeInsets.all(10),
             child: ListView(
               children: <Widget>[
-                // Container(
-                //     alignment: Alignment.center,
-                //     padding: const EdgeInsets.all(10),
-                //     child: const Text(
-                //       'Welcome to Lake Nixon!',
-                //       style: TextStyle(
-                //           //nixonblue
-                //           color: Color.fromRGBO(165, 223, 249, 1),
-                //           fontFamily: 'Fruit',
-                //           fontWeight: FontWeight.w500,
-                //           fontSize: 35),
-                //     )),
-                Container(
-                    child: const Image(
+                const Image(
                   image: AssetImage('images/lakenixonlogo.png'),
-                )),
+                ),
                 Container(
                     padding: const EdgeInsets.all(10),
                     child: SizedBox(

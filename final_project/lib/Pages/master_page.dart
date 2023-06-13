@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Objects/Group.dart';
-import 'package:final_project/Pages/CalendarPage.dart';
+import 'package:final_project/Objects/group.dart';
+import 'package:final_project/Pages/calendar_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import "package:syncfusion_flutter_calendar/calendar.dart";
-import '../Objects/AppState.dart';
-import '../Objects/Globals.dart';
+import '../Objects/globals.dart';
 
 class MasterPage extends StatefulWidget {
   const MasterPage({Key? key}) : super(key: key);
@@ -24,7 +22,7 @@ class _MasterPageState extends State<MasterPage> {
   var ageLimitController = TextEditingController();
   var groupSizeController = TextEditingController();
 
-  Future<void> _EventInfoPopupForm(BuildContext context) async {
+  Future<void> _eventInfoPopupForm(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -75,10 +73,10 @@ class _MasterPageState extends State<MasterPage> {
                 // if (snapshot.size > 0) {
                 //   List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
                 //   data.forEach((element) {
-                //     print(element.data());
+                //     debugPrint(element.data());
                 //   });
                 // } else {
-                //   print('No data available.');
+                //   debugPrint('No data available.');
                 // }
 
                 //This is where we write database, specfically to the event collection. You can change collection just up a couple lines
@@ -101,12 +99,12 @@ class _MasterPageState extends State<MasterPage> {
     );
   }
 
-  Future<void> MasterPush() async {
+  Future<void> masterPush() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
-          builder: (context) => CalendarPage(
-                group: const Group(
-                    name: "Admin", color: Color(0xFFFFFFFF), age: 99999),
+          builder: (context) => const CalendarPage(
+                group:
+                    Group(name: "Admin", color: Color(0xFFFFFFFF), age: 99999),
                 title: "Master",
                 isUser: true,
                 master: true,
@@ -116,7 +114,6 @@ class _MasterPageState extends State<MasterPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
         appBar: AppBar(
           //automaticallyImplyLeading: false,
@@ -158,7 +155,7 @@ class _MasterPageState extends State<MasterPage> {
                           fontSize: 30),
                     ),
                     onPressed: () {
-                      _EventInfoPopupForm(context);
+                      _eventInfoPopupForm(context);
                     },
                   ),
                 ),
@@ -178,7 +175,7 @@ class _MasterPageState extends State<MasterPage> {
                       for (Group g in groups) {
                         createGroup(g);
                       }
-                      MasterPush();
+                      masterPush();
                     },
                   ),
                 ),

@@ -1,11 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Pages/StartPage.dart';
+import 'package:final_project/Pages/start_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import '../Objects/Globals.dart';
-import 'UserSplashScreen.dart';
+import 'user_splash_screen.dart';
 
 class UserSplashScreen extends StatefulWidget {
   const UserSplashScreen({super.key});
@@ -23,7 +20,7 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
     _checkAuth();
   }
 
-  Future<void> UserPagePush() async {
+  Future<void> userPagePush() async {
     await Navigator.of(context).push(
       MaterialPageRoute(builder: (context) => const SplashScreen()),
     );
@@ -51,7 +48,7 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
     });
 
     if (role == 'user') {
-      UserPagePush();
+      userPagePush();
     } else {
       startPagePush();
     }

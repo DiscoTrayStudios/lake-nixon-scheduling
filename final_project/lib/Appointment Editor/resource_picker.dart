@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'CalendarTimeZonePicker.dart';
+import 'calendar_time_zone_picker.dart';
 
 class ResourcePicker extends StatefulWidget {
-  const ResourcePicker(this.resourceCollection, {required this.onChanged});
+  const ResourcePicker(this.resourceCollection,
+      {super.key, required this.onChanged});
 
   final List<CalendarResource> resourceCollection;
 
