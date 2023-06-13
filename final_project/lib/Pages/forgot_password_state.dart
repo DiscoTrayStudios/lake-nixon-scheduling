@@ -1,22 +1,17 @@
-import 'package:final_project/Pages/LoginPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../Objects/AppState.dart';
-import '../Objects/Globals.dart';
+import '../Objects/globals.dart';
 
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
   @override
-  State<ForgotPassword> createState() => _ForgotPasswordState();
+  State<ForgotPasswordPage> createState() => _ForgotPasswordPageState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
+class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _key = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -132,7 +127,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           FirebaseAuth.instance.sendPasswordResetEmail(
                               email: _emailController.text);
 
-                          print("Test");
+                          debugPrint("Test");
                           /*
                           Fluttertoast.showToast(
                               msg: "Email sent to reset password",
@@ -159,7 +154,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
-                            print('No user found for that email.');
+                            debugPrint('No user found for that email.');
                           } else if (e.code == 'invalid-email') {
                             Fluttertoast.showToast(
                                 msg: "Improper email format",

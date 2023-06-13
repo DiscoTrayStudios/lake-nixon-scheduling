@@ -1,19 +1,12 @@
-import 'dart:developer';
-
-import 'package:final_project/Pages/CalendarPage.dart';
-import 'package:final_project/Pages/ForgotPasswordPage.dart';
-import 'package:final_project/Pages/SignupPage.dart';
-import 'package:final_project/Pages/StartPage.dart';
-import 'package:final_project/Pages/UserScreen.dart';
+import 'package:final_project/Pages/forgot_password_page.dart';
+import 'package:final_project/Pages/signup_page.dart';
+import 'package:final_project/Pages/user_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import '../Objects/Globals.dart';
-import 'GroupPage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import '../firebase_options.dart';
-import '../Objects/AppState.dart';
+import '../Objects/globals.dart';
+import '../Objects/app_state.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -41,8 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> startPagePush() async {
-    await Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => UserSplashScreen()));
+    await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => const UserSplashScreen()));
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);
@@ -150,7 +143,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
-                            print('No user found for that email.');
+                            debugPrint('No user found for that email.');
                           } else if (e.code == 'wrong-password') {
                             Fluttertoast.showToast(
                                 msg: "Incorrect password for that email",
@@ -160,7 +153,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 backgroundColor: Colors.red,
                                 textColor: Colors.white,
                                 fontSize: 16.0);
-                            print('Wrong password provided for that user.');
+                            debugPrint(
+                                'Wrong password provided for that user.');
                           }
                         }
 

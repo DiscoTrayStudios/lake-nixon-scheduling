@@ -1,15 +1,14 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Objects/Event.dart';
-import 'package:final_project/Objects/LakeAppointment.dart';
+import 'package:final_project/Objects/event.dart';
+import 'package:final_project/Objects/lake_appointment.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../Pages/CalendarPage.dart';
 import '../firebase_options.dart';
-import 'package:final_project/Objects/Group.dart';
+import 'package:final_project/Objects/group.dart';
 
 /// to do:
 /// move colors from globals
@@ -18,13 +17,13 @@ import 'package:final_project/Objects/Group.dart';
 /// basically move everything from globals -> here, make everything consumer
 
 class AppState extends ChangeNotifier {
-  List<Event> _events = [];
+  final List<Event> _events = [];
   List<Event> get events => _events;
 
-  List<LakeAppointment> _appointments = [];
+  final List<LakeAppointment> _appointments = [];
   List<LakeAppointment> get appointments => _appointments;
 
-  List<Group> _groups = [];
+  final List<Group> _groups = [];
   List<Group> get groups => _groups;
 
   AppState() {
@@ -45,17 +44,17 @@ class AppState extends ChangeNotifier {
         eventSubscription?.cancel();
         appointmentSubscription?.cancel();
         groupSubscription?.cancel();
-        print("starting to listen");
+        debugPrint("starting to listen");
         getEvents();
         getAppointments();
-        print("Finished appointments ${_appointments.length}");
+        debugPrint("Finished appointments ${_appointments.length}");
         //createGroups();
         getGroups();
         firstSnapshot = false;
         notifyListeners();
       },
       onError: (error) {
-        print(error);
+        debugPrint(error);
       },
     );
     notifyListeners();
@@ -63,18 +62,18 @@ class AppState extends ChangeNotifier {
 
 //Used to create the group checkboxes for appointment editor
   List<MultiSelectItem<Group>> createCheckboxGroups() {
-    var _items = groups
+    var items = groups
         .map((group) => MultiSelectItem<Group>(group, group.name))
         .toList();
-    return _items;
+    return items;
   }
 
 //Used to create the checkbox events for the appointment editor
   List<MultiSelectItem<String>> createCheckboxEvents() {
-    var _items = events
+    var items = events
         .map((event) => MultiSelectItem<String>(event.name, event.name))
         .toList();
-    return _items;
+    return items;
   }
 
 //Takes the appointments from firebase and turns them into a class called LakeAppointment and puts them in a list we can use throughout the program
@@ -83,11 +82,11 @@ class AppState extends ChangeNotifier {
         .collection('appointments')
         .snapshots()
         .listen((snapshot) {
-      snapshot.docs.forEach((document) {
+      for (var document in snapshot.docs) {
         String valueString =
             document.data()['color'].split("(0x")[1].split(")")[0];
         int value = int.parse(valueString, radix: 16);
-        Color color = new Color(value);
+        Color color = Color(value);
         Timestamp start = document.data()['start_time'];
         Timestamp end = document.data()['end_time'];
         var lake = LakeAppointment(
@@ -98,9 +97,9 @@ class AppState extends ChangeNotifier {
             startTime: start.toDate(),
             subject: document.data()['subject'],
             startHour: document.data()['start_hour']);
-        print(lake);
+        debugPrint(lake.toString());
         _appointments.add(lake);
-      });
+      }
     });
   }
 
@@ -162,8 +161,8 @@ class AppState extends ChangeNotifier {
 
 // Gets the amount of groups in an event at a specific time and returns that as a value that shows how many are in the event
 // out of how many can be in the event. This is used in the event dropdown so you can see when selecting how full they are.
-  String getCurrentAmount(String event, start_time) {
-    var apps = getAppsAtTime(start_time);
+  String getCurrentAmount(String event, startTime) {
+    var apps = getAppsAtTime(startTime);
     var count = 0;
     var total = indexEvents(event).groupMax;
     for (LakeAppointment app in apps) {
@@ -171,18 +170,18 @@ class AppState extends ChangeNotifier {
         count++;
       }
     }
-    return "${count}/${total}";
+    return "$count/$total";
   }
 
   //FIX THE START TIME ISSUE AND MAKE IT DAY SPECIFIC NOT TIME SPECIFIC
   //^^ I think this has been fixed but I'll keep that there just to make sure its not forgotten if I didn't fix it
   // This creates the event dropdown with the amount of groups in each event
   List<DropdownMenuItem<String>> createDropdown(
-      List<DropdownMenuItem> items, start_time) {
+      List<DropdownMenuItem> items, startTime) {
     List<DropdownMenuItem<String>> newItems = [];
     for (DropdownMenuItem item in items) {
       var event = item.value;
-      var currentAmount = getCurrentAmount(event, start_time);
+      var currentAmount = getCurrentAmount(event, startTime);
       newItems.add(DropdownMenuItem(
           value: event, child: Text("$event  $currentAmount")));
     }
@@ -196,23 +195,23 @@ class AppState extends ChangeNotifier {
       int value = int.parse(valueString, radix: 16);
       color = Color(value);
     }
-    print("Create app : ${startTime}");
+    debugPrint("Create app : $startTime");
     return Appointment(
         startTime: startTime, endTime: endTime, color: color, subject: subject);
   }
 
   //Checks how many groups are in an event and a specific time and then checks to see if the amount the user wanted
   //to add is more than the limit and returns true or false.
-  bool checkEvent(String event, String start_hour, int groupCount) {
+  bool checkEvent(String event, String startHour, int groupCount) {
     var current = 0;
-    var _event = indexEvents(event);
+    var event0 = indexEvents(event);
     for (LakeAppointment app in _appointments) {
       // If the event capacity is not filled up, the current app is this event and they start at the same hour
-      if (app.subject == event && app.startHour == start_hour) {
+      if (app.subject == event && app.startHour == startHour) {
         current += 1;
       }
     }
-    if (current + groupCount <= _event.groupMax) {
+    if (current + groupCount <= event0.groupMax) {
       return true;
     } else {
       return false;
@@ -220,10 +219,10 @@ class AppState extends ChangeNotifier {
   }
 
 //Returns the appointments happening at a certain time
-  List<LakeAppointment> getAppsAtTime(start_time) {
+  List<LakeAppointment> getAppsAtTime(startTime) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
-      if (app.startTime! == start_time) {
+      if (app.startTime! == startTime) {
         apps.add(app);
       }
     }
@@ -231,10 +230,10 @@ class AppState extends ChangeNotifier {
   }
 
 // Gets the groups in events at certain time
-  List<String> getGroupsAtTime(start_time) {
+  List<String> getGroupsAtTime(startTime) {
     List<String> groups = [];
     for (LakeAppointment app in _appointments) {
-      if (app.startTime! == start_time) {
+      if (app.startTime! == startTime) {
         groups.add(app.group!);
       }
     }
@@ -247,14 +246,14 @@ class AppState extends ChangeNotifier {
         .collection('events')
         .snapshots()
         .listen((snapshot) {
-      print("in event snapshot");
-      snapshot.docs.forEach((document) {
+      debugPrint("in event snapshot");
+      for (var document in snapshot.docs) {
         _events.add(Event(
             ageMin: document.data()['ageMin'],
             groupMax: document.data()['groupMax'],
             name: document.data()['name'],
             desc: document.data()['desc']));
-      });
+      }
     });
   }
 
@@ -264,17 +263,17 @@ class AppState extends ChangeNotifier {
         .collection('groups')
         .snapshots()
         .listen((snapshot) {
-      print("in groups snapshot");
-      snapshot.docs.forEach((document) {
+      debugPrint("in groups snapshot");
+      for (var document in snapshot.docs) {
         String valueString =
             document.data()['color'].split("(0x")[1].split(")")[0];
         int value = int.parse(valueString, radix: 16);
-        Color color = new Color(value);
+        Color color = Color(value);
         _groups.add(Group(
             name: document.data()['name'],
             color: color,
             age: document.data()['age']));
-      });
+      }
     });
   }
 
@@ -284,7 +283,7 @@ class AppState extends ChangeNotifier {
     //int count = 0;
     for (Event element in _events) {
       if (element.name == name) {
-        print(element.desc);
+        debugPrint(element.desc);
         return element;
       }
       //count++;

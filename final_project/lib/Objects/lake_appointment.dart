@@ -1,19 +1,16 @@
 import 'dart:ui';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:final_project/Objects/Group.dart';
 
 // this is basically LakeNixonEvent but with only the stuff in Firebase
 class LakeAppointment {
   LakeAppointment(
       {required this.startTime,
       required this.endTime,
-      Color? this.color,
-      String? this.group,
-      String? this.notes,
-      String? this.startHour, //do we need this?
-      String? this.subject});
+      this.color,
+      this.group,
+      this.notes,
+      this.startHour, //do we need this?
+      this.subject});
 
   DateTime? startTime;
   DateTime? endTime;

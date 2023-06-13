@@ -1,14 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Pages/CalendarPage.dart';
-import '../Objects/Globals.dart';
-import 'package:final_project/Pages/LoginPage.dart';
+import '../Objects/globals.dart';
+import 'package:final_project/Pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'GroupPage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import '../firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../Objects/AppState.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -129,7 +124,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 'The account already exists for that email.');
                           }
                         } catch (e) {
-                          print(e);
+                          debugPrint(e.toString());
                         }
                         if (success) {
                           Navigator.pop(context);
@@ -145,11 +140,11 @@ class _SignupScreenState extends State<SignupScreen> {
                                 backgroundColor:
                                     MaterialStatePropertyAll<Color>(
                                         nixonbrown)),
+                            onPressed: goBack,
                             child: const Text(
                               'Back',
                               style: TextStyle(fontFamily: 'Fruit'),
-                            ),
-                            onPressed: goBack)))
+                            ))))
               ],
             )));
   }

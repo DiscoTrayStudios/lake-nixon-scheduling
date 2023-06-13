@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'CalendarTimeZonePicker.dart';
-import 'CustomRule.dart';
+import 'calendar_time_zone_picker.dart';
+import 'custom_rule.dart';
 
 class SelectRuleDialog extends StatefulWidget {
-  SelectRuleDialog(
+  const SelectRuleDialog(
       this.recurrenceProperties, this.appointmentColor, this.events,
-      {required this.onChanged, this.selectedAppointment});
+      {required this.onChanged, this.selectedAppointment, super.key});
 
   final Appointment? selectedAppointment;
 
-  RecurrenceProperties? recurrenceProperties;
+  final RecurrenceProperties? recurrenceProperties;
 
   final Color appointmentColor;
 
@@ -56,7 +56,7 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
   }
 
   void _updateRecurrenceType() {
-    _recurrenceType = widget.recurrenceProperties!.recurrenceType;
+    _recurrenceType = _recurrenceProperties!.recurrenceType;
     _recurrenceRange = _recurrenceProperties!.recurrenceRange;
     _interval = _recurrenceProperties!.interval;
     if (_interval == 1 && _recurrenceRange == RecurrenceRange.noEndDate) {
@@ -106,7 +106,7 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                     setState(() {
                       if (value != null) {
                         _rule = value;
-                        widget.recurrenceProperties = null;
+                        _recurrenceProperties = null;
                         widget.onChanged(
                             PickerChangedDetails(selectedRule: _rule));
                       }
@@ -124,12 +124,12 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                     setState(() {
                       if (value != null) {
                         _rule = value;
-                        widget.recurrenceProperties =
+                        _recurrenceProperties =
                             RecurrenceProperties(startDate: _startDate);
-                        widget.recurrenceProperties!.recurrenceType =
+                        _recurrenceProperties!.recurrenceType =
                             RecurrenceType.daily;
-                        widget.recurrenceProperties!.interval = 1;
-                        widget.recurrenceProperties!.recurrenceRange =
+                        _recurrenceProperties!.interval = 1;
+                        _recurrenceProperties!.recurrenceRange =
                             RecurrenceRange.noEndDate;
                         widget.onChanged(
                             PickerChangedDetails(selectedRule: _rule));
@@ -148,15 +148,14 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                     setState(() {
                       if (value != null) {
                         _rule = value;
-                        widget.recurrenceProperties =
+                        _recurrenceProperties =
                             RecurrenceProperties(startDate: _startDate);
-                        widget.recurrenceProperties!.recurrenceType =
+                        _recurrenceProperties!.recurrenceType =
                             RecurrenceType.weekly;
-                        widget.recurrenceProperties!.interval = 1;
-                        widget.recurrenceProperties!.recurrenceRange =
+                        _recurrenceProperties!.interval = 1;
+                        _recurrenceProperties!.recurrenceRange =
                             RecurrenceRange.noEndDate;
-                        widget.recurrenceProperties!.weekDays = _startDate
-                                    .weekday ==
+                        _recurrenceProperties!.weekDays = _startDate.weekday ==
                                 1
                             ? <WeekDays>[WeekDays.monday]
                             : _startDate.weekday == 2
@@ -187,14 +186,14 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                     setState(() {
                       if (value != null) {
                         _rule = value;
-                        widget.recurrenceProperties =
+                        _recurrenceProperties =
                             RecurrenceProperties(startDate: _startDate);
-                        widget.recurrenceProperties!.recurrenceType =
+                        _recurrenceProperties!.recurrenceType =
                             RecurrenceType.monthly;
-                        widget.recurrenceProperties!.interval = 1;
-                        widget.recurrenceProperties!.recurrenceRange =
+                        _recurrenceProperties!.interval = 1;
+                        _recurrenceProperties!.recurrenceRange =
                             RecurrenceRange.noEndDate;
-                        widget.recurrenceProperties!.dayOfMonth =
+                        _recurrenceProperties!.dayOfMonth =
                             widget.selectedAppointment!.startTime.day;
                         widget.onChanged(
                             PickerChangedDetails(selectedRule: _rule));
@@ -213,16 +212,16 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                     setState(() {
                       if (value != null) {
                         _rule = value;
-                        widget.recurrenceProperties =
+                        _recurrenceProperties =
                             RecurrenceProperties(startDate: _startDate);
-                        widget.recurrenceProperties!.recurrenceType =
+                        _recurrenceProperties!.recurrenceType =
                             RecurrenceType.yearly;
-                        widget.recurrenceProperties!.interval = 1;
-                        widget.recurrenceProperties!.recurrenceRange =
+                        _recurrenceProperties!.interval = 1;
+                        _recurrenceProperties!.recurrenceRange =
                             RecurrenceRange.noEndDate;
-                        widget.recurrenceProperties!.month =
+                        _recurrenceProperties!.month =
                             widget.selectedAppointment!.startTime.month;
-                        widget.recurrenceProperties!.dayOfMonth =
+                        _recurrenceProperties!.dayOfMonth =
                             widget.selectedAppointment!.startTime.day;
                         widget.onChanged(
                             PickerChangedDetails(selectedRule: _rule));

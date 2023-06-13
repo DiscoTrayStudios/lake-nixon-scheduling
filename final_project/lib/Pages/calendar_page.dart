@@ -1,27 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Objects/Event.dart';
-import 'package:final_project/Objects/Group.dart';
-import 'package:final_project/Objects/LakeNixonEvent.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:final_project/Objects/event.dart';
+import 'package:final_project/Objects/group.dart';
+import 'package:final_project/Objects/lake_nixon_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../Appointment Editor/AppointmentEditor.dart';
-import '../Objects/AppState.dart';
-import '../Objects/Globals.dart';
+import '../Appointment Editor/appointment_editor.dart';
+import '../Objects/app_state.dart';
+import '../Objects/globals.dart';
 
 List<LakeNixonEvent> appointments = <LakeNixonEvent>[];
 
 //late bool isUser;
 
 class CalendarPage extends StatefulWidget {
-  CalendarPage(
+  const CalendarPage(
       {super.key,
       required this.title,
       required this.group,
@@ -92,9 +89,9 @@ class _CalendarPageState extends State<CalendarPage> {
     CollectionReference events =
         FirebaseFirestore.instance.collection("events");
     final snapshot = await events.get();
-    if (snapshot.size > 0 && dbEvents.length == 0) {
+    if (snapshot.size > 0 && dbEvents.isEmpty) {
       List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      data.forEach((element) {
+      for (var element in data) {
         var event = element.data() as Map;
         var tmp = Event(
             name: event["name"],
@@ -102,15 +99,15 @@ class _CalendarPageState extends State<CalendarPage> {
             groupMax: event["groupMax"],
             desc: event["desc"]);
         dbEvents.add(tmp);
-      });
+      }
     } else {
-      print('No data available.3');
+      debugPrint('No data available.3');
     }
     for (Event event in dbEvents) {
       firebaseEvents
           .add(DropdownMenuItem(value: event.name, child: Text(event.name)));
     }
-    print(dbEvents);
+    debugPrint(dbEvents.toString());
   }
 
 // This helps initalize the calendars data source
@@ -251,7 +248,6 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-
 // This determines if we send the user to the master calendar or user calendar
   Widget _getCalendar(BuildContext context, String group) {
     if (widget.master) {
@@ -295,7 +291,7 @@ class _CalendarPageState extends State<CalendarPage> {
     return Consumer<AppState>(builder: (context, appState, child) {
       return Scaffold(
         appBar: AppBar(
-          flexibleSpace: FlexibleSpaceBar(),
+          flexibleSpace: const FlexibleSpaceBar(),
           title: Text("${widget.group.name} calendar",
               style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
           backgroundColor: nixonblue,

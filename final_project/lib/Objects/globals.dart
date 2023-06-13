@@ -69,11 +69,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:final_project/Pages/CalendarPage.dart';
 
-import 'Event.dart';
-import 'Group.dart';
+import 'event.dart';
+import 'group.dart';
 
 Color nixonblue = const Color.fromRGBO(165, 223, 249, 1);
 Color nixonyellow = const Color.fromRGBO(255, 248, 153, 1);
@@ -151,15 +149,11 @@ List<Group> groups = <Group>[
 
 // will probably be changed/deleted. used for getSavedEvents
 Group? indexGroups(String name) {
-  int count = 0;
-  int index = -1;
   Group? group;
   events.forEach((key, value) {
     if (key.name == name) {
-      index = count;
       group = key;
     }
-    count++;
   });
   return group;
 }

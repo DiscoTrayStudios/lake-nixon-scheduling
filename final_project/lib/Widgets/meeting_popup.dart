@@ -1,7 +1,4 @@
-import 'package:final_project/Objects/Group.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
@@ -15,7 +12,8 @@ class PopUpAppointmentEditor extends StatefulWidget {
       this.colorNames,
       this.selectedAppointment,
       this.timeZoneCollection,
-      this.visibleDates);
+      this.visibleDates,
+      {super.key});
 
   /// Model of appointment editor
 
@@ -44,7 +42,7 @@ class PopUpAppointmentEditor extends StatefulWidget {
   final List<DateTime> visibleDates;
 
   @override
-  _PopUpAppointmentEditorState createState() => _PopUpAppointmentEditorState();
+  State<PopUpAppointmentEditor> createState() => _PopUpAppointmentEditorState();
 }
 
 class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
@@ -146,8 +144,8 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
         }
       },
       child: Text(DateFormat('MMM dd, yyyy').format(_startDate),
-          style:
-              TextStyle(fontWeight: FontWeight.w500, color: defaultTextColor),
+          style: const TextStyle(
+              fontWeight: FontWeight.w500, color: defaultTextColor),
           textAlign: TextAlign.left),
     );
 
@@ -186,7 +184,8 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
       },
       child: Text(
         DateFormat('hh:mm a').format(_startDate),
-        style: TextStyle(fontWeight: FontWeight.w500, color: defaultTextColor),
+        style: const TextStyle(
+            fontWeight: FontWeight.w500, color: defaultTextColor),
         textAlign: TextAlign.left,
       ),
     );
@@ -229,7 +228,8 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
       },
       child: Text(
         DateFormat('hh:mm a').format(_endDate),
-        style: TextStyle(fontWeight: FontWeight.w500, color: defaultTextColor),
+        style: const TextStyle(
+            fontWeight: FontWeight.w500, color: defaultTextColor),
         textAlign: TextAlign.left,
       ),
     );
@@ -271,8 +271,8 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
         }
       },
       child: Text(DateFormat('MMM dd, yyyy').format(_endDate),
-          style:
-              TextStyle(fontWeight: FontWeight.w500, color: defaultTextColor),
+          style: const TextStyle(
+              fontWeight: FontWeight.w500, color: defaultTextColor),
           textAlign: TextAlign.left),
     );
 
@@ -281,7 +281,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
           height: 50,
           child: ListTile(
             trailing: IconButton(
-              icon: Icon(Icons.close, color: defaultColor),
+              icon: const Icon(Icons.close, color: defaultColor),
               splashRadius: 20,
               onPressed: () {
                 if (widget.newAppointment != null &&
@@ -307,14 +307,14 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
             leading: const Text(''),
             title: TextField(
               autofocus: true,
-              cursorColor: Color(0xff4169e1),
+              cursorColor: const Color(0xff4169e1),
               controller: TextEditingController(text: _subject),
               onChanged: (String value) {
                 _subject = value;
               },
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   color: defaultTextColor,
                   fontWeight: FontWeight.w400),
@@ -335,7 +335,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
             leading: Container(
                 width: 30,
                 alignment: Alignment.centerRight,
-                child: Icon(
+                child: const Icon(
                   Icons.access_time,
                   size: 20,
                   color: defaultColor,
@@ -369,7 +369,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
             leading: Container(
                 width: 30,
                 alignment: Alignment.centerRight,
-                child: Icon(
+                child: const Icon(
                   Icons.location_on,
                   color: defaultColor,
                   size: 20,
@@ -382,7 +382,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
               },
               keyboardType: TextInputType.multiline,
               maxLines: null,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 color: defaultTextColor,
               ),
@@ -402,7 +402,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
             leading: Container(
                 width: 30,
                 alignment: Alignment.centerRight,
-                child: Icon(
+                child: const Icon(
                   Icons.subject,
                   size: 20,
                   color: defaultColor,
@@ -414,7 +414,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
               },
               keyboardType: TextInputType.multiline,
               maxLines: 1,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 color: defaultTextColor,
               ),
@@ -430,7 +430,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
               leading: Container(
                   width: 30,
                   alignment: Alignment.centerRight,
-                  child: Icon(
+                  child: const Icon(
                     Icons.people,
                     color: defaultColor,
                     size: 20,
@@ -461,7 +461,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                 },
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  child: _getResourceEditor(TextStyle(
+                  child: _getResourceEditor(const TextStyle(
                       fontSize: 15,
                       color: defaultColor,
                       fontWeight: FontWeight.w300)),
@@ -501,7 +501,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   widget.colorNames[_selectedColorIndex],
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontWeight: FontWeight.w500, color: defaultTextColor),
                   textAlign: TextAlign.start,
                 ),
@@ -549,7 +549,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                               return const Text("hello");
                             });
                       },
-                      child: Text(
+                      child: const Text(
                         'MORE OPTIONS',
                         style: TextStyle(
                             fontWeight: FontWeight.w500,
@@ -564,24 +564,20 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                     ),
                     fillColor: const Color(0xff4169e1),
                     onPressed: () {
-                      if (widget.selectedAppointment != null ||
-                          widget.newAppointment != null) {
-                        if (widget.events.appointments!.isNotEmpty &&
-                            widget.events.appointments!
-                                .contains(widget.selectedAppointment)) {
-                          widget.events.appointments!.removeAt(widget
-                              .events.appointments!
-                              .indexOf(widget.selectedAppointment));
-                          widget.events.notifyListeners(
-                              CalendarDataSourceAction.remove,
-                              <Appointment>[widget.selectedAppointment]);
-                        }
-                        if (widget.appointment.isNotEmpty &&
-                            widget.appointment
-                                .contains(widget.newAppointment)) {
-                          widget.appointment.removeAt(widget.appointment
-                              .indexOf(widget.newAppointment!));
-                        }
+                      if (widget.events.appointments!.isNotEmpty &&
+                          widget.events.appointments!
+                              .contains(widget.selectedAppointment)) {
+                        widget.events.appointments!.removeAt(widget
+                            .events.appointments!
+                            .indexOf(widget.selectedAppointment));
+                        widget.events.notifyListeners(
+                            CalendarDataSourceAction.remove,
+                            <Appointment>[widget.selectedAppointment]);
+                      }
+                      if (widget.appointment.isNotEmpty &&
+                          widget.appointment.contains(widget.newAppointment)) {
+                        widget.appointment.removeAt(
+                            widget.appointment.indexOf(widget.newAppointment!));
                       }
 
                       widget.appointment.add(Appointment(
@@ -624,7 +620,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
   /// Return the resource editor to edit the resource collection for an
   /// appointment
   Widget _getResourceEditor(TextStyle hintTextStyle) {
-    if (_selectedResources == null || _selectedResources.isEmpty) {
+    if (_selectedResources.isEmpty) {
       return Text('Add people', style: hintTextStyle);
     }
 
@@ -856,28 +852,29 @@ class _ResourcePickerState extends State<_ResourcePicker> {
   }
 }
 
-enum _SelectRule {
-  doesNotRepeat,
-  everyDay,
-  everyWeek,
-  everyMonth,
-  everyYear,
-  custom
-}
+// enum _SelectRule {
+//   doesNotRepeat,
+//   everyDay,
+//   everyWeek,
+//   everyMonth,
+//   everyYear,
+//   custom
+// }
 
 typedef _PickerChanged = void Function(
     _PickerChangedDetails pickerChangedDetails);
 
 /// Details for the [_PickerChanged].
 class _PickerChangedDetails {
-  _PickerChangedDetails(
-      {this.index = -1,
-      this.resourceId,
-      this.selectedRule = _SelectRule.doesNotRepeat});
+  _PickerChangedDetails({
+    this.index = -1,
+    this.resourceId,
+    //this.selectedRule
+  });
 
   final int index;
 
   final Object? resourceId;
 
-  final _SelectRule? selectedRule;
+  //final _SelectRule? selectedRule;
 }

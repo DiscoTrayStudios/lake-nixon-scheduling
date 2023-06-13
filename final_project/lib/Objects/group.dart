@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'Globals.dart';
+import 'globals.dart';
 
 class Group {
   const Group({required this.name, required this.color, required this.age});
@@ -30,26 +30,6 @@ class GroupItem extends StatelessWidget {
   final ToDoListChangedCallback onListChanged;
   final Group group;
 
-  Color _getColor(BuildContext context) {
-    // The theme depends on the BuildContext because different
-    // parts of the tree can have different themes.
-    // The BuildContext indicates where the build is
-    // taking place and therefore which theme to use.
-    return Colors.black;
-    //return completed //
-    //? Colors.black54
-    //: Theme.of(context).primaryColor;
-  }
-
-  TextStyle? _getTextStyle(BuildContext context) {
-    //if (!completed) return null;
-
-    return const TextStyle(
-      color: Colors.black,
-      //decoration: TextDecoration.lineThrough,
-    );
-  }
-
   // _detailCounter(BuildContext)
 
   @override
@@ -61,7 +41,7 @@ class GroupItem extends StatelessWidget {
         tileColor: nixonyellow,
         iconColor: nixonblue,
         shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.black, width: 1),
+          side: const BorderSide(color: Colors.black, width: 1),
           borderRadius: BorderRadius.circular(5),
         ),
         onTap: () {

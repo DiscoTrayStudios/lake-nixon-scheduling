@@ -2,13 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../Objects/Event.dart';
-import '../Objects/Globals.dart';
+import '../Objects/event.dart';
+import '../Objects/globals.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-
 class DeleteDialog extends StatefulWidget {
-  const DeleteDialog(this.selectedAppointment, this.events);
+  const DeleteDialog(this.selectedAppointment, this.events, {super.key});
 
   final Appointment selectedAppointment;
   final CalendarDataSource events;
@@ -189,9 +188,9 @@ class DeleteDialogState extends State<DeleteDialog> {
                                 <Appointment>[parentAppointment]);
                           }
                           db.collection("schedules").doc(docName).delete().then(
-                                (doc) => print("Document deleted"),
+                                (doc) => debugPrint("Document deleted"),
                                 onError: (e) =>
-                                    print("Error updating document $e"),
+                                    debugPrint("Error updating document $e"),
                               );
                         }
                         Navigator.pop(context);

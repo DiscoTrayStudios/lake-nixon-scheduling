@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import 'AppointmentEditor.dart';
+import 'appointment_editor.dart';
 
 class CalendarTimeZonePicker extends StatefulWidget {
   const CalendarTimeZonePicker(
       this.backgroundColor, this.timeZoneCollection, this.selectedTimeZoneIndex,
-      {required this.onChanged});
+      {super.key, required this.onChanged});
 
   final Color backgroundColor;
 

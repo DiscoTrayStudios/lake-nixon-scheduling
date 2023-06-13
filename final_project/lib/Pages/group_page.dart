@@ -1,16 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/Pages/UserCalendarPage.dart';
+import 'package:final_project/Pages/user_calendar_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import '../Objects/AppState.dart';
-import '../Objects/Globals.dart';
-import '../Objects/Group.dart';
-import 'CalendarPage.dart';
-import 'package:firebase_database/firebase_database.dart';
-import '../Objects/Event.dart';
+import '../Objects/globals.dart';
+import '../Objects/group.dart';
+import 'calendar_page.dart';
 
 class GroupPage extends StatefulWidget {
-  GroupPage({super.key, required this.title});
+  const GroupPage({super.key, required this.title});
 
   final String title;
 
@@ -25,7 +22,7 @@ class _GroupPageState extends State<GroupPage> {
   var groupSizeController = TextEditingController();
   var descriptionController = TextEditingController();
 
-  Future<void> UserPush(Group group) async {
+  Future<void> userPush(Group group) async {
     await Navigator.of(context).push(
       MaterialPageRoute(
           builder: (context) => UserCalendarPage(
@@ -40,7 +37,7 @@ class _GroupPageState extends State<GroupPage> {
     //);
   }
 
-  Future<void> AdminPush(Group group) async {
+  Future<void> adminPush(Group group) async {
     //await Navigator.of(context).push(
     // MaterialPageRoute(builder: (context) => const SplashScreen()),
     //);
@@ -73,14 +70,14 @@ class _GroupPageState extends State<GroupPage> {
     });
 
     if (role == 'user') {
-      UserPush(group);
+      userPush(group);
     } else {
-      AdminPush(group);
+      adminPush(group);
     }
   }
 
   Future<void> _handleCalendar(Group group) async {
-    print("Chat");
+    debugPrint("Chat");
 
     _checkAuth(group);
     //await Navigator.of(context).push(
@@ -105,9 +102,9 @@ class _GroupPageState extends State<GroupPage> {
           padding: const EdgeInsets.fromLTRB(10, 20, 40, 0),
           child: ListView(
             // padding: const EdgeInsets.symmetric(vertical: 8.0),
-            children: groups.map((Group) {
+            children: groups.map((group) {
               return GroupItem(
-                group: Group,
+                group: group,
                 onListChanged: _handleCalendar,
               );
             }).toList(),
@@ -120,12 +117,12 @@ class _GroupPageState extends State<GroupPage> {
     );
   }
 
-  Future<void> _EventInfoPopupForm(BuildContext context) async {
+  Future<void> _eventInfoPopupForm(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Add Event'),
+          title: const Text('Add Event'),
           content: SingleChildScrollView(
             child: SizedBox(
               height: 200,
@@ -157,7 +154,7 @@ class _GroupPageState extends State<GroupPage> {
           actions: <Widget>[
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               key: const Key("OKButton"),
@@ -172,10 +169,10 @@ class _GroupPageState extends State<GroupPage> {
                 // if (snapshot.size > 0) {
                 //   List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
                 //   data.forEach((element) {
-                //     print(element.data());
+                //     debugPrint(element.data());
                 //   });
                 // } else {
-                //   print('No data available.');
+                //   debugPrint('No data available.');
                 // }
 
                 //This is where we write database, specfically to the event collection. You can change collection just up a couple lines
@@ -191,7 +188,7 @@ class _GroupPageState extends State<GroupPage> {
                 descriptionController.clear();
                 Navigator.pop(context);
               },
-              child: Text('Send'),
+              child: const Text('Send'),
             ),
           ],
         );
