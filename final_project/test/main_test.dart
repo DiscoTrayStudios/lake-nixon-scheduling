@@ -12,13 +12,13 @@ void main() {
 
     Widget nextPage = checkLogin(auth);
 
-    expect(nextPage, const LoginScreen());
+    expect(nextPage, isInstanceOf<LoginScreen>());
   });
   test('checkLogin should return StartPage when signed in', () {
     final auth = MockFirebaseAuth(signedIn: true);
 
     Widget nextPage = checkLogin(auth);
 
-    expect(nextPage, const LoginScreen());
+    expect(nextPage, isInstanceOf<StartPage>());
   });
 }
