@@ -1,11 +1,12 @@
-import 'package:final_project/Objects/app_state.dart';
-import 'package:final_project/Pages/start_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-import 'package:final_project/Pages/login_page.dart';
+
+import 'package:final_project/objects/app_state.dart';
+import 'package:final_project/pages/start_page.dart';
+import 'package:final_project/firebase_options.dart';
+import 'package:final_project/pages/login_page.dart';
 
 // Initialize firebase and run the app
 Future<void> main() async {
