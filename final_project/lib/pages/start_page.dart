@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -19,13 +18,15 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  late AppState appState;
+
   @override
   void initState() {
     for (Group g in groups) {
       createGroup(g);
     }
-    getSavedEvents();
-    Provider.of<AppState>(context, listen: false);
+    appState = Provider.of<AppState>(context, listen: false);
+    getSavedEvents(appState.firestore);
     super.initState();
   }
 
@@ -46,10 +47,6 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-  Future<void> logout() async {
-    await FirebaseAuth.instance.signOut();
-  }
-
   Future<void> logoutScreenPush() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -58,9 +55,8 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-  Future<void> getSavedEvents() async {
-    CollectionReference schedules =
-        FirebaseFirestore.instance.collection("schedules");
+  Future<void> getSavedEvents(FirebaseFirestore firebase) async {
+    CollectionReference schedules = firebase.collection("schedules");
     final snapshot = await schedules.get();
     if (snapshot.size > 0) {
       List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
@@ -166,8 +162,8 @@ class _StartPageState extends State<StartPage> {
                       "Logout",
                       style: TextStyle(fontFamily: 'Fruit', fontSize: 30),
                     ),
-                    onPressed: () {
-                      logout();
+                    onPressed: () async {
+                      await appState.auth.signOut();
                       logoutScreenPush();
                     },
                   ),
