@@ -27,8 +27,12 @@ class AppState extends ChangeNotifier {
   final List<Group> _groups = [];
   List<Group> get groups => _groups;
 
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   AppState() {
-    init();
+    init(auth, firestore);
   }
 
   bool firstSnapshot = true;
@@ -36,21 +40,18 @@ class AppState extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? appointmentSubscription;
   StreamSubscription<QuerySnapshot>? groupSubscription;
 
-  Future<void> init() async {
-    await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
-
-    FirebaseAuth.instance.userChanges().listen(
+  Future<void> init(FirebaseAuth auth, FirebaseFirestore firestore) async {
+    auth.userChanges().listen(
       (user) {
         eventSubscription?.cancel();
         appointmentSubscription?.cancel();
         groupSubscription?.cancel();
         debugPrint("starting to listen");
-        getEvents();
-        getAppointments();
+        getEvents(firestore);
+        getAppointments(firestore);
         debugPrint("Finished appointments ${_appointments.length}");
         //createGroups();
-        getGroups();
+        getGroups(firestore);
         firstSnapshot = false;
         notifyListeners();
       },
@@ -77,12 +78,11 @@ class AppState extends ChangeNotifier {
     return items;
   }
 
-//Takes the appointments from firebase and turns them into a class called LakeAppointment and puts them in a list we can use throughout the program
-  Future<void> getAppointments() async {
-    appointmentSubscription = FirebaseFirestore.instance
-        .collection('appointments')
-        .snapshots()
-        .listen((snapshot) {
+// Takes the appointments from firebase and turns them into a class called
+// LakeAppointment and puts them in a list we can use throughout the program
+  Future<void> getAppointments(FirebaseFirestore firestore) async {
+    appointmentSubscription =
+        firestore.collection('appointments').snapshots().listen((snapshot) {
       for (var document in snapshot.docs) {
         String valueString =
             document.data()['color'].split("(0x")[1].split(")")[0];
@@ -109,7 +109,8 @@ class AppState extends ChangeNotifier {
     List<Appointment> apps = [];
     for (LakeAppointment app in _appointments) {
       if (app.group == group) {
-        apps.add(createApp(app.startTime, app.endTime, app.color, app.subject));
+        apps.add(createAppointment(
+            app.startTime, app.endTime, app.color, app.subject));
       }
     }
     return apps;
@@ -123,8 +124,8 @@ class AppState extends ChangeNotifier {
     if (selectedGroups.isEmpty && selectedEvents.isEmpty) {
       if (_appointments.isNotEmpty) {
         for (LakeAppointment app in _appointments) {
-          apps.add(
-              createApp(app.startTime, app.endTime, app.color, app.subject));
+          apps.add(createAppointment(
+              app.startTime, app.endTime, app.color, app.subject));
         }
       }
     } else if (selectedGroups.isNotEmpty) {
@@ -135,16 +136,16 @@ class AppState extends ChangeNotifier {
         }
         for (LakeAppointment app in _appointments) {
           if (groupNames.contains(app.group)) {
-            apps.add(
-                createApp(app.startTime, app.endTime, app.color, app.subject));
+            apps.add(createAppointment(
+                app.startTime, app.endTime, app.color, app.subject));
           }
         }
       }
     } else {
       for (LakeAppointment app in _appointments) {
         if (selectedEvents.contains(app.subject)) {
-          apps.add(
-              createApp(app.startTime, app.endTime, app.color, app.subject));
+          apps.add(createAppointment(
+              app.startTime, app.endTime, app.color, app.subject));
         }
       }
     }
@@ -153,8 +154,9 @@ class AppState extends ChangeNotifier {
   }
 
 // This function takes in appointments formatted to be put into firebase and puts them into firebase
-  Future<void> addAppointments(Map<String, Map<String, dynamic>> events) async {
-    var apps = FirebaseFirestore.instance.collection("appointments");
+  Future<void> addAppointments(Map<String, Map<String, dynamic>> events,
+      FirebaseFirestore firestore) async {
+    var apps = firestore.collection("appointments");
     for (Map<String, dynamic> app in events.values) {
       apps.doc().set(app);
     }
@@ -190,7 +192,7 @@ class AppState extends ChangeNotifier {
   }
 
   //Takes a firebase appointment and turns it into a calendar appointment
-  Appointment createApp(startTime, endTime, color, subject) {
+  Appointment createAppointment(startTime, endTime, color, subject) {
     if (color.runtimeType == String) {
       String valueString = color.split("(0x")[1].split(")")[0];
       int value = int.parse(valueString, radix: 16);
@@ -201,7 +203,8 @@ class AppState extends ChangeNotifier {
         startTime: startTime, endTime: endTime, color: color, subject: subject);
   }
 
-  //Checks how many groups are in an event and a specific time and then checks to see if the amount the user wanted
+  //Checks how many groups are in an event and a specific time
+  //and then checks to see if the amount the user wanted
   //to add is more than the limit and returns true or false.
   bool checkEvent(String event, String startHour, int groupCount) {
     var current = 0;
@@ -242,11 +245,9 @@ class AppState extends ChangeNotifier {
   }
 
 // get all of the events from firebase
-  Future<void> getEvents() async {
-    eventSubscription = FirebaseFirestore.instance
-        .collection('events')
-        .snapshots()
-        .listen((snapshot) {
+  Future<void> getEvents(FirebaseFirestore firestore) async {
+    eventSubscription =
+        firestore.collection('events').snapshots().listen((snapshot) {
       debugPrint("in event snapshot");
       for (var document in snapshot.docs) {
         _events.add(Event(
@@ -259,11 +260,9 @@ class AppState extends ChangeNotifier {
   }
 
 //gets all of the groups from firebase
-  Future<void> getGroups() async {
-    groupSubscription = FirebaseFirestore.instance
-        .collection('groups')
-        .snapshots()
-        .listen((snapshot) {
+  Future<void> getGroups(FirebaseFirestore firestore) async {
+    groupSubscription =
+        firestore.collection('groups').snapshots().listen((snapshot) {
       debugPrint("in groups snapshot");
       for (var document in snapshot.docs) {
         String valueString =
@@ -290,6 +289,28 @@ class AppState extends ChangeNotifier {
       //count++;
     }
     return const Event(name: "error", ageMin: 0, groupMax: 0, desc: "");
+  }
+
+  Future<void> createEvent(FirebaseFirestore firestore, String name, int ageMin,
+      int groupMax, String desc) async {
+    CollectionReference events = firestore.collection("events");
+    final snapshot = await events.get();
+
+    // Example of reading in a collection and getting each doc
+
+    // if (snapshot.size > 0) {
+    //   List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
+    //   data.forEach((element) {
+    //     debugPrint(element.data());
+    //   });
+    // } else {
+    //   debugPrint('No data available.');
+    // }
+
+    //This is where we write database, specfically to the event collection. You can change collection just up a couple lines
+    int count = snapshot.size;
+    events.doc("$count").set(
+        {"name": name, "ageMin": ageMin, "groupMax": groupMax, "desc": desc});
   }
 
   // Future<void> createEvents() async {
