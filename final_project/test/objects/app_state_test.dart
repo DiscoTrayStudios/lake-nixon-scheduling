@@ -93,7 +93,7 @@ void main() {
 
     expect(items.length, 1);
   });
-  test('createCheckboxGroups creates checkbox events', () async {
+  test('createCheckboxEvents creates checkbox events', () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
     MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
 
