@@ -27,11 +27,11 @@ class AppState extends ChangeNotifier {
   final List<Group> _groups = [];
   List<Group> get groups => _groups;
 
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseFirestore firestore;
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseAuth auth;
 
-  AppState() {
+  AppState(this.firestore, this.auth) {
     init(auth, firestore);
   }
 
@@ -46,10 +46,8 @@ class AppState extends ChangeNotifier {
         eventSubscription?.cancel();
         appointmentSubscription?.cancel();
         groupSubscription?.cancel();
-        debugPrint("starting to listen");
         getEvents(firestore);
         getAppointments(firestore);
-        debugPrint("Finished appointments ${_appointments.length}");
         //createGroups();
         getGroups(firestore);
         firstSnapshot = false;
@@ -98,7 +96,6 @@ class AppState extends ChangeNotifier {
             startTime: start.toDate(),
             subject: document.data()['subject'],
             startHour: document.data()['start_hour']);
-        debugPrint(lake.toString());
         _appointments.add(lake);
       }
     });
@@ -198,7 +195,6 @@ class AppState extends ChangeNotifier {
       int value = int.parse(valueString, radix: 16);
       color = Color(value);
     }
-    debugPrint("Create app : $startTime");
     return Appointment(
         startTime: startTime, endTime: endTime, color: color, subject: subject);
   }
@@ -248,7 +244,6 @@ class AppState extends ChangeNotifier {
   Future<void> getEvents(FirebaseFirestore firestore) async {
     eventSubscription =
         firestore.collection('events').snapshots().listen((snapshot) {
-      debugPrint("in event snapshot");
       for (var document in snapshot.docs) {
         _events.add(Event(
             ageMin: document.data()['ageMin'],
@@ -263,7 +258,6 @@ class AppState extends ChangeNotifier {
   Future<void> getGroups(FirebaseFirestore firestore) async {
     groupSubscription =
         firestore.collection('groups').snapshots().listen((snapshot) {
-      debugPrint("in groups snapshot");
       for (var document in snapshot.docs) {
         String valueString =
             document.data()['color'].split("(0x")[1].split(")")[0];
@@ -283,7 +277,6 @@ class AppState extends ChangeNotifier {
     //int count = 0;
     for (Event element in _events) {
       if (element.name == name) {
-        debugPrint(element.desc);
         return element;
       }
       //count++;
