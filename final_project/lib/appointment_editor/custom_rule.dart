@@ -25,7 +25,7 @@ class CustomRule extends StatefulWidget {
 
 class CustomRuleState extends State<CustomRule> {
   late DateTime _startDate;
-  EndRule? _endRule;
+  // EndRule? _endRule;
   RecurrenceProperties? _recurrenceProperties;
   String? _selectedRecurrenceType, _monthlyRule, _weekNumberDay;
   int? _count, _interval, _month, _week;
@@ -53,7 +53,7 @@ class CustomRuleState extends State<CustomRule> {
     _dayOfMonth = _startDate.day;
     _dayOfWeek = _startDate.weekday;
     _monthlyRule = 'Monthly on day ${_startDate.day}th';
-    _endRule = EndRule.never;
+    // _endRule = EndRule.never;
     _month = _startDate.month;
     _weekNumber = _getWeekNumber(_startDate);
     _weekNumberDay =
@@ -109,11 +109,11 @@ class CustomRuleState extends State<CustomRule> {
     _recurrenceRange = _recurrenceProperties!.recurrenceRange;
     switch (_recurrenceRange) {
       case RecurrenceRange.noEndDate:
-        _endRule = EndRule.never;
+        // _endRule = EndRule.never;
         _rangeNoEndDate();
         break;
       case RecurrenceRange.endDate:
-        _endRule = EndRule.endDate;
+        // _endRule = EndRule.endDate;
         final Appointment? parentAppointment =
             widget.events.getPatternAppointment(widget.selectedAppointment, '')
                 as Appointment?;
@@ -121,7 +121,7 @@ class CustomRuleState extends State<CustomRule> {
         _rangeEndDate();
         break;
       case RecurrenceRange.count:
-        _endRule = EndRule.count;
+        // _endRule = EndRule.count;
         _rangeCount();
         break;
     }
@@ -737,191 +737,191 @@ class CustomRuleState extends State<CustomRule> {
                   padding: EdgeInsets.only(left: 15, top: 15),
                   child: Text('ENDS'),
                 ),
-                RadioListTile<EndRule>(
-                  contentPadding: const EdgeInsets.only(left: 7),
-                  title: const Text('Never'),
-                  value: EndRule.never,
-                  groupValue: _endRule,
-                  activeColor: const Color(0xff4169e1),
-                  onChanged: (EndRule? value) {
-                    setState(() {
-                      _endRule = EndRule.never;
-                      _rangeNoEndDate();
-                    });
-                  },
-                ),
+                // RadioListTile<EndRule>(
+                //   contentPadding: const EdgeInsets.only(left: 7),
+                //   title: const Text('Never'),
+                //   value: EndRule.never,
+                //   groupValue: _endRule,
+                //   activeColor: const Color(0xff4169e1),
+                //   onChanged: (EndRule? value) {
+                //     setState(() {
+                //       _endRule = EndRule.never;
+                //       _rangeNoEndDate();
+                //     });
+                //   },
+                // ),
                 const Divider(
                   indent: 50,
                   height: 1.0,
                   thickness: 1,
                 ),
-                RadioListTile<EndRule>(
-                  contentPadding: const EdgeInsets.only(left: 7),
-                  title: Row(
-                    children: <Widget>[
-                      const Text('On'),
-                      Container(
-                        margin: const EdgeInsets.only(left: 5),
-                        width: 110,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                        child: ButtonTheme(
-                            minWidth: 30.0,
-                            child: MaterialButton(
-                                elevation: 0,
-                                focusElevation: 0,
-                                highlightElevation: 0,
-                                disabledElevation: 0,
-                                hoverElevation: 0,
-                                onPressed: () async {
-                                  final DateTime? pickedDate =
-                                      await showDatePicker(
-                                          context: context,
-                                          initialDate: _selectedDate,
-                                          firstDate:
-                                              _startDate.isBefore(_firstDate)
-                                                  ? _startDate
-                                                  : _firstDate,
-                                          currentDate: _selectedDate,
-                                          lastDate: DateTime(2050),
-                                          builder: (BuildContext context,
-                                              Widget? child) {
-                                            return Theme(
-                                              data: ThemeData(
-                                                brightness: Brightness.light,
-                                                colorScheme:
-                                                    ColorScheme.fromSwatch(
-                                                  backgroundColor:
-                                                      const Color(0xff4169e1),
-                                                ),
-                                              ),
-                                              child: child!,
-                                            );
-                                          });
-                                  if (pickedDate == null) {
-                                    return;
-                                  }
-                                  setState(() {
-                                    _endRule = EndRule.endDate;
-                                    _recurrenceProperties!.recurrenceRange =
-                                        RecurrenceRange.endDate;
-                                    _selectedDate = DateTime(pickedDate.year,
-                                        pickedDate.month, pickedDate.day);
-                                    _recurrenceProperties!.endDate =
-                                        _selectedDate;
-                                  });
-                                },
-                                shape: const CircleBorder(),
-                                child: Text(
-                                  DateFormat('MM/dd/yyyy')
-                                      .format(_selectedDate),
-                                  style: const TextStyle(
-                                      fontSize: 13,
-                                      color: defaultTextColor,
-                                      fontWeight: FontWeight.w400),
-                                ))),
-                      ),
-                    ],
-                  ),
-                  value: EndRule.endDate,
-                  groupValue: _endRule,
-                  activeColor: const Color(0xff4169e1),
-                  onChanged: (EndRule? value) {
-                    setState(() {
-                      _endRule = value;
-                      _rangeEndDate();
-                    });
-                  },
-                ),
+                // RadioListTile<EndRule>(
+                //   contentPadding: const EdgeInsets.only(left: 7),
+                //   title: Row(
+                //     children: <Widget>[
+                //       const Text('On'),
+                //       Container(
+                //         margin: const EdgeInsets.only(left: 5),
+                //         width: 110,
+                //         height: 40,
+                //         decoration: BoxDecoration(
+                //           color: Colors.grey.withOpacity(0.1),
+                //           borderRadius: BorderRadius.circular(3),
+                //         ),
+                //         child: ButtonTheme(
+                //             minWidth: 30.0,
+                //             child: MaterialButton(
+                //                 elevation: 0,
+                //                 focusElevation: 0,
+                //                 highlightElevation: 0,
+                //                 disabledElevation: 0,
+                //                 hoverElevation: 0,
+                //                 onPressed: () async {
+                //                   final DateTime? pickedDate =
+                //                       await showDatePicker(
+                //                           context: context,
+                //                           initialDate: _selectedDate,
+                //                           firstDate:
+                //                               _startDate.isBefore(_firstDate)
+                //                                   ? _startDate
+                //                                   : _firstDate,
+                //                           currentDate: _selectedDate,
+                //                           lastDate: DateTime(2050),
+                //                           builder: (BuildContext context,
+                //                               Widget? child) {
+                //                             return Theme(
+                //                               data: ThemeData(
+                //                                 brightness: Brightness.light,
+                //                                 colorScheme:
+                //                                     ColorScheme.fromSwatch(
+                //                                   backgroundColor:
+                //                                       const Color(0xff4169e1),
+                //                                 ),
+                //                               ),
+                //                               child: child!,
+                //                             );
+                //                           });
+                //                   if (pickedDate == null) {
+                //                     return;
+                //                   }
+                //                   setState(() {
+                //                     _endRule = EndRule.endDate;
+                //                     _recurrenceProperties!.recurrenceRange =
+                //                         RecurrenceRange.endDate;
+                //                     _selectedDate = DateTime(pickedDate.year,
+                //                         pickedDate.month, pickedDate.day);
+                //                     _recurrenceProperties!.endDate =
+                //                         _selectedDate;
+                //                   });
+                //                 },
+                //                 shape: const CircleBorder(),
+                //                 child: Text(
+                //                   DateFormat('MM/dd/yyyy')
+                //                       .format(_selectedDate),
+                //                   style: const TextStyle(
+                //                       fontSize: 13,
+                //                       color: defaultTextColor,
+                //                       fontWeight: FontWeight.w400),
+                //                 ))),
+                //       ),
+                //     ],
+                //   ),
+                //   value: EndRule.endDate,
+                //   groupValue: _endRule,
+                //   activeColor: const Color(0xff4169e1),
+                //   onChanged: (EndRule? value) {
+                //     setState(() {
+                //       _endRule = value;
+                //       _rangeEndDate();
+                //     });
+                //   },
+                // ),
                 const Divider(
                   indent: 50,
                   height: 1.0,
                   thickness: 1,
                 ),
-                SizedBox(
-                  height: 40,
-                  child: RadioListTile<EndRule>(
-                    contentPadding: const EdgeInsets.only(left: 7),
-                    title: Row(
-                      children: <Widget>[
-                        const Text('After'),
-                        Container(
-                          height: 40,
-                          width: 60,
-                          padding: const EdgeInsets.only(left: 5, bottom: 10),
-                          margin: const EdgeInsets.only(left: 5),
-                          alignment: Alignment.topCenter,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                          child: TextField(
-                            readOnly: _endRule != EndRule.count,
-                            controller: TextEditingController.fromValue(
-                                TextEditingValue(
-                                    text: _count.toString(),
-                                    selection: TextSelection.collapsed(
-                                        offset: _count.toString().length))),
-                            cursorColor: const Color(0xff4169e1),
-                            onTap: () {
-                              setState(() {
-                                _endRule = EndRule.count;
-                              });
-                            },
-                            onChanged: (String value) async {
-                              if (value.isNotEmpty) {
-                                _count = int.parse(value);
-                                if (_count == 0) {
-                                  _count = 1;
-                                } else if (_count! >= 999) {
-                                  setState(() {
-                                    _count = 999;
-                                  });
-                                }
-                              } else if (value.isEmpty) {
-                                _count = 1;
-                              }
-                              _endRule = EndRule.count;
-                              _recurrenceProperties!.recurrenceRange =
-                                  RecurrenceRange.count;
-                              _recurrenceProperties!.recurrenceCount = _count!;
-                            },
-                            keyboardType: TextInputType.number,
-                            // ignore: always_specify_types
-                            inputFormatters: [
-                              FilteringTextInputFormatter.digitsOnly
-                            ],
-                            style: const TextStyle(
-                                fontSize: 13,
-                                color: defaultTextColor,
-                                fontWeight: FontWeight.w400),
-                            textAlign: TextAlign.center,
-                            decoration:
-                                const InputDecoration(border: InputBorder.none),
-                          ),
-                        ),
-                        Container(
-                          width: 10,
-                        ),
-                        const Text('occurrence'),
-                      ],
-                    ),
-                    value: EndRule.count,
-                    groupValue: _endRule,
-                    activeColor: const Color(0xff4169e1),
-                    onChanged: (EndRule? value) {
-                      setState(() {
-                        _endRule = value;
-                        _recurrenceProperties!.recurrenceRange =
-                            RecurrenceRange.count;
-                        _recurrenceProperties!.recurrenceCount = _count!;
-                      });
-                    },
-                  ),
-                ),
+                // SizedBox(
+                //   height: 40,
+                //   child: RadioListTile<EndRule>(
+                //     contentPadding: const EdgeInsets.only(left: 7),
+                //     title: Row(
+                //       children: <Widget>[
+                //         const Text('After'),
+                //         Container(
+                //           height: 40,
+                //           width: 60,
+                //           padding: const EdgeInsets.only(left: 5, bottom: 10),
+                //           margin: const EdgeInsets.only(left: 5),
+                //           alignment: Alignment.topCenter,
+                //           decoration: BoxDecoration(
+                //             color: Colors.grey.withOpacity(0.1),
+                //             borderRadius: BorderRadius.circular(3),
+                //           ),
+                //           child: TextField(
+                //             readOnly: _endRule != EndRule.count,
+                //             controller: TextEditingController.fromValue(
+                //                 TextEditingValue(
+                //                     text: _count.toString(),
+                //                     selection: TextSelection.collapsed(
+                //                         offset: _count.toString().length))),
+                //             cursorColor: const Color(0xff4169e1),
+                //             onTap: () {
+                //               setState(() {
+                //                 _endRule = EndRule.count;
+                //               });
+                //             },
+                //             onChanged: (String value) async {
+                //               if (value.isNotEmpty) {
+                //                 _count = int.parse(value);
+                //                 if (_count == 0) {
+                //                   _count = 1;
+                //                 } else if (_count! >= 999) {
+                //                   setState(() {
+                //                     _count = 999;
+                //                   });
+                //                 }
+                //               } else if (value.isEmpty) {
+                //                 _count = 1;
+                //               }
+                //               _endRule = EndRule.count;
+                //               _recurrenceProperties!.recurrenceRange =
+                //                   RecurrenceRange.count;
+                //               _recurrenceProperties!.recurrenceCount = _count!;
+                //             },
+                //             keyboardType: TextInputType.number,
+                //             // ignore: always_specify_types
+                //             inputFormatters: [
+                //               FilteringTextInputFormatter.digitsOnly
+                //             ],
+                //             style: const TextStyle(
+                //                 fontSize: 13,
+                //                 color: defaultTextColor,
+                //                 fontWeight: FontWeight.w400),
+                //             textAlign: TextAlign.center,
+                //             decoration:
+                //                 const InputDecoration(border: InputBorder.none),
+                //           ),
+                //         ),
+                //         Container(
+                //           width: 10,
+                //         ),
+                //         const Text('occurrence'),
+                //       ],
+                //     ),
+                //     value: EndRule.count,
+                //     groupValue: _endRule,
+                //     activeColor: const Color(0xff4169e1),
+                //     onChanged: (EndRule? value) {
+                //       setState(() {
+                //         _endRule = value;
+                //         _recurrenceProperties!.recurrenceRange =
+                //             RecurrenceRange.count;
+                //         _recurrenceProperties!.recurrenceCount = _count!;
+                //       });
+                //     },
+                //   ),
+                // ),
               ],
             ),
           ],
