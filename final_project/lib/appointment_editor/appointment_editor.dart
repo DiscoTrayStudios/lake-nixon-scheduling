@@ -864,13 +864,14 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             //If it does, it takes us to the else statement
                             if (appState.checkEvent(name, hour, groupAmount)) {
                               //If it doesnt we come in here and we add the appoinments to the app state
-                              appState.addAppointments(groupToApp);
+                              appState.addAppointments(
+                                  groupToApp, appState.firestore);
                               //This for loop adds all of the appointments to the calendar backend which separate from ours.
                               for (Map<String, dynamic> app
                                   in groupToApp.values) {
                                 widget.events.notifyListeners(
                                     CalendarDataSourceAction.add, [
-                                  appState.createApp(
+                                  appState.createAppointment(
                                       app["start_time"],
                                       app["end_time"],
                                       app["color"],
