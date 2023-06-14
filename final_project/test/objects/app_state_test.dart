@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:final_project/objects/group.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
@@ -13,8 +15,12 @@ Future<AppState> initializeAppStateTests(
 
   await auth.currentUser!.reload();
 
-  await instance.collection('events').doc('Test Event').set(
-      {"name": "Test", "ageMin": 1, "groupMax": 6, "desc": "Test Description"});
+  await instance.collection('events').doc('Test Event').set({
+    "name": "Test Subject",
+    "ageMin": 1,
+    "groupMax": 6,
+    "desc": "Test Description"
+  });
 
   await instance.collection('appointments').doc('Test Appointment').set({
     "start_time": DateTime.utc(1969, 7, 20, 20),
@@ -136,7 +142,7 @@ void main() {
       "end_time": DateTime.utc(1969, 7, 20, 20, 30),
       "color": "Color(0xff2471a3)",
       "notes": "Test Notes",
-      "subject": "Test Subject",
+      "subject": "Test Subject 2",
       "group": "Test Group 2",
       "start_hour": "20"
     });
@@ -144,5 +150,242 @@ void main() {
     List<Appointment> appts = appState.allAppointments([], []);
 
     expect(appts.length, 2);
+    expect(appts[0].subject, "Test Subject");
+    expect(appts[1].subject, "Test Subject 2");
+  });
+  test(
+      'allAppointments returns only matching appointments when filtered by event',
+      () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    await instance.collection('appointments').doc('Test Appointment 2').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject 2",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    await instance.collection('appointments').doc('Test Appointment 3').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    List<Appointment> appts = appState.allAppointments([], ["Test Subject"]);
+
+    expect(appts.length, 2);
+    expect(appts[0].subject, "Test Subject");
+    expect(appts[1].subject, "Test Subject");
+  });
+  test(
+      'allAppointments returns only matching appointments when filtered by group',
+      () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    await instance.collection('appointments').doc('Test Appointment 2').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject 2",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    await instance.collection('appointments').doc('Test Appointment 3').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    List<Appointment> appts = appState.allAppointments(
+        [const Group(age: 1, color: Color(0xff000000), name: "Test Group 2")],
+        []);
+
+    expect(appts.length, 2);
+    expect(appts[0].subject, "Test Subject 2");
+    expect(appts[1].subject, "Test Subject");
+  });
+  test('addAppointments adds appointments to firebase', () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    await instance
+        .collection('appointments')
+        .count()
+        .get()
+        .then((value) => expect(value.count, 1));
+
+    await appState.addAppointments({
+      'appt 1': {
+        "start_time": DateTime.utc(1969, 7, 20, 20),
+        "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+        "color": "Color(0xff2471a3)",
+        "notes": "Test Notes",
+        "subject": "Test Subject",
+        "group": "Test Group 2",
+        "start_hour": "20"
+      },
+      'appt 2': {
+        "start_time": DateTime.utc(1969, 7, 20, 20),
+        "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+        "color": "Color(0xff2471a3)",
+        "notes": "Test Notes",
+        "subject": "Test Subject",
+        "group": "Test Group 2",
+        "start_hour": "20"
+      }
+    }, instance);
+
+    await instance
+        .collection('appointments')
+        .count()
+        .get()
+        .then((value) => expect(value.count, 3));
+    await instance
+        .collection('appointments')
+        .where("group", isEqualTo: "Test Group 2")
+        .count()
+        .get()
+        .then((value) => expect(value.count, 2));
+  });
+  test('getCurrentAmount gets gets correct ratio of groups', () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    await instance.collection('appointments').doc('Test Appointment 2').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    await instance.collection('appointments').doc('Test Appointment 3').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject 2",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    expect(
+        appState.getCurrentAmount(
+            "Test Subject", DateTime.utc(1969, 7, 20, 20)),
+        "3/6");
+  });
+  test('createAppointment creates calendar appointements from firebase',
+      () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    Appointment appt = appState.createAppointment(
+        DateTime.utc(1969, 7, 20, 20),
+        DateTime.utc(1969, 7, 20, 20, 30),
+        "Color(0xff2471a3)",
+        "Test Subject 2");
+
+    expect(appt.startTime, DateTime.utc(1969, 7, 20, 20));
+    expect(appt.endTime, DateTime.utc(1969, 7, 20, 20, 30));
+    expect(appt.color, const Color(0xff2471a3));
+    expect(appt.subject, "Test Subject 2");
+  });
+  test('checkEvent correctly identifies if there are too many groups',
+      () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    await instance.collection('appointments').doc('Test Appointment 2').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    await instance.collection('appointments').doc('Test Appointment 3').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    await instance.collection('appointments').doc('Test Appointment 4').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    expect(appState.checkEvent("Test Subject", "20", 0), true);
+    expect(appState.checkEvent("Test Subject", "20", 1), true);
+    expect(appState.checkEvent("Test Subject", "20", 2), true);
+    expect(appState.checkEvent("Test Subject", "20", 3), false);
+    expect(appState.checkEvent("Test Subject", "20", 15), false);
+  });
+  test('getApptsAtTime gets right appts', () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    await instance.collection('appointments').doc('Test Appointment 2').set({
+      "start_time": DateTime.utc(1969, 7, 20, 20),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "20"
+    });
+
+    await instance.collection('appointments').doc('Test Appointment 3').set({
+      "start_time": DateTime.utc(1969, 7, 20, 19),
+      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+      "color": "Color(0xff2471a3)",
+      "notes": "Test Notes",
+      "subject": "Test Subject",
+      "group": "Test Group 2",
+      "start_hour": "19"
+    });
+
+    expect(appState.getApptsAtTime(DateTime.utc(1969, 7, 20, 20)).length, 2);
   });
 }

@@ -163,9 +163,9 @@ class AppState extends ChangeNotifier {
 // Gets the amount of groups in an event at a specific time and returns that as a value that shows how many are in the event
 // out of how many can be in the event. This is used in the event dropdown so you can see when selecting how full they are.
   String getCurrentAmount(String event, startTime) {
-    var apps = getAppsAtTime(startTime);
+    var apps = getApptsAtTime(startTime);
     var count = 0;
-    var total = indexEvents(event).groupMax;
+    var total = lookupEventByName(event).groupMax;
     for (LakeAppointment app in apps) {
       if (app.subject == event) {
         count++;
@@ -174,6 +174,7 @@ class AppState extends ChangeNotifier {
     return "$count/$total";
   }
 
+  //Move this function to appontment_editor.dart
   //FIX THE START TIME ISSUE AND MAKE IT DAY SPECIFIC NOT TIME SPECIFIC
   //^^ I think this has been fixed but I'll keep that there just to make sure its not forgotten if I didn't fix it
   // This creates the event dropdown with the amount of groups in each event
@@ -205,7 +206,7 @@ class AppState extends ChangeNotifier {
   //to add is more than the limit and returns true or false.
   bool checkEvent(String event, String startHour, int groupCount) {
     var current = 0;
-    var event0 = indexEvents(event);
+    var event0 = lookupEventByName(event);
     for (LakeAppointment app in _appointments) {
       // If the event capacity is not filled up, the current app is this event and they start at the same hour
       if (app.subject == event && app.startHour == startHour) {
@@ -220,10 +221,10 @@ class AppState extends ChangeNotifier {
   }
 
 //Returns the appointments happening at a certain time
-  List<LakeAppointment> getAppsAtTime(startTime) {
+  List<LakeAppointment> getApptsAtTime(startTime) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
-      if (app.startTime! == startTime) {
+      if (app.startTime!.isAtSameMomentAs(startTime)) {
         apps.add(app);
       }
     }
@@ -234,7 +235,7 @@ class AppState extends ChangeNotifier {
   List<String> getGroupsAtTime(startTime) {
     List<String> groups = [];
     for (LakeAppointment app in _appointments) {
-      if (app.startTime! == startTime) {
+      if (app.startTime!.isAtSameMomentAs(startTime)) {
         groups.add(app.group!);
       }
     }
@@ -276,7 +277,7 @@ class AppState extends ChangeNotifier {
 
   // give this function an event name and it will give you the index for event in the global list
   //so that you can extract other information
-  Event indexEvents(String name) {
+  Event lookupEventByName(String name) {
     //int count = 0;
     for (Event element in _events) {
       if (element.name == name) {
