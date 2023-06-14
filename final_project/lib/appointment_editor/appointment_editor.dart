@@ -629,7 +629,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   color: defaultColor,
                 ),
                 title: Text(
-                  appState.indexEvents(_subject).desc,
+                  appState.lookupEventByName(_subject).desc,
                   style: TextStyle(
                       fontSize: 18,
                       color: defaultColor,
