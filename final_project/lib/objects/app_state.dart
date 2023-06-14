@@ -27,6 +27,10 @@ class AppState extends ChangeNotifier {
   final List<Group> _groups = [];
   List<Group> get groups => _groups;
 
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   AppState() {
     init();
   }
@@ -290,6 +294,28 @@ class AppState extends ChangeNotifier {
       //count++;
     }
     return const Event(name: "error", ageMin: 0, groupMax: 0, desc: "");
+  }
+
+  Future<void> createEvent(FirebaseFirestore instance, String name, int ageMin,
+      int groupMax, String desc) async {
+    CollectionReference events = instance.collection("events");
+    final snapshot = await events.get();
+
+    // Example of reading in a collection and getting each doc
+
+    // if (snapshot.size > 0) {
+    //   List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
+    //   data.forEach((element) {
+    //     debugPrint(element.data());
+    //   });
+    // } else {
+    //   debugPrint('No data available.');
+    // }
+
+    //This is where we write database, specfically to the event collection. You can change collection just up a couple lines
+    int count = snapshot.size;
+    events.doc("$count").set(
+        {"name": name, "ageMin": ageMin, "groupMax": groupMax, "desc": desc});
   }
 
   // Future<void> createEvents() async {
