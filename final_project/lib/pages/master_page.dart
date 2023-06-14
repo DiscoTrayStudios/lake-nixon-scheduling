@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import "package:syncfusion_flutter_calendar/calendar.dart";
+import 'package:provider/provider.dart';
 
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/calendar_page.dart';
 import 'package:final_project/objects/globals.dart';
+
+import 'package:final_project/objects/app_state.dart';
 
 class MasterPage extends StatefulWidget {
   const MasterPage({Key? key}) : super(key: key);
@@ -22,8 +25,11 @@ class _MasterPageState extends State<MasterPage> {
   var eventController = TextEditingController();
   var ageLimitController = TextEditingController();
   var groupSizeController = TextEditingController();
+  var descController = TextEditingController();
 
   Future<void> _eventInfoPopupForm(BuildContext context) async {
+    final provider = Provider.of<AppState>(context);
+
     return showDialog(
       context: context,
       builder: (context) {
@@ -52,6 +58,10 @@ class _MasterPageState extends State<MasterPage> {
                       controller: groupSizeController,
                       decoration: 'Group Size',
                       formkey: "YearField"),
+                  FormFieldTemplate(
+                      controller: descController,
+                      decoration: 'Description',
+                      formkey: "DescField")
                 ],
               ),
             ),
@@ -65,31 +75,18 @@ class _MasterPageState extends State<MasterPage> {
               key: const Key("OKButton"),
               onPressed: () async {
                 // This is how you get the database from Firebase
-                CollectionReference events =
-                    FirebaseFirestore.instance.collection("events");
-                final snapshot = await events.get();
 
-                // Example of reading in a collection and getting each doc
+                provider.createEvent(
+                    provider.firestore,
+                    eventController.text,
+                    int.parse(ageLimitController.text),
+                    int.parse(groupSizeController.text),
+                    descController.text);
 
-                // if (snapshot.size > 0) {
-                //   List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-                //   data.forEach((element) {
-                //     debugPrint(element.data());
-                //   });
-                // } else {
-                //   debugPrint('No data available.');
-                // }
-
-                //This is where we write database, specfically to the event collection. You can change collection just up a couple lines
-                int count = snapshot.size;
-                events.doc("$count").set({
-                  "name": eventController.text,
-                  "ageMin": int.parse(ageLimitController.text),
-                  "groupMax": int.parse(groupSizeController.text)
-                });
                 eventController.clear();
                 ageLimitController.clear();
                 groupSizeController.clear();
+                descController.clear();
                 Navigator.pop(context);
               },
               child: const Text('Send'),
