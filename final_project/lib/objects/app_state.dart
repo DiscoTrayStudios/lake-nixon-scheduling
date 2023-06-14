@@ -81,6 +81,7 @@ class AppState extends ChangeNotifier {
   Future<void> getAppointments(FirebaseFirestore firestore) async {
     appointmentSubscription =
         firestore.collection('appointments').snapshots().listen((snapshot) {
+      _appointments.clear();
       for (var document in snapshot.docs) {
         String valueString =
             document.data()['color'].split("(0x")[1].split(")")[0];
@@ -244,6 +245,7 @@ class AppState extends ChangeNotifier {
   Future<void> getEvents(FirebaseFirestore firestore) async {
     eventSubscription =
         firestore.collection('events').snapshots().listen((snapshot) {
+      _events.clear();
       for (var document in snapshot.docs) {
         _events.add(Event(
             ageMin: document.data()['ageMin'],
@@ -258,6 +260,7 @@ class AppState extends ChangeNotifier {
   Future<void> getGroups(FirebaseFirestore firestore) async {
     groupSubscription =
         firestore.collection('groups').snapshots().listen((snapshot) {
+      _groups.clear();
       for (var document in snapshot.docs) {
         String valueString =
             document.data()['color'].split("(0x")[1].split(")")[0];
