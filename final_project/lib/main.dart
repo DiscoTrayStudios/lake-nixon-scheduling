@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ChangeNotifierProvider(
-    create: ((context) => AppState()),
+    create: ((context) =>
+        AppState(FirebaseFirestore.instance, FirebaseAuth.instance)),
     child: const MyApp(),
   ));
 }
