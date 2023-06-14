@@ -293,18 +293,6 @@ class AppState extends ChangeNotifier {
     CollectionReference events = firestore.collection("events");
     final snapshot = await events.get();
 
-    // Example of reading in a collection and getting each doc
-
-    // if (snapshot.size > 0) {
-    //   List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-    //   data.forEach((element) {
-    //     debugPrint(element.data());
-    //   });
-    // } else {
-    //   debugPrint('No data available.');
-    // }
-
-    //This is where we write database, specfically to the event collection. You can change collection just up a couple lines
     int count = snapshot.size;
     events.doc("$count").set(
         {"name": name, "ageMin": ageMin, "groupMax": groupMax, "desc": desc});
