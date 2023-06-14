@@ -235,7 +235,8 @@ class AppState extends ChangeNotifier {
   List<String> getGroupsAtTime(startTime) {
     List<String> groups = [];
     for (LakeAppointment app in _appointments) {
-      if (app.startTime!.isAtSameMomentAs(startTime)) {
+      if (app.startTime!.isAtSameMomentAs(startTime) &&
+          !groups.contains(app.group!)) {
         groups.add(app.group!);
       }
     }
