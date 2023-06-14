@@ -28,7 +28,7 @@ class _MasterPageState extends State<MasterPage> {
   var descController = TextEditingController();
 
   Future<void> _eventInfoPopupForm(BuildContext context) async {
-    final provider = Provider.of<AppState>(context);
+    final provider = Provider.of<AppState>(context, listen: false);
 
     return showDialog(
       context: context,
