@@ -22,11 +22,11 @@ class _StartPageState extends State<StartPage> {
 
   @override
   void initState() {
-    for (Group g in groups) {
-      createGroup(g);
-    }
+    // for (Group g in groups) {
+    //   createGroup(g);
+    // }
     appState = Provider.of<AppState>(context, listen: false);
-    getSavedEvents(appState.firestore);
+    // getSavedEvents(appState.firestore);
     super.initState();
   }
 
@@ -55,42 +55,42 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-  Future<void> getSavedEvents(FirebaseFirestore firebase) async {
-    CollectionReference schedules = firebase.collection("schedules");
-    final snapshot = await schedules.get();
-    if (snapshot.size > 0) {
-      List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      for (var element in data) {
-        var event = element.data() as Map;
-        Map apps = event["appointments"];
+  // Future<void> getSavedEvents(FirebaseFirestore firebase) async {
+  //   CollectionReference schedules = firebase.collection("schedules");
+  //   final snapshot = await schedules.get();
+  //   if (snapshot.size > 0) {
+  //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
+  //     for (var element in data) {
+  //       var event = element.data() as Map;
+  //       Map apps = event["appointments"];
 
-        apps.forEach((key, value) {
-          for (var appt in value) {
-            var app = appt["appointment"];
-            var test = app[2];
-            String valueString = test.split('(0x')[1].split(')')[0];
-            int value = int.parse(valueString, radix: 16);
-            Color color = Color(value);
-            Appointment tmp = Appointment(
-                startTime: app[0].toDate(),
-                endTime: app[1].toDate(),
-                color: color,
-                startTimeZone: app[3],
-                endTimeZone: app[4],
-                notes: app[5],
-                isAllDay: app[6],
-                subject: app[7],
-                resourceIds: app[8],
-                recurrenceRule: app[9]);
-            var group = indexGroups(key);
-            events[group]!.add(tmp);
-          }
-        });
-      }
-    } else {
-      debugPrint('No data available.2');
-    }
-  }
+  //       apps.forEach((key, value) {
+  //         for (var appt in value) {
+  //           var app = appt["appointment"];
+  //           var test = app[2];
+  //           String valueString = test.split('(0x')[1].split(')')[0];
+  //           int value = int.parse(valueString, radix: 16);
+  //           Color color = Color(value);
+  //           Appointment tmp = Appointment(
+  //               startTime: app[0].toDate(),
+  //               endTime: app[1].toDate(),
+  //               color: color,
+  //               startTimeZone: app[3],
+  //               endTimeZone: app[4],
+  //               notes: app[5],
+  //               isAllDay: app[6],
+  //               subject: app[7],
+  //               resourceIds: app[8],
+  //               recurrenceRule: app[9]);
+  //           var group = indexGroups(key);
+  //           events[group]!.add(tmp);
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     debugPrint('No data available.2');
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

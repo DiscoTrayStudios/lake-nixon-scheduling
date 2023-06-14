@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/event.dart';
@@ -67,8 +69,9 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
     bool user = widget.isUser;
     //_checkAuth();
     getEvents();
-    getSavedEvents();
-    _events = AppointmentDataSource(_getDataSource(widget.group));
+    // getSavedEvents();
+    _events = AppointmentDataSource(
+        Provider.of<AppState>(context).allAppointments([widget.group], []));
     debugPrint(_events.toString());
 
     super.initState();
@@ -87,7 +90,7 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
             ageMin: event["ageMin"],
             groupMax: event["groupMax"],
             desc: event["desc"]);
-        dbEvents.add(tmp);
+        // dbEvents.add(tmp);
 
         firebaseEvents.add(
             DropdownMenuItem(value: event["name"], child: Text(event["name"])));
@@ -95,74 +98,74 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
     } else {
       debugPrint('No data available.');
     }
-    debugPrint(dbEvents.toString());
+    // debugPrint(dbEvents.toString());
   }
 
-  Future<void> getSavedEvents() async {
-    CollectionReference schedules =
-        FirebaseFirestore.instance.collection("schedules");
-    final snapshot = await schedules.get();
-    if (snapshot.size > 0) {
-      List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      for (var element in data) {
-        var event = element.data() as Map;
-        Map apps = event["appointments"];
+  // Future<void> getSavedEvents() async {
+  //   CollectionReference schedules =
+  //       FirebaseFirestore.instance.collection("schedules");
+  //   final snapshot = await schedules.get();
+  //   if (snapshot.size > 0) {
+  //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
+  //     for (var element in data) {
+  //       var event = element.data() as Map;
+  //       Map apps = event["appointments"];
 
-        apps.forEach((key, value) {
-          for (var appt in value) {
-            var app = appt["appointment"];
-            var test = app[2];
-            String valueString = test.split('(0x')[1].split(')')[0];
-            int value = int.parse(valueString, radix: 16);
-            Color color = Color(value);
-            debugPrint(app[6]);
-            Appointment tmp = Appointment(
-                startTime: app[0].toDate(),
-                endTime: app[1].toDate(),
-                color: color,
-                startTimeZone: app[3],
-                endTimeZone: app[4],
-                notes: app[5],
-                isAllDay: app[6],
-                subject: app[7],
-                resourceIds: app[8],
-                recurrenceRule: app[9]);
-            var group = indexGroups(key);
-            events[group]!.add(tmp);
-          }
-        });
-      }
-    } else {
-      debugPrint('No data available.');
-    }
-  }
+  //       apps.forEach((key, value) {
+  //         for (var appt in value) {
+  //           var app = appt["appointment"];
+  //           var test = app[2];
+  //           String valueString = test.split('(0x')[1].split(')')[0];
+  //           int value = int.parse(valueString, radix: 16);
+  //           Color color = Color(value);
+  //           debugPrint(app[6]);
+  //           Appointment tmp = Appointment(
+  //               startTime: app[0].toDate(),
+  //               endTime: app[1].toDate(),
+  //               color: color,
+  //               startTimeZone: app[3],
+  //               endTimeZone: app[4],
+  //               notes: app[5],
+  //               isAllDay: app[6],
+  //               subject: app[7],
+  //               resourceIds: app[8],
+  //               recurrenceRule: app[9]);
+  //           var group = indexGroups(key);
+  //           events[group]!.add(tmp);
+  //         }
+  //       });
+  //     }
+  //   } else {
+  //     debugPrint('No data available.');
+  //   }
+  // }
 
-  List<Appointment> _getDataSource(Group group) {
-    _colorNames.add('Green');
-    _colorNames.add('Purple');
-    _colorNames.add('Red');
-    _colorNames.add('Orange');
-    _colorNames.add('Caramel');
-    _colorNames.add('Light Green');
-    _colorNames.add('Blue');
-    _colorNames.add('Peach');
-    _colorNames.add('Gray');
+  // List<Appointment> _getDataSource(Group group) {
+  //   _colorNames.add('Green');
+  //   _colorNames.add('Purple');
+  //   _colorNames.add('Red');
+  //   _colorNames.add('Orange');
+  //   _colorNames.add('Caramel');
+  //   _colorNames.add('Light Green');
+  //   _colorNames.add('Blue');
+  //   _colorNames.add('Peach');
+  //   _colorNames.add('Gray');
 
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-    _colorCollection.add(const Color(0xFF01A1EF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
-    _timeZoneCollection.add('Central Standard Time');
+  //   _colorCollection.add(const Color(0xFF0F8644));
+  //   _colorCollection.add(const Color(0xFF8B1FA9));
+  //   _colorCollection.add(const Color(0xFFD20100));
+  //   _colorCollection.add(const Color(0xFFFC571D));
+  //   _colorCollection.add(const Color(0xFF36B37B));
+  //   _colorCollection.add(const Color(0xFF01A1EF));
+  //   _colorCollection.add(const Color(0xFF3D4FB5));
+  //   _colorCollection.add(const Color(0xFFE47C73));
+  //   _colorCollection.add(const Color(0xFF636363));
+  //   _timeZoneCollection.add('Central Standard Time');
 
-    List<Appointment> appointments = <Appointment>[];
+  //   List<Appointment> appointments = <Appointment>[];
 
-    return events[group] as List<Appointment>;
-  }
+  //   return events[group] as List<Appointment>;
+  // }
 
   void _onViewChanged(ViewChangedDetails viewChangedDetails) {
     if (_currentView != CalendarView.month &&
