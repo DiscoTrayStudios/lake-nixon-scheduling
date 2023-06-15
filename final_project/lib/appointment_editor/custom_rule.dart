@@ -344,634 +344,600 @@ class CustomRuleState extends State<CustomRule> {
     return textPainter.width + 60;
   }
 
-  Widget _getCustomRule(
-      BuildContext context, Color backgroundColor, Color defaultColor) {
-    const Color defaultTextColor = Colors.black87;
-    const Color defaultButtonColor = Colors.white;
+  Widget _getCustomRule(BuildContext context) {
     return Container(
-        color: backgroundColor,
         child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              height: 20,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(left: 15, bottom: 15),
-              child: Text('REPEATS EVERY'),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, bottom: 15),
-              child: Row(
-                children: <Widget>[
-                  Container(
-                    height: 40,
-                    width: 60,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: TextField(
-                      controller: TextEditingController.fromValue(
-                          TextEditingValue(
-                              text: _interval.toString(),
-                              selection: TextSelection.collapsed(
-                                  offset: _interval.toString().length))),
-                      cursorColor: const Color(0xff4169e1),
-                      onChanged: (String value) {
-                        if (value.isNotEmpty) {
-                          _interval = int.parse(value);
-                          if (_interval == 0) {
-                            _interval = 1;
-                          } else if (_interval! >= 999) {
-                            setState(() {
-                              _interval = 999;
-                            });
-                          }
-                        } else if (value.isEmpty) {
-                          _interval = 1;
-                        }
-                        _recurrenceProperties!.interval = _interval!;
-                      },
-                      keyboardType: TextInputType.number,
-                      // ignore: always_specify_types
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      style: const TextStyle(
-                          fontSize: 13,
-                          color: defaultTextColor,
-                          fontWeight: FontWeight.w400),
-                      textAlign: TextAlign.center,
-                      decoration:
-                          const InputDecoration(border: InputBorder.none),
-                    ),
-                  ),
-                  Container(
-                    width: 20,
-                  ),
-                  Container(
-                    height: 40,
-                    width: 100,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    child: DropdownButton<String>(
-                        focusColor: Colors.transparent,
-                        isExpanded: true,
-                        underline: Container(),
-                        style: const TextStyle(
-                            fontSize: 13,
-                            color: defaultTextColor,
-                            fontWeight: FontWeight.w400),
-                        value: _selectedRecurrenceType,
-                        items: mobileRecurrence.map((String item) {
-                          return DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item),
-                          );
-                        }).toList(),
-                        onChanged: (String? value) {
-                          setState(() {
-                            if (value == 'day') {
-                              _selectedRecurrenceType = 'day';
-                              _dayRule();
-                            } else if (value == 'week') {
-                              _selectedRecurrenceType = 'week';
-                              _weekRule();
-                            } else if (value == 'month') {
-                              _selectedRecurrenceType = 'month';
-                              _monthRule();
-                            } else if (value == 'year') {
-                              _selectedRecurrenceType = 'year';
-                              _yearRule();
-                            }
-                          });
-                        }),
-                  ),
-                ],
-              ),
-            ),
-            const Divider(
-              thickness: 1,
-            ),
-            Visibility(
-                visible: _selectedRecurrenceType == 'week',
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    const Padding(
-                      padding: EdgeInsets.only(left: 15, top: 15),
-                      child: Text('REPEATS ON'),
-                    ),
-                    Padding(
-                        padding:
-                            const EdgeInsets.only(left: 8, bottom: 15, top: 5),
-                        child: Row(
-                          children: <Widget>[
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _mobileSelectWeekDays(WeekDays.sunday);
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(5, 5),
-                                backgroundColor:
-                                    _days!.contains(WeekDays.sunday)
-                                        ? const Color(0xff4169e1)
-                                        : defaultButtonColor,
-                                foregroundColor:
-                                    _days!.contains(WeekDays.sunday)
-                                        ? Colors.white
-                                        : defaultTextColor,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(12),
-                              ),
-                              child: const Text('S'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _mobileSelectWeekDays(WeekDays.monday);
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(7, 7),
-                                disabledForegroundColor: Colors.black26,
-                                disabledBackgroundColor: Colors.black26,
-                                backgroundColor:
-                                    _days!.contains(WeekDays.monday)
-                                        ? const Color(0xff4169e1)
-                                        : defaultButtonColor,
-                                foregroundColor:
-                                    _days!.contains(WeekDays.monday)
-                                        ? Colors.white
-                                        : defaultTextColor,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(10),
-                              ),
-                              child: const Text('M'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _mobileSelectWeekDays(WeekDays.tuesday);
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(7, 7),
-                                disabledForegroundColor: Colors.black26,
-                                disabledBackgroundColor: Colors.black26,
-                                backgroundColor:
-                                    _days!.contains(WeekDays.tuesday)
-                                        ? const Color(0xff4169e1)
-                                        : defaultButtonColor,
-                                foregroundColor:
-                                    _days!.contains(WeekDays.tuesday)
-                                        ? Colors.white
-                                        : defaultTextColor,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(12),
-                              ),
-                              child: const Text('T'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _mobileSelectWeekDays(WeekDays.wednesday);
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(7, 7),
-                                disabledForegroundColor: Colors.black26,
-                                disabledBackgroundColor: Colors.black26,
-                                backgroundColor:
-                                    _days!.contains(WeekDays.wednesday)
-                                        ? const Color(0xff4169e1)
-                                        : defaultButtonColor,
-                                foregroundColor:
-                                    _days!.contains(WeekDays.wednesday)
-                                        ? Colors.white
-                                        : defaultTextColor,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(10),
-                              ),
-                              child: const Text('W'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _mobileSelectWeekDays(WeekDays.thursday);
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(7, 7),
-                                disabledForegroundColor: Colors.black26,
-                                disabledBackgroundColor: Colors.black26,
-                                backgroundColor:
-                                    _days!.contains(WeekDays.thursday)
-                                        ? const Color(0xff4169e1)
-                                        : defaultButtonColor,
-                                foregroundColor:
-                                    _days!.contains(WeekDays.thursday)
-                                        ? Colors.white
-                                        : defaultTextColor,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(12),
-                              ),
-                              child: const Text('T'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _mobileSelectWeekDays(WeekDays.friday);
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(7, 7),
-                                disabledForegroundColor: Colors.black26,
-                                disabledBackgroundColor: Colors.black26,
-                                backgroundColor:
-                                    _days!.contains(WeekDays.friday)
-                                        ? const Color(0xff4169e1)
-                                        : defaultButtonColor,
-                                foregroundColor:
-                                    _days!.contains(WeekDays.friday)
-                                        ? Colors.white
-                                        : defaultTextColor,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(12),
-                              ),
-                              child: const Text('F'),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  _mobileSelectWeekDays(WeekDays.saturday);
-                                });
-                              },
-                              style: ElevatedButton.styleFrom(
-                                minimumSize: const Size(7, 7),
-                                disabledForegroundColor: Colors.black26,
-                                disabledBackgroundColor: Colors.black26,
-                                backgroundColor:
-                                    _days!.contains(WeekDays.saturday)
-                                        ? const Color(0xff4169e1)
-                                        : defaultButtonColor,
-                                foregroundColor:
-                                    _days!.contains(WeekDays.saturday)
-                                        ? Colors.white
-                                        : defaultTextColor,
-                                shape: const CircleBorder(),
-                                padding: const EdgeInsets.all(12),
-                              ),
-                              child: const Text('S'),
-                            ),
-                          ],
-                        )),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                  ],
-                )),
-            Visibility(
-              visible: _selectedRecurrenceType == 'month',
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    height: 40,
-                    width: _width,
-                    decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(3),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 10),
-                    margin: const EdgeInsets.all(15),
-                    child: DropdownButton<String>(
-                        focusColor: Colors.transparent,
-                        isExpanded: true,
-                        underline: Container(),
-                        style: const TextStyle(
-                            fontSize: 13,
-                            color: defaultTextColor,
-                            fontWeight: FontWeight.w400),
-                        value: _monthlyRule,
-                        items: <DropdownMenuItem<String>>[
-                          DropdownMenuItem<String>(
-                            value: 'Monthly on day ${_startDate.day}th',
-                            child: Text('Monthly on day ${_startDate.day}th'),
-                          ),
-                          DropdownMenuItem<String>(
-                            value: 'Monthly on the ${_weekNumberDay!}',
-                            child: Text('Monthly on the ${_weekNumberDay!}'),
-                          ),
-                          const DropdownMenuItem<String>(
-                            value: 'Last day of month',
-                            child: Text('Last day of month'),
-                          ),
-                        ],
-                        onChanged: (String? value) {
-                          setState(() {
-                            if (value == 'Monthly on day ${_startDate.day}th') {
-                              _width = _textSize(
-                                  'Monthly on day ${_startDate.day}th');
-                              _monthlyDay();
-                            } else if (value ==
-                                'Monthly on the ${_weekNumberDay!}') {
-                              _width = _textSize(
-                                  'Monthly on the ${_weekNumberDay!}');
-                              _monthlyWeek();
-                            } else if (value == 'Last day of month') {
-                              _width = _textSize('Last day of month');
-                              _lastDayOfMonth();
-                            }
-                          });
-                        }),
-                  ),
-                  const Divider(
-                    thickness: 1,
-                  ),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: _selectedRecurrenceType == 'year',
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Checkbox(
-                    focusColor: const Color(0xff4169e1),
-                    activeColor: const Color(0xff4169e1),
-                    value: _isLastDay,
-                    onChanged: (bool? value) {
-                      if (value == null) {
-                        return;
+      padding: EdgeInsets.zero,
+      children: <Widget>[
+        Container(
+          height: 20,
+        ),
+        const Padding(
+          padding: EdgeInsets.only(left: 15, bottom: 15),
+          child: Text('REPEATS EVERY'),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 15, bottom: 15),
+          child: Row(
+            children: <Widget>[
+              Container(
+                height: 40,
+                width: 60,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                child: TextField(
+                  controller: TextEditingController.fromValue(TextEditingValue(
+                      text: _interval.toString(),
+                      selection: TextSelection.collapsed(
+                          offset: _interval.toString().length))),
+                  cursorColor: const Color(0xff4169e1),
+                  onChanged: (String value) {
+                    if (value.isNotEmpty) {
+                      _interval = int.parse(value);
+                      if (_interval == 0) {
+                        _interval = 1;
+                      } else if (_interval! >= 999) {
+                        setState(() {
+                          _interval = 999;
+                        });
                       }
+                    } else if (value.isEmpty) {
+                      _interval = 1;
+                    }
+                    _recurrenceProperties!.interval = _interval!;
+                  },
+                  keyboardType: TextInputType.number,
+                  // ignore: always_specify_types
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Theme.of(context).colorScheme.tertiary,
+                      fontWeight: FontWeight.w400),
+                  textAlign: TextAlign.center,
+                  decoration: const InputDecoration(border: InputBorder.none),
+                ),
+              ),
+              Container(
+                width: 20,
+              ),
+              Container(
+                height: 40,
+                width: 100,
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                child: DropdownButton<String>(
+                    focusColor: Colors.transparent,
+                    isExpanded: true,
+                    underline: Container(),
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        fontWeight: FontWeight.w400),
+                    value: _selectedRecurrenceType,
+                    items: mobileRecurrence.map((String item) {
+                      return DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(item),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
                       setState(() {
-                        _isLastDay = value;
-                        _lastDayOfMonth();
+                        if (value == 'day') {
+                          _selectedRecurrenceType = 'day';
+                          _dayRule();
+                        } else if (value == 'week') {
+                          _selectedRecurrenceType = 'week';
+                          _weekRule();
+                        } else if (value == 'month') {
+                          _selectedRecurrenceType = 'month';
+                          _monthRule();
+                        } else if (value == 'year') {
+                          _selectedRecurrenceType = 'year';
+                          _yearRule();
+                        }
                       });
-                    },
-                  ),
-                  const Text(
-                    'Last day of month',
-                  ),
-                ],
+                    }),
               ),
-            ),
-            if (_selectedRecurrenceType == 'year')
-              const Divider(
-                thickness: 1,
-              ),
-            Column(
+            ],
+          ),
+        ),
+        const Divider(
+          thickness: 1,
+        ),
+        Visibility(
+            visible: _selectedRecurrenceType == 'week',
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 const Padding(
                   padding: EdgeInsets.only(left: 15, top: 15),
-                  child: Text('ENDS'),
+                  child: Text('REPEATS ON'),
                 ),
-                // RadioListTile<EndRule>(
-                //   contentPadding: const EdgeInsets.only(left: 7),
-                //   title: const Text('Never'),
-                //   value: EndRule.never,
-                //   groupValue: _endRule,
-                //   activeColor: const Color(0xff4169e1),
-                //   onChanged: (EndRule? value) {
-                //     setState(() {
-                //       _endRule = EndRule.never;
-                //       _rangeNoEndDate();
-                //     });
-                //   },
-                // ),
+                Padding(
+                    padding: const EdgeInsets.only(left: 8, bottom: 15, top: 5),
+                    child: Row(
+                      children: <Widget>[
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mobileSelectWeekDays(WeekDays.sunday);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(5, 5),
+                            backgroundColor: _days!.contains(WeekDays.sunday)
+                                ? const Color(0xff4169e1)
+                                : Theme.of(context).colorScheme.tertiary,
+                            foregroundColor: _days!.contains(WeekDays.sunday)
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.tertiary,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(12),
+                          ),
+                          child: const Text('S'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mobileSelectWeekDays(WeekDays.monday);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(7, 7),
+                            disabledForegroundColor: Colors.black26,
+                            disabledBackgroundColor: Colors.black26,
+                            backgroundColor: _days!.contains(WeekDays.monday)
+                                ? const Color(0xff4169e1)
+                                : Theme.of(context).colorScheme.tertiary,
+                            foregroundColor: _days!.contains(WeekDays.monday)
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.tertiary,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(10),
+                          ),
+                          child: const Text('M'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mobileSelectWeekDays(WeekDays.tuesday);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(7, 7),
+                            disabledForegroundColor: Colors.black26,
+                            disabledBackgroundColor: Colors.black26,
+                            backgroundColor: _days!.contains(WeekDays.tuesday)
+                                ? const Color(0xff4169e1)
+                                : Theme.of(context).colorScheme.tertiary,
+                            foregroundColor: _days!.contains(WeekDays.tuesday)
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.tertiary,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(12),
+                          ),
+                          child: const Text('T'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mobileSelectWeekDays(WeekDays.wednesday);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(7, 7),
+                            disabledForegroundColor: Colors.black26,
+                            disabledBackgroundColor: Colors.black26,
+                            backgroundColor: _days!.contains(WeekDays.wednesday)
+                                ? const Color(0xff4169e1)
+                                : Theme.of(context).colorScheme.tertiary,
+                            foregroundColor: _days!.contains(WeekDays.wednesday)
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.tertiary,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(10),
+                          ),
+                          child: const Text('W'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mobileSelectWeekDays(WeekDays.thursday);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(7, 7),
+                            disabledForegroundColor: Colors.black26,
+                            disabledBackgroundColor: Colors.black26,
+                            backgroundColor: _days!.contains(WeekDays.thursday)
+                                ? const Color(0xff4169e1)
+                                : Theme.of(context).colorScheme.tertiary,
+                            foregroundColor: _days!.contains(WeekDays.thursday)
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.tertiary,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(12),
+                          ),
+                          child: const Text('T'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mobileSelectWeekDays(WeekDays.friday);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(7, 7),
+                            disabledForegroundColor: Colors.black26,
+                            disabledBackgroundColor: Colors.black26,
+                            backgroundColor: _days!.contains(WeekDays.friday)
+                                ? const Color(0xff4169e1)
+                                : Theme.of(context).colorScheme.tertiary,
+                            foregroundColor: _days!.contains(WeekDays.friday)
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.tertiary,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(12),
+                          ),
+                          child: const Text('F'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              _mobileSelectWeekDays(WeekDays.saturday);
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(7, 7),
+                            disabledForegroundColor: Colors.black26,
+                            disabledBackgroundColor: Colors.black26,
+                            backgroundColor: _days!.contains(WeekDays.saturday)
+                                ? const Color(0xff4169e1)
+                                : Theme.of(context).colorScheme.tertiary,
+                            foregroundColor: _days!.contains(WeekDays.saturday)
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.tertiary,
+                            shape: const CircleBorder(),
+                            padding: const EdgeInsets.all(12),
+                          ),
+                          child: const Text('S'),
+                        ),
+                      ],
+                    )),
                 const Divider(
-                  indent: 50,
-                  height: 1.0,
                   thickness: 1,
                 ),
-                // RadioListTile<EndRule>(
-                //   contentPadding: const EdgeInsets.only(left: 7),
-                //   title: Row(
-                //     children: <Widget>[
-                //       const Text('On'),
-                //       Container(
-                //         margin: const EdgeInsets.only(left: 5),
-                //         width: 110,
-                //         height: 40,
-                //         decoration: BoxDecoration(
-                //           color: Colors.grey.withOpacity(0.1),
-                //           borderRadius: BorderRadius.circular(3),
-                //         ),
-                //         child: ButtonTheme(
-                //             minWidth: 30.0,
-                //             child: MaterialButton(
-                //                 elevation: 0,
-                //                 focusElevation: 0,
-                //                 highlightElevation: 0,
-                //                 disabledElevation: 0,
-                //                 hoverElevation: 0,
-                //                 onPressed: () async {
-                //                   final DateTime? pickedDate =
-                //                       await showDatePicker(
-                //                           context: context,
-                //                           initialDate: _selectedDate,
-                //                           firstDate:
-                //                               _startDate.isBefore(_firstDate)
-                //                                   ? _startDate
-                //                                   : _firstDate,
-                //                           currentDate: _selectedDate,
-                //                           lastDate: DateTime(2050),
-                //                           builder: (BuildContext context,
-                //                               Widget? child) {
-                //                             return Theme(
-                //                               data: ThemeData(
-                //                                 brightness: Brightness.light,
-                //                                 colorScheme:
-                //                                     ColorScheme.fromSwatch(
-                //                                   backgroundColor:
-                //                                       const Color(0xff4169e1),
-                //                                 ),
-                //                               ),
-                //                               child: child!,
-                //                             );
-                //                           });
-                //                   if (pickedDate == null) {
-                //                     return;
-                //                   }
-                //                   setState(() {
-                //                     _endRule = EndRule.endDate;
-                //                     _recurrenceProperties!.recurrenceRange =
-                //                         RecurrenceRange.endDate;
-                //                     _selectedDate = DateTime(pickedDate.year,
-                //                         pickedDate.month, pickedDate.day);
-                //                     _recurrenceProperties!.endDate =
-                //                         _selectedDate;
-                //                   });
-                //                 },
-                //                 shape: const CircleBorder(),
-                //                 child: Text(
-                //                   DateFormat('MM/dd/yyyy')
-                //                       .format(_selectedDate),
-                //                   style: const TextStyle(
-                //                       fontSize: 13,
-                //                       color: defaultTextColor,
-                //                       fontWeight: FontWeight.w400),
-                //                 ))),
-                //       ),
-                //     ],
-                //   ),
-                //   value: EndRule.endDate,
-                //   groupValue: _endRule,
-                //   activeColor: const Color(0xff4169e1),
-                //   onChanged: (EndRule? value) {
-                //     setState(() {
-                //       _endRule = value;
-                //       _rangeEndDate();
-                //     });
-                //   },
-                // ),
-                const Divider(
-                  indent: 50,
-                  height: 1.0,
-                  thickness: 1,
-                ),
-                // SizedBox(
-                //   height: 40,
-                //   child: RadioListTile<EndRule>(
-                //     contentPadding: const EdgeInsets.only(left: 7),
-                //     title: Row(
-                //       children: <Widget>[
-                //         const Text('After'),
-                //         Container(
-                //           height: 40,
-                //           width: 60,
-                //           padding: const EdgeInsets.only(left: 5, bottom: 10),
-                //           margin: const EdgeInsets.only(left: 5),
-                //           alignment: Alignment.topCenter,
-                //           decoration: BoxDecoration(
-                //             color: Colors.grey.withOpacity(0.1),
-                //             borderRadius: BorderRadius.circular(3),
-                //           ),
-                //           child: TextField(
-                //             readOnly: _endRule != EndRule.count,
-                //             controller: TextEditingController.fromValue(
-                //                 TextEditingValue(
-                //                     text: _count.toString(),
-                //                     selection: TextSelection.collapsed(
-                //                         offset: _count.toString().length))),
-                //             cursorColor: const Color(0xff4169e1),
-                //             onTap: () {
-                //               setState(() {
-                //                 _endRule = EndRule.count;
-                //               });
-                //             },
-                //             onChanged: (String value) async {
-                //               if (value.isNotEmpty) {
-                //                 _count = int.parse(value);
-                //                 if (_count == 0) {
-                //                   _count = 1;
-                //                 } else if (_count! >= 999) {
-                //                   setState(() {
-                //                     _count = 999;
-                //                   });
-                //                 }
-                //               } else if (value.isEmpty) {
-                //                 _count = 1;
-                //               }
-                //               _endRule = EndRule.count;
-                //               _recurrenceProperties!.recurrenceRange =
-                //                   RecurrenceRange.count;
-                //               _recurrenceProperties!.recurrenceCount = _count!;
-                //             },
-                //             keyboardType: TextInputType.number,
-                //             // ignore: always_specify_types
-                //             inputFormatters: [
-                //               FilteringTextInputFormatter.digitsOnly
-                //             ],
-                //             style: const TextStyle(
-                //                 fontSize: 13,
-                //                 color: defaultTextColor,
-                //                 fontWeight: FontWeight.w400),
-                //             textAlign: TextAlign.center,
-                //             decoration:
-                //                 const InputDecoration(border: InputBorder.none),
-                //           ),
-                //         ),
-                //         Container(
-                //           width: 10,
-                //         ),
-                //         const Text('occurrence'),
-                //       ],
-                //     ),
-                //     value: EndRule.count,
-                //     groupValue: _endRule,
-                //     activeColor: const Color(0xff4169e1),
-                //     onChanged: (EndRule? value) {
-                //       setState(() {
-                //         _endRule = value;
-                //         _recurrenceProperties!.recurrenceRange =
-                //             RecurrenceRange.count;
-                //         _recurrenceProperties!.recurrenceCount = _count!;
-                //       });
-                //     },
-                //   ),
-                // ),
               ],
+            )),
+        Visibility(
+          visible: _selectedRecurrenceType == 'month',
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                height: 40,
+                width: _width,
+                decoration: BoxDecoration(
+                  color: Colors.grey.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                margin: const EdgeInsets.all(15),
+                child: DropdownButton<String>(
+                    focusColor: Colors.transparent,
+                    isExpanded: true,
+                    underline: Container(),
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.tertiary,
+                        fontWeight: FontWeight.w400),
+                    value: _monthlyRule,
+                    items: <DropdownMenuItem<String>>[
+                      DropdownMenuItem<String>(
+                        value: 'Monthly on day ${_startDate.day}th',
+                        child: Text('Monthly on day ${_startDate.day}th'),
+                      ),
+                      DropdownMenuItem<String>(
+                        value: 'Monthly on the ${_weekNumberDay!}',
+                        child: Text('Monthly on the ${_weekNumberDay!}'),
+                      ),
+                      const DropdownMenuItem<String>(
+                        value: 'Last day of month',
+                        child: Text('Last day of month'),
+                      ),
+                    ],
+                    onChanged: (String? value) {
+                      setState(() {
+                        if (value == 'Monthly on day ${_startDate.day}th') {
+                          _width =
+                              _textSize('Monthly on day ${_startDate.day}th');
+                          _monthlyDay();
+                        } else if (value ==
+                            'Monthly on the ${_weekNumberDay!}') {
+                          _width =
+                              _textSize('Monthly on the ${_weekNumberDay!}');
+                          _monthlyWeek();
+                        } else if (value == 'Last day of month') {
+                          _width = _textSize('Last day of month');
+                          _lastDayOfMonth();
+                        }
+                      });
+                    }),
+              ),
+              const Divider(
+                thickness: 1,
+              ),
+            ],
+          ),
+        ),
+        Visibility(
+          visible: _selectedRecurrenceType == 'year',
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Checkbox(
+                focusColor: const Color(0xff4169e1),
+                activeColor: const Color(0xff4169e1),
+                value: _isLastDay,
+                onChanged: (bool? value) {
+                  if (value == null) {
+                    return;
+                  }
+                  setState(() {
+                    _isLastDay = value;
+                    _lastDayOfMonth();
+                  });
+                },
+              ),
+              const Text(
+                'Last day of month',
+              ),
+            ],
+          ),
+        ),
+        if (_selectedRecurrenceType == 'year')
+          const Divider(
+            thickness: 1,
+          ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            const Padding(
+              padding: EdgeInsets.only(left: 15, top: 15),
+              child: Text('ENDS'),
             ),
+            // RadioListTile<EndRule>(
+            //   contentPadding: const EdgeInsets.only(left: 7),
+            //   title: const Text('Never'),
+            //   value: EndRule.never,
+            //   groupValue: _endRule,
+            //   activeColor: const Color(0xff4169e1),
+            //   onChanged: (EndRule? value) {
+            //     setState(() {
+            //       _endRule = EndRule.never;
+            //       _rangeNoEndDate();
+            //     });
+            //   },
+            // ),
+            const Divider(
+              indent: 50,
+              height: 1.0,
+              thickness: 1,
+            ),
+            // RadioListTile<EndRule>(
+            //   contentPadding: const EdgeInsets.only(left: 7),
+            //   title: Row(
+            //     children: <Widget>[
+            //       const Text('On'),
+            //       Container(
+            //         margin: const EdgeInsets.only(left: 5),
+            //         width: 110,
+            //         height: 40,
+            //         decoration: BoxDecoration(
+            //           color: Colors.grey.withOpacity(0.1),
+            //           borderRadius: BorderRadius.circular(3),
+            //         ),
+            //         child: ButtonTheme(
+            //             minWidth: 30.0,
+            //             child: MaterialButton(
+            //                 elevation: 0,
+            //                 focusElevation: 0,
+            //                 highlightElevation: 0,
+            //                 disabledElevation: 0,
+            //                 hoverElevation: 0,
+            //                 onPressed: () async {
+            //                   final DateTime? pickedDate =
+            //                       await showDatePicker(
+            //                           context: context,
+            //                           initialDate: _selectedDate,
+            //                           firstDate:
+            //                               _startDate.isBefore(_firstDate)
+            //                                   ? _startDate
+            //                                   : _firstDate,
+            //                           currentDate: _selectedDate,
+            //                           lastDate: DateTime(2050),
+            //                           builder: (BuildContext context,
+            //                               Widget? child) {
+            //                             return Theme(
+            //                               data: ThemeData(
+            //                                 brightness: Brightness.light,
+            //                                 colorScheme:
+            //                                     ColorScheme.fromSwatch(
+            //                                   backgroundColor:
+            //                                       const Color(0xff4169e1),
+            //                                 ),
+            //                               ),
+            //                               child: child!,
+            //                             );
+            //                           });
+            //                   if (pickedDate == null) {
+            //                     return;
+            //                   }
+            //                   setState(() {
+            //                     _endRule = EndRule.endDate;
+            //                     _recurrenceProperties!.recurrenceRange =
+            //                         RecurrenceRange.endDate;
+            //                     _selectedDate = DateTime(pickedDate.year,
+            //                         pickedDate.month, pickedDate.day);
+            //                     _recurrenceProperties!.endDate =
+            //                         _selectedDate;
+            //                   });
+            //                 },
+            //                 shape: const CircleBorder(),
+            //                 child: Text(
+            //                   DateFormat('MM/dd/yyyy')
+            //                       .format(_selectedDate),
+            //                   style: const TextStyle(
+            //                       fontSize: 13,
+            //                       color: defaultTextColor,
+            //                       fontWeight: FontWeight.w400),
+            //                 ))),
+            //       ),
+            //     ],
+            //   ),
+            //   value: EndRule.endDate,
+            //   groupValue: _endRule,
+            //   activeColor: const Color(0xff4169e1),
+            //   onChanged: (EndRule? value) {
+            //     setState(() {
+            //       _endRule = value;
+            //       _rangeEndDate();
+            //     });
+            //   },
+            // ),
+            const Divider(
+              indent: 50,
+              height: 1.0,
+              thickness: 1,
+            ),
+            // SizedBox(
+            //   height: 40,
+            //   child: RadioListTile<EndRule>(
+            //     contentPadding: const EdgeInsets.only(left: 7),
+            //     title: Row(
+            //       children: <Widget>[
+            //         const Text('After'),
+            //         Container(
+            //           height: 40,
+            //           width: 60,
+            //           padding: const EdgeInsets.only(left: 5, bottom: 10),
+            //           margin: const EdgeInsets.only(left: 5),
+            //           alignment: Alignment.topCenter,
+            //           decoration: BoxDecoration(
+            //             color: Colors.grey.withOpacity(0.1),
+            //             borderRadius: BorderRadius.circular(3),
+            //           ),
+            //           child: TextField(
+            //             readOnly: _endRule != EndRule.count,
+            //             controller: TextEditingController.fromValue(
+            //                 TextEditingValue(
+            //                     text: _count.toString(),
+            //                     selection: TextSelection.collapsed(
+            //                         offset: _count.toString().length))),
+            //             cursorColor: const Color(0xff4169e1),
+            //             onTap: () {
+            //               setState(() {
+            //                 _endRule = EndRule.count;
+            //               });
+            //             },
+            //             onChanged: (String value) async {
+            //               if (value.isNotEmpty) {
+            //                 _count = int.parse(value);
+            //                 if (_count == 0) {
+            //                   _count = 1;
+            //                 } else if (_count! >= 999) {
+            //                   setState(() {
+            //                     _count = 999;
+            //                   });
+            //                 }
+            //               } else if (value.isEmpty) {
+            //                 _count = 1;
+            //               }
+            //               _endRule = EndRule.count;
+            //               _recurrenceProperties!.recurrenceRange =
+            //                   RecurrenceRange.count;
+            //               _recurrenceProperties!.recurrenceCount = _count!;
+            //             },
+            //             keyboardType: TextInputType.number,
+            //             // ignore: always_specify_types
+            //             inputFormatters: [
+            //               FilteringTextInputFormatter.digitsOnly
+            //             ],
+            //             style: const TextStyle(
+            //                 fontSize: 13,
+            //                 color: defaultTextColor,
+            //                 fontWeight: FontWeight.w400),
+            //             textAlign: TextAlign.center,
+            //             decoration:
+            //                 const InputDecoration(border: InputBorder.none),
+            //           ),
+            //         ),
+            //         Container(
+            //           width: 10,
+            //         ),
+            //         const Text('occurrence'),
+            //       ],
+            //     ),
+            //     value: EndRule.count,
+            //     groupValue: _endRule,
+            //     activeColor: const Color(0xff4169e1),
+            //     onChanged: (EndRule? value) {
+            //       setState(() {
+            //         _endRule = value;
+            //         _recurrenceProperties!.recurrenceRange =
+            //             RecurrenceRange.count;
+            //         _recurrenceProperties!.recurrenceCount = _count!;
+            //       });
+            //     },
+            //   ),
+            // ),
           ],
-        ));
+        ),
+      ],
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: ThemeData(
-          brightness: Brightness.light,
-          colorScheme: ColorScheme.fromSwatch(
-            backgroundColor: const Color(0xff4169e1),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Custom Recurrence'),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
           ),
+          onPressed: () {
+            Navigator.pop(context, widget.recurrenceProperties);
+          },
         ),
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            title: const Text('Custom Recurrence'),
-            backgroundColor: widget.appointmentColor,
-            leading: IconButton(
+        actions: <Widget>[
+          IconButton(
+              padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
               icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
+                Icons.done,
               ),
               onPressed: () {
-                Navigator.pop(context, widget.recurrenceProperties);
-              },
-            ),
-            actions: <Widget>[
-              IconButton(
-                  padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  icon: const Icon(
-                    Icons.done,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context, _recurrenceProperties);
-                  })
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-            child: Stack(
-              children: <Widget>[
-                _getCustomRule(context, (Colors.white), Colors.black87)
-              ],
-            ),
-          ),
-        ));
+                Navigator.pop(context, _recurrenceProperties);
+              })
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+        child: Stack(
+          children: <Widget>[_getCustomRule(context)],
+        ),
+      ),
+    );
   }
 }
 

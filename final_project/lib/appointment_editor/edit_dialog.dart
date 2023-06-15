@@ -24,7 +24,6 @@ class EditDialogState extends State<EditDialog> {
 
   @override
   Widget build(BuildContext context) {
-    const Color defaultTextColor = Colors.white;
     return SimpleDialog(
       children: <Widget>[
         Container(
@@ -40,10 +39,11 @@ class EditDialogState extends State<EditDialog> {
                 Container(
                   height: 30,
                   padding: const EdgeInsets.only(left: 25, top: 5),
-                  child: const Text(
+                  child: Text(
                     'Save recurring event',
                     style: TextStyle(
-                        color: defaultTextColor, fontWeight: FontWeight.w500),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(

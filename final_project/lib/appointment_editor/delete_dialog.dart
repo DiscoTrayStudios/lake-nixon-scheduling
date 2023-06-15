@@ -25,7 +25,6 @@ class DeleteDialogState extends State<DeleteDialog> {
 
   @override
   Widget build(BuildContext context) {
-    const Color defaultTextColor = Colors.black87;
     return SimpleDialog(
       children: <Widget>[
         Container(
@@ -41,10 +40,11 @@ class DeleteDialogState extends State<DeleteDialog> {
                 Container(
                   height: 30,
                   padding: const EdgeInsets.only(left: 25, top: 5),
-                  child: const Text(
+                  child: Text(
                     'Delete recurring event',
                     style: TextStyle(
-                        color: defaultTextColor, fontWeight: FontWeight.w500),
+                        color: Theme.of(context).colorScheme.tertiary,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
                 Container(
