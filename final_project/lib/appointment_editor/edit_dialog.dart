@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:final_project/objects/globals.dart';
-
 class EditDialog extends StatefulWidget {
   const EditDialog(this.newAppointment, this.selectedAppointment,
       this.recurrenceProperties, this.events,

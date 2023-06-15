@@ -4,7 +4,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import 'package:final_project/objects/event.dart';
-import 'package:final_project/objects/globals.dart';
 
 class DeleteDialog extends StatefulWidget {
   const DeleteDialog(this.selectedAppointment, this.events, {super.key});

@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/group_page.dart';
 import 'package:final_project/pages/login_page.dart';
@@ -95,12 +94,7 @@ class _StartPageState extends State<StartPage> {
         appBar: AppBar(
           title: const Text(
             "Action Page",
-            style: TextStyle(
-                //check here later --- can't insert nixonbrown for some reason?
-                color: Color.fromRGBO(137, 116, 73, 1),
-                fontFamily: 'Fruit'),
           ),
-          backgroundColor: nixonblue,
         ),
         body: Padding(
             padding: const EdgeInsets.all(10),
@@ -109,13 +103,14 @@ class _StartPageState extends State<StartPage> {
                 Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
-                    child: const Text(
+                    child: Text(
                       'Lake Nixon Admin',
                       style: TextStyle(
-                          //nixonbrown
-                          color: Color.fromRGBO(137, 116, 73, 1),
-                          fontFamily: 'Fruit',
-                          fontSize: 30),
+                          color: Theme.of(context).colorScheme.onBackground,
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineMedium!
+                              .fontSize),
                     )),
                 Container(
                     padding: const EdgeInsets.all(10),
@@ -123,11 +118,16 @@ class _StartPageState extends State<StartPage> {
                       height: 80,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll<Color>(nixongreen)),
-                        child: const Text("Groups",
-                            style:
-                                TextStyle(fontSize: 40, fontFamily: 'Fruit')),
+                            backgroundColor: MaterialStatePropertyAll<Color>(
+                                Theme.of(context).colorScheme.secondary)),
+                        child: Text("Groups",
+                            style: TextStyle(
+                                color:
+                                    Theme.of(context).colorScheme.onSecondary,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .displayMedium!
+                                    .fontSize)),
                         onPressed: () {
                           groupPagePush();
                         },
@@ -138,10 +138,15 @@ class _StartPageState extends State<StartPage> {
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(nixongreen)),
-                    child: const Text("Master Calendar",
-                        style: TextStyle(fontSize: 40, fontFamily: 'Fruit')),
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.secondary)),
+                    child: Text("Master Calendar",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .displayMedium!
+                                .fontSize)),
                     onPressed: () {
                       masterCalendar(const Group(
                           name: "Admin", color: Color(0xFFFFFFFF), age: 99999));
@@ -153,14 +158,19 @@ class _StartPageState extends State<StartPage> {
                   padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(nixonbrown)),
-                    child: const Text(
-                      "Logout",
-                      style: TextStyle(fontFamily: 'Fruit', fontSize: 30),
-                    ),
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.tertiary)),
+                    child: Text("Log Out",
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.onTertiary,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .displaySmall!
+                                .fontSize)),
                     onPressed: () async {
-                      await Provider.of<AppState>(context).auth.signOut();
+                      await Provider.of<AppState>(context, listen: false)
+                          .auth
+                          .signOut();
                       logoutScreenPush();
                     },
                   ),

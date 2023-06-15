@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/calendar_page.dart';
-import 'package:final_project/objects/globals.dart';
 
 import 'package:final_project/objects/app_state.dart';
 
@@ -36,7 +35,7 @@ class _MasterPageState extends State<MasterPage> {
         return AlertDialog(
           title: Text(
             'Add Event',
-            style: TextStyle(fontFamily: 'Fruit', color: nixongreen),
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           content: SingleChildScrollView(
             child: SizedBox(
@@ -115,12 +114,9 @@ class _MasterPageState extends State<MasterPage> {
     return Scaffold(
         appBar: AppBar(
           //automaticallyImplyLeading: false,
-          title: const Text("Master Calendar",
-              style: TextStyle(
-                  //check here later --- can't insert nixonbrown for some reason?
-                  color: Color.fromRGBO(137, 116, 73, 1),
-                  fontFamily: 'Fruit')),
-          backgroundColor: nixonblue,
+          title: Text("Master Calendar",
+              style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
+          backgroundColor: Theme.of(context).colorScheme.primary,
         ),
         body: Padding(
             padding: const EdgeInsets.all(10),
@@ -130,27 +126,31 @@ class _MasterPageState extends State<MasterPage> {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
                     height: 80,
-                    child: const Text(
+                    child: Text(
                       'Lake Nixon',
                       style: TextStyle(
                           //nixonblue
-                          color: Color.fromRGBO(165, 223, 249, 1),
-                          fontFamily: 'Fruit',
-                          fontSize: 30),
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .fontSize),
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
                   height: 80,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(nixongreen)),
-                    child: const Text(
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.secondary)),
+                    child: Text(
                       "Add event",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Fruit',
-                          fontSize: 30),
+                          color: Theme.of(context).colorScheme.onSecondary,
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .fontSize),
                     ),
                     onPressed: () {
                       _eventInfoPopupForm(context);
@@ -162,13 +162,15 @@ class _MasterPageState extends State<MasterPage> {
                   height: 80,
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(nixongreen)),
-                    child: const Text("View Master Calendar",
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.secondary)),
+                    child: Text("View Master Calendar",
                         style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Fruit',
-                            fontSize: 30)),
+                            color: Theme.of(context).colorScheme.onSecondary,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .fontSize)),
                     onPressed: () {
                       masterPush();
                     },

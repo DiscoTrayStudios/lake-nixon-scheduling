@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:final_project/pages/forgot_password_page.dart';
 import 'package:final_project/pages/signup_page.dart';
 import 'package:final_project/pages/user_screen.dart';
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/objects/app_state.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -75,13 +74,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
-                    child: const Text(
+                    child: Text(
                       'Sign in',
                       style: TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'Fruit',
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .fontSize,
                           //nixongreen
-                          color: Color.fromRGBO(81, 146, 78, 1)),
+                          color: Theme.of(context).colorScheme.secondary),
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -117,11 +118,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(nixongreen)),
-                      child: const Text(
+                          backgroundColor: MaterialStatePropertyAll<Color>(
+                              Theme.of(context).colorScheme.secondary)),
+                      child: Text(
                         'Login',
-                        style: TextStyle(fontFamily: 'Fruit', fontSize: 30),
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .fontSize),
                       ),
                       onPressed: () async {
                         try {
@@ -141,9 +146,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                textColor:
+                                    Theme.of(context).colorScheme.onError,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize);
                             debugPrint('No user found for that email.');
                           } else if (e.code == 'wrong-password') {
                             Fluttertoast.showToast(
@@ -151,9 +161,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                textColor:
+                                    Theme.of(context).colorScheme.onError,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize);
                             debugPrint(
                                 'Wrong password provided for that user.');
                           }
@@ -167,9 +182,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     const Text('Do not have account?'),
                     TextButton(
-                      child: const Text(
+                      child: Text(
                         'Sign up',
-                        style: TextStyle(fontSize: 20, fontFamily: 'Fruit'),
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .fontSize),
                       ),
                       onPressed: () async {
                         await Navigator.of(context).push(MaterialPageRoute(

@@ -12,7 +12,6 @@ import 'package:final_project/appointment_editor/delete_dialog.dart';
 import 'package:final_project/appointment_editor/edit_dialog.dart';
 import 'package:final_project/appointment_editor/resource_picker.dart';
 import 'package:final_project/appointment_editor/select_rule_dialog.dart';
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/calendar_page.dart';
@@ -109,8 +108,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   SelectRule? _rule = SelectRule.doesNotRepeat;
 
-  var _items =
-      groups.map((group) => MultiSelectItem<Group>(group, group.name)).toList();
+  late List<MultiSelectItem<Group>> _items;
 
   void createItems(List<Group> groups) {
     _items = groups
@@ -234,6 +232,8 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   Widget _getAppointmentEditor(
       BuildContext context, Color backgroundColor, Color defaultColor) {
     return Consumer<AppState>(builder: (context, appState, child) {
+      createItems(appState.groups);
+
       return Container(
           color: backgroundColor,
           child: ListView(
@@ -935,12 +935,20 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             DateFormat formatter = DateFormat("MM-dd-yy");
                             var docName = formatter.format(time!);
 
-                            db.collection("schedules").doc(docName).update({
+                            Provider.of<AppState>(context)
+                                .firestore
+                                .collection("schedules")
+                                .doc(docName)
+                                .update({
                               "appointments.${widget.group.name}":
                                   FieldValue.arrayRemove([appMap])
                             });
 
-                            db.collection("schedules").doc(docName).update({
+                            Provider.of<AppState>(context)
+                                .firestore
+                                .collection("schedules")
+                                .doc(docName)
+                                .update({
                               "$name.$hour":
                                   FieldValue.arrayRemove([widget.group.name])
                             });

@@ -5,7 +5,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/group_page.dart';
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/pages/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
