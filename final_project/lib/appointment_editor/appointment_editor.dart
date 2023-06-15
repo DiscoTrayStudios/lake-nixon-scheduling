@@ -229,766 +229,757 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   void updateDropdown() {}
 
-  Widget _getAppointmentEditor(
-      BuildContext context, Color backgroundColor, Color defaultColor) {
-    return Consumer<AppState>(builder: (context, appState, child) {
-      createItems(appState.groups);
-
-      return Container(
-          color: backgroundColor,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-                leading: const Text("Events"),
-                //This is the groups dropdown button
-                //A current issue is that for the group filtering to work we have to click within this box to
-                //get the filtering to work.
-                title: DropdownButton(
-                  value: dropdownValue,
-                  items: widget.firebaseEvents,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      dropdownValue = newValue!;
-                      _subject = newValue;
-                    });
-                    var excludedGroups = appState.getGroupsAtTime(_startDate);
-                    List<Group> showGroups = [];
-                    for (Group group in appState.groups) {
-                      if (excludedGroups.contains(group.name)) {
-                      } else {
-                        showGroups.add(group);
-                      }
-                    }
-                    createItems(showGroups);
-                  },
-                ),
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-                leading: const Text("Assign Groups"),
-                //This is where the group select field is
-                title: MultiSelectDialogField(
-                  items: _items,
-                  initialValue: _selectedGroups,
-                  onConfirm: (results) {
-                    setState(() {
-                      _selectedGroups = results;
-                      //assignments[widget.group] = _selectedGroups;
-                    });
-                  },
-                ),
-              ),
-              const Divider(
-                height: 1.0,
-                thickness: 1,
-              ),
-              ListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                  leading: Icon(
-                    Icons.access_time,
-                    color: defaultColor,
-                  ),
-                  title: Row(children: <Widget>[
-                    const Expanded(
-                      child: Text('All-day'),
-                    ),
-                    Expanded(
-                        child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Switch(
-                              value: _isAllDay,
-                              onChanged: (bool value) {
-                                setState(() {
-                                  _isAllDay = value;
-                                });
-                              },
-                            ))),
-                  ])),
-              ListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                  leading: const Text(''),
-                  title: Row(children: <Widget>[
-                    Expanded(
-                      flex: 7,
-                      child: GestureDetector(
-                        onTap: () async {
-                          final DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: _startDate,
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime(2100),
-                              builder: (BuildContext context, Widget? child) {
-                                return Theme(
-                                  data: ThemeData(
-                                    brightness: Brightness.light,
-                                    colorScheme: ColorScheme.fromSwatch(
-                                      backgroundColor: theme,
-                                    ),
-                                  ),
-                                  child: child!,
-                                );
-                              });
-
-                          if (date != null && date != _startDate) {
-                            setState(() {
-                              final Duration difference =
-                                  _endDate.difference(_startDate);
-                              _startDate = DateTime(date.year, date.month,
-                                  date.day, _startTime.hour, _startTime.minute);
-                              _endDate = _startDate.add(difference);
-                              _endTime = TimeOfDay(
-                                  hour: _endDate.hour, minute: _endDate.minute);
-                            });
-                          }
-                        },
-                        child: Text(
-                            DateFormat('EEE, MMM dd yyyy').format(_startDate),
-                            textAlign: TextAlign.left),
-                      ),
-                    ),
-                    Expanded(
-                        flex: 3,
-                        child: _isAllDay
-                            ? const Text('')
-                            : GestureDetector(
-                                onTap: () async {
-                                  final TimeOfDay? time = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay(
-                                          hour: _startTime.hour,
-                                          minute: _startTime.minute),
-                                      builder: (BuildContext context,
-                                          Widget? child) {
-                                        return Theme(
-                                          data: ThemeData(
-                                            brightness: Brightness.light,
-                                            colorScheme: ColorScheme.fromSwatch(
-                                              backgroundColor:
-                                                  const Color(0xff4169e1),
-                                            ),
-                                          ),
-                                          child: child!,
-                                        );
-                                      });
-
-                                  if (time != null && time != _startTime) {
-                                    setState(() {
-                                      _startTime = time;
-                                      final Duration difference =
-                                          _endDate.difference(_startDate);
-                                      _startDate = DateTime(
-                                          _startDate.year,
-                                          _startDate.month,
-                                          _startDate.day,
-                                          _startTime.hour,
-                                          _startTime.minute);
-                                      _endDate = _startDate.add(difference);
-                                      _endTime = TimeOfDay(
-                                          hour: _endDate.hour,
-                                          minute: _endDate.minute);
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  DateFormat('hh:mm a').format(_startDate),
-                                  textAlign: TextAlign.right,
-                                ),
-                              )),
-                  ])),
-              ListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                  leading: const Text(''),
-                  title: Row(children: <Widget>[
-                    Expanded(
-                      flex: 7,
-                      child: GestureDetector(
-                        onTap: () async {
-                          final DateTime? date = await showDatePicker(
-                              context: context,
-                              initialDate: _endDate,
-                              firstDate: DateTime(1900),
-                              lastDate: DateTime(2100),
-                              builder: (BuildContext context, Widget? child) {
-                                return Theme(
-                                  data: ThemeData(
-                                    brightness: Brightness.light,
-                                    colorScheme: ColorScheme.fromSwatch(
-                                      backgroundColor: const Color(0xff4169e1),
-                                    ),
-                                  ),
-                                  child: child!,
-                                );
-                              });
-
-                          if (date != null && date != _endDate) {
-                            setState(() {
-                              final Duration difference =
-                                  _endDate.difference(_startDate);
-                              _endDate = DateTime(date.year, date.month,
-                                  date.day, _endTime.hour, _endTime.minute);
-                              if (_endDate.isBefore(_startDate)) {
-                                _startDate = _endDate.subtract(difference);
-                                _startTime = TimeOfDay(
-                                    hour: _startDate.hour,
-                                    minute: _startDate.minute);
-                              }
-                            });
-                          }
-                        },
-                        child: Text(
-                          DateFormat('EEE, MMM dd yyyy').format(_endDate),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                        flex: 3,
-                        child: _isAllDay
-                            ? const Text('')
-                            : GestureDetector(
-                                onTap: () async {
-                                  final TimeOfDay? time = await showTimePicker(
-                                      context: context,
-                                      initialTime: TimeOfDay(
-                                          hour: _endTime.hour,
-                                          minute: _endTime.minute),
-                                      builder: (BuildContext context,
-                                          Widget? child) {
-                                        return Theme(
-                                          data: ThemeData(
-                                            brightness: Brightness.light,
-                                            colorScheme: ColorScheme.fromSwatch(
-                                              backgroundColor:
-                                                  const Color(0xff4169e1),
-                                            ),
-                                          ),
-                                          child: child!,
-                                        );
-                                      });
-
-                                  if (time != null && time != _endTime) {
-                                    setState(() {
-                                      _endTime = time;
-                                      final Duration difference =
-                                          _endDate.difference(_startDate);
-                                      _endDate = DateTime(
-                                          _endDate.year,
-                                          _endDate.month,
-                                          _endDate.day,
-                                          _endTime.hour,
-                                          _endTime.minute);
-                                      if (_endDate.isBefore(_startDate)) {
-                                        _startDate =
-                                            _endDate.subtract(difference);
-                                        _startTime = TimeOfDay(
-                                            hour: _startDate.hour,
-                                            minute: _startDate.minute);
-                                      }
-                                    });
-                                  }
-                                },
-                                child: Text(
-                                  DateFormat('hh:mm a').format(_endDate),
-                                  textAlign: TextAlign.right,
-                                ),
-                              )),
-                  ])),
-              ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                leading: Icon(
-                  Icons.public,
-                  color: defaultColor,
-                ),
-                title: Text(widget.timeZoneCollection[_selectedTimeZoneIndex]),
-                onTap: () {
-                  showDialog<Widget>(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CalendarTimeZonePicker(
-                        const Color(0xff4169e1),
-                        widget.timeZoneCollection,
-                        _selectedTimeZoneIndex,
-                        onChanged: (PickerChangedDetails details) {
-                          _selectedTimeZoneIndex = details.index;
-                        },
-                      );
-                    },
-                  ).then((dynamic value) => setState(() {
-                        /// update the time zone changes
-                      }));
-                },
-              ),
-              ListTile(
-                contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                leading: Icon(
-                  Icons.refresh,
-                  color: defaultColor,
-                ),
-                title: Text(_rule == SelectRule.doesNotRepeat
-                    ? 'Does not repeat'
-                    : _rule == SelectRule.everyDay
-                        ? 'Every day'
-                        : _rule == SelectRule.everyWeek
-                            ? 'Every week'
-                            : _rule == SelectRule.everyMonth
-                                ? 'Every month'
-                                : _rule == SelectRule.everyYear
-                                    ? 'Every year'
-                                    : 'Custom'),
-                onTap: () async {
-                  final dynamic properties = await showDialog<dynamic>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return WillPopScope(
-                            onWillPop: () async {
-                              return true;
-                            },
-                            child: Theme(
-                              data: ThemeData(
-                                  brightness: Brightness.light,
-                                  colorScheme: ColorScheme.fromSwatch(
-                                    backgroundColor: const Color(0xff4169e1),
-                                  )),
-                              // ignore: prefer_const_literals_to_create_immutables
-                              child: SelectRuleDialog(
-                                _recurrenceProperties,
-                                widget.colorCollection[_selectedColorIndex],
-                                widget.events,
-                                selectedAppointment:
-                                    widget.selectedAppointment ??
-                                        Appointment(
-                                          startTime: _startDate,
-                                          endTime: _endDate,
-                                          isAllDay: _isAllDay,
-                                          subject: _subject == ''
-                                              ? '(No title)'
-                                              : _subject,
-                                        ),
-                                onChanged: (PickerChangedDetails details) {
-                                  setState(() {
-                                    _rule = details.selectedRule;
-                                  });
-                                },
-                              ),
-                            ));
-                      });
-                  _recurrenceProperties = properties as RecurrenceProperties?;
-                },
-              ),
-              if (widget.events.resources == null ||
-                  widget.events.resources!.isEmpty)
-                Container()
-              else
-                ListTile(
-                  contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                  leading: Icon(Icons.people, color: defaultColor),
-                  title: _getResourceEditor(TextStyle(
-                      fontSize: 18,
-                      color: defaultColor,
-                      fontWeight: FontWeight.w300)),
-                  onTap: () {
-                    showDialog<Widget>(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return ResourcePicker(
-                          _unSelectedResources,
-                          onChanged: (PickerChangedDetails details) {
-                            _resourceIds = _resourceIds == null
-                                ? <Object>[details.resourceId!]
-                                : (_resourceIds!.sublist(0)
-                                  ..add(details.resourceId!));
-                            _selectedResources = _getSelectedResources(
-                                _resourceIds, widget.events.resources);
-                            _unSelectedResources = _getUnSelectedResources(
-                                _selectedResources, widget.events.resources);
-                          },
-                        );
-                      },
-                    ).then((dynamic value) => setState(() {
-                          /// update the color picker changes
-                        }));
-                  },
-                ),
-              const Divider(
-                height: 1.0,
-                thickness: 1,
-              ),
-              const Divider(
-                height: 1.0,
-                thickness: 1,
-              ),
-              Container(),
-              Container(),
-              ListTile(
-                contentPadding: const EdgeInsets.all(5),
-                leading: Icon(
-                  Icons.subject,
-                  color: defaultColor,
-                ),
-                title: Text(
-                  appState.lookupEventByName(_subject).desc,
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: defaultColor,
-                      fontWeight: FontWeight.w400),
-                ),
-              ),
-            ],
-          ));
-    });
-  }
+  // Widget _getAppointmentEditor(
+  //     BuildContext context, Color backgroundColor, Color defaultColor) {
+  //   return
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(builder: (context, appState, child) {
-      return Theme(
-          data: ThemeData(
-            brightness: Brightness.light,
-            colorScheme: ColorScheme.fromSwatch(
-              backgroundColor: const Color(0xff4169e1),
+      createItems(appState.groups);
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            leading: IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-          ),
-          child: Scaffold(
-              backgroundColor: Colors.white,
-              appBar: AppBar(
-                backgroundColor: widget.colorCollection[_selectedColorIndex],
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.close,
-                    color: Colors.white,
+            actions: <Widget>[
+              IconButton(
+                  padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  icon: Icon(
+                    Icons.done,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                actions: <Widget>[
-                  IconButton(
-                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                      icon: const Icon(
-                        Icons.done,
-                        color: Colors.white,
-                      ),
-                      onPressed: () async {
-                        //updateDropdown();
+                  onPressed: () async {
+                    //updateDropdown();
+                    if (widget.selectedAppointment != null) {
+                      if (widget.selectedAppointment!.appointmentType !=
+                          AppointmentType.normal) {
+                        final Appointment newAppointment = Appointment(
+                          startTime: _startDate,
+                          endTime: _endDate,
+                          color: widget.colorCollection[_selectedColorIndex],
+                          startTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : widget
+                                  .timeZoneCollection[_selectedTimeZoneIndex],
+                          endTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : widget
+                                  .timeZoneCollection[_selectedTimeZoneIndex],
+                          notes: _notes,
+                          isAllDay: _isAllDay,
+                          subject: _subject == '' ? '(No title)' : _subject,
+                          recurrenceExceptionDates: widget
+                              .selectedAppointment!.recurrenceExceptionDates,
+                          resourceIds: _resourceIds,
+                          id: widget.selectedAppointment!.id,
+                          recurrenceId:
+                              widget.selectedAppointment!.recurrenceId,
+                          recurrenceRule: _recurrenceProperties == null
+                              ? null
+                              : SfCalendar.generateRRule(
+                                  _recurrenceProperties!, _startDate, _endDate),
+                        );
+
+                        showDialog<Widget>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return WillPopScope(
+                                  onWillPop: () async {
+                                    return true;
+                                  },
+                                  child: EditDialog(
+                                      newAppointment,
+                                      widget.selectedAppointment!,
+                                      _recurrenceProperties,
+                                      widget.events));
+                            });
+                      } else {
+                        final List<Appointment> appointment = <Appointment>[];
                         if (widget.selectedAppointment != null) {
-                          if (widget.selectedAppointment!.appointmentType !=
-                              AppointmentType.normal) {
-                            final Appointment newAppointment = Appointment(
-                              startTime: _startDate,
-                              endTime: _endDate,
-                              color:
-                                  widget.colorCollection[_selectedColorIndex],
-                              startTimeZone: _selectedTimeZoneIndex == 0
-                                  ? ''
-                                  : widget.timeZoneCollection[
-                                      _selectedTimeZoneIndex],
-                              endTimeZone: _selectedTimeZoneIndex == 0
-                                  ? ''
-                                  : widget.timeZoneCollection[
-                                      _selectedTimeZoneIndex],
-                              notes: _notes,
-                              isAllDay: _isAllDay,
-                              subject: _subject == '' ? '(No title)' : _subject,
-                              recurrenceExceptionDates: widget
-                                  .selectedAppointment!
-                                  .recurrenceExceptionDates,
-                              resourceIds: _resourceIds,
-                              id: widget.selectedAppointment!.id,
-                              recurrenceId:
-                                  widget.selectedAppointment!.recurrenceId,
-                              recurrenceRule: _recurrenceProperties == null
-                                  ? null
-                                  : SfCalendar.generateRRule(
-                                      _recurrenceProperties!,
-                                      _startDate,
-                                      _endDate),
-                            );
+                          widget.events.appointments!.removeAt(widget
+                              .events.appointments!
+                              .indexOf(widget.selectedAppointment));
+                          widget.events.notifyListeners(
+                              CalendarDataSourceAction.remove,
+                              <Appointment>[widget.selectedAppointment!]);
+                        }
+                        appointment.add(Appointment(
+                          startTime: _startDate,
+                          endTime: _endDate,
+                          color: widget.colorCollection[_selectedColorIndex],
+                          startTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : widget
+                                  .timeZoneCollection[_selectedTimeZoneIndex],
+                          endTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : widget
+                                  .timeZoneCollection[_selectedTimeZoneIndex],
+                          notes: _notes,
+                          isAllDay: _isAllDay,
+                          subject: _subject == '' ? '(No title)' : _subject,
+                          resourceIds: _resourceIds,
+                          id: widget.selectedAppointment!.id,
+                          recurrenceRule: _recurrenceProperties == null
+                              ? null
+                              : SfCalendar.generateRRule(
+                                  _recurrenceProperties!, _startDate, _endDate),
+                        ));
+                        widget.events.appointments!.add(appointment[0]);
 
-                            showDialog<Widget>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return WillPopScope(
-                                      onWillPop: () async {
-                                        return true;
-                                      },
-                                      child: Theme(
-                                        data: ThemeData(
-                                          brightness: Brightness.light,
-                                          colorScheme: ColorScheme.fromSwatch(
-                                            backgroundColor:
-                                                const Color(0xff4169e1),
-                                          ),
-                                        ),
-                                        child: EditDialog(
-                                            newAppointment,
-                                            widget.selectedAppointment!,
-                                            _recurrenceProperties,
-                                            widget.events),
-                                      ));
-                                });
-                          } else {
-                            final List<Appointment> appointment =
-                                <Appointment>[];
-                            if (widget.selectedAppointment != null) {
-                              widget.events.appointments!.removeAt(widget
-                                  .events.appointments!
-                                  .indexOf(widget.selectedAppointment));
-                              widget.events.notifyListeners(
-                                  CalendarDataSourceAction.remove,
-                                  <Appointment>[widget.selectedAppointment!]);
-                            }
-                            appointment.add(Appointment(
-                              startTime: _startDate,
-                              endTime: _endDate,
-                              color:
-                                  widget.colorCollection[_selectedColorIndex],
-                              startTimeZone: _selectedTimeZoneIndex == 0
-                                  ? ''
-                                  : widget.timeZoneCollection[
-                                      _selectedTimeZoneIndex],
-                              endTimeZone: _selectedTimeZoneIndex == 0
-                                  ? ''
-                                  : widget.timeZoneCollection[
-                                      _selectedTimeZoneIndex],
-                              notes: _notes,
-                              isAllDay: _isAllDay,
-                              subject: _subject == '' ? '(No title)' : _subject,
-                              resourceIds: _resourceIds,
-                              id: widget.selectedAppointment!.id,
-                              recurrenceRule: _recurrenceProperties == null
-                                  ? null
-                                  : SfCalendar.generateRRule(
-                                      _recurrenceProperties!,
-                                      _startDate,
-                                      _endDate),
-                            ));
-                            widget.events.appointments!.add(appointment[0]);
+                        widget.events.notifyListeners(
+                            CalendarDataSourceAction.add, appointment);
+                        Navigator.pop(context);
+                      }
+                    } else {
+                      final List<Appointment> appointment = <Appointment>[];
+                      if (widget.selectedAppointment != null) {
+                        widget.events.appointments!.removeAt(widget
+                            .events.appointments!
+                            .indexOf(widget.selectedAppointment));
+                        widget.events.notifyListeners(
+                            CalendarDataSourceAction.remove,
+                            <Appointment>[widget.selectedAppointment!]);
+                      }
 
-                            widget.events.notifyListeners(
-                                CalendarDataSourceAction.add, appointment);
-                            Navigator.pop(context);
+                      Appointment app = Appointment(
+                        startTime: _startDate,
+                        endTime: _endDate,
+                        color: widget.colorCollection[_selectedColorIndex],
+                        startTimeZone: _selectedTimeZoneIndex == 0
+                            ? ''
+                            : widget.timeZoneCollection[_selectedTimeZoneIndex],
+                        endTimeZone: _selectedTimeZoneIndex == 0
+                            ? ''
+                            : widget.timeZoneCollection[_selectedTimeZoneIndex],
+                        notes: _notes,
+                        isAllDay: _isAllDay,
+                        subject: _subject == '' ? '(No title)' : _subject,
+                        resourceIds: _resourceIds,
+                        recurrenceRule: _rule == SelectRule.doesNotRepeat ||
+                                _recurrenceProperties == null
+                            ? null
+                            : SfCalendar.generateRRule(
+                                _recurrenceProperties!, _startDate, _endDate),
+                      );
+
+                      ///WE ARE WORKING HERE
+                      Map<String, Map<String, dynamic>> groupToApp = {};
+                      for (Group g in _selectedGroups) {
+                        Appointment tmpApp = Appointment(
+                          startTime: _startDate,
+                          endTime: _endDate,
+                          color: g.color,
+                          startTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : widget
+                                  .timeZoneCollection[_selectedTimeZoneIndex],
+                          endTimeZone: _selectedTimeZoneIndex == 0
+                              ? ''
+                              : widget
+                                  .timeZoneCollection[_selectedTimeZoneIndex],
+                          notes: _notes,
+                          isAllDay: _isAllDay,
+                          subject: _subject == '' ? '(No title)' : _subject,
+                          resourceIds: _resourceIds,
+                          recurrenceRule: _rule == SelectRule.doesNotRepeat ||
+                                  _recurrenceProperties == null
+                              ? null
+                              : SfCalendar.generateRRule(
+                                  _recurrenceProperties!, _startDate, _endDate),
+                        );
+                        //Turning the already created appointment into something we can put into firebase
+                        var startTime = tmpApp.startTime;
+                        Map<String, dynamic> appMap = {
+                          "start_time": startTime,
+                          "end_time": tmpApp.endTime,
+                          "color": tmpApp.color.toString(),
+                          "notes": tmpApp.notes,
+                          "subject": tmpApp.subject,
+                          "group": g.name,
+                          "start_hour": "${startTime.hour}"
+                        };
+                        //associating a group with a specific appointment
+                        groupToApp[g.name] = appMap;
+                        //adding here it what actually puts in on the calendar
+                        appointment.add(tmpApp);
+                      }
+                      //appState.addAppointments(groupToApp);
+
+                      var time = app.startTime;
+                      String hour = "${time.hour}";
+                      var name = app.subject;
+
+                      //Checking if we have groups to look through
+                      if (_selectedGroups.iterator.moveNext()) {
+                        int groupAmount = _selectedGroups.length;
+                        //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
+                        //If it does, it takes us to the else statement
+                        if (appState.checkEvent(name, hour, groupAmount)) {
+                          //If it doesnt we come in here and we add the appoinments to the app state
+                          appState.addAppointments(
+                              groupToApp, appState.firestore);
+                          //This for loop adds all of the appointments to the calendar backend which separate from ours.
+                          for (Map<String, dynamic> app in groupToApp.values) {
+                            widget.events
+                                .notifyListeners(CalendarDataSourceAction.add, [
+                              appState.createAppointment(app["start_time"],
+                                  app["end_time"], app["color"], app["subject"])
+                            ]);
                           }
                         } else {
-                          final List<Appointment> appointment = <Appointment>[];
-                          if (widget.selectedAppointment != null) {
-                            widget.events.appointments!.removeAt(widget
-                                .events.appointments!
-                                .indexOf(widget.selectedAppointment));
-                            widget.events.notifyListeners(
-                                CalendarDataSourceAction.remove,
-                                <Appointment>[widget.selectedAppointment!]);
-                          }
+                          Fluttertoast.showToast(
+                              msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        }
+                      }
 
-                          Appointment app = Appointment(
-                            startTime: _startDate,
-                            endTime: _endDate,
-                            color: widget.colorCollection[_selectedColorIndex],
-                            startTimeZone: _selectedTimeZoneIndex == 0
-                                ? ''
-                                : widget
-                                    .timeZoneCollection[_selectedTimeZoneIndex],
-                            endTimeZone: _selectedTimeZoneIndex == 0
-                                ? ''
-                                : widget
-                                    .timeZoneCollection[_selectedTimeZoneIndex],
-                            notes: _notes,
-                            isAllDay: _isAllDay,
-                            subject: _subject == '' ? '(No title)' : _subject,
-                            resourceIds: _resourceIds,
-                            recurrenceRule: _rule == SelectRule.doesNotRepeat ||
-                                    _recurrenceProperties == null
-                                ? null
-                                : SfCalendar.generateRRule(
-                                    _recurrenceProperties!,
-                                    _startDate,
-                                    _endDate),
-                          );
-
-                          ///WE ARE WORKING HERE
-                          Map<String, Map<String, dynamic>> groupToApp = {};
-                          for (Group g in _selectedGroups) {
-                            Appointment tmpApp = Appointment(
-                              startTime: _startDate,
-                              endTime: _endDate,
-                              color: g.color,
-                              startTimeZone: _selectedTimeZoneIndex == 0
-                                  ? ''
-                                  : widget.timeZoneCollection[
-                                      _selectedTimeZoneIndex],
-                              endTimeZone: _selectedTimeZoneIndex == 0
-                                  ? ''
-                                  : widget.timeZoneCollection[
-                                      _selectedTimeZoneIndex],
-                              notes: _notes,
-                              isAllDay: _isAllDay,
-                              subject: _subject == '' ? '(No title)' : _subject,
-                              resourceIds: _resourceIds,
-                              recurrenceRule:
-                                  _rule == SelectRule.doesNotRepeat ||
-                                          _recurrenceProperties == null
-                                      ? null
-                                      : SfCalendar.generateRRule(
-                                          _recurrenceProperties!,
-                                          _startDate,
-                                          _endDate),
-                            );
-                            //Turning the already created appointment into something we can put into firebase
-                            var startTime = tmpApp.startTime;
-                            Map<String, dynamic> appMap = {
-                              "start_time": startTime,
-                              "end_time": tmpApp.endTime,
-                              "color": tmpApp.color.toString(),
-                              "notes": tmpApp.notes,
-                              "subject": tmpApp.subject,
-                              "group": g.name,
-                              "start_hour": "${startTime.hour}"
-                            };
-                            //associating a group with a specific appointment
-                            groupToApp[g.name] = appMap;
-                            //adding here it what actually puts in on the calendar
-                            appointment.add(tmpApp);
-                          }
-                          //appState.addAppointments(groupToApp);
-
-                          var time = app.startTime;
-                          String hour = "${time.hour}";
-                          var name = app.subject;
-
-                          //Checking if we have groups to look through
-                          if (_selectedGroups.iterator.moveNext()) {
-                            int groupAmount = _selectedGroups.length;
-                            //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
-                            //If it does, it takes us to the else statement
-                            if (appState.checkEvent(name, hour, groupAmount)) {
-                              //If it doesnt we come in here and we add the appoinments to the app state
-                              appState.addAppointments(
-                                  groupToApp, appState.firestore);
-                              //This for loop adds all of the appointments to the calendar backend which separate from ours.
-                              for (Map<String, dynamic> app
-                                  in groupToApp.values) {
-                                widget.events.notifyListeners(
-                                    CalendarDataSourceAction.add, [
-                                  appState.createAppointment(
-                                      app["start_time"],
-                                      app["end_time"],
-                                      app["color"],
-                                      app["subject"])
-                                ]);
-                              }
+                      Navigator.pop(context);
+                    }
+                  })
+            ],
+          ),
+          body: Padding(
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+              child: Container(
+                  child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  ListTile(
+                    contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                    leading: Text("Events",
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .fontSize,
+                            color: Theme.of(context).colorScheme.secondary)),
+                    //This is the groups dropdown button
+                    //A current issue is that for the group filtering to work we have to click within this box to
+                    //get the filtering to work.
+                    title: Align(
+                      alignment: Alignment.centerRight,
+                      child: DropdownButton(
+                        iconEnabledColor:
+                            Theme.of(context).colorScheme.tertiary,
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.tertiary,
+                            fontStyle: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .fontStyle,
+                            fontFamily: "Fruit"),
+                        value: dropdownValue,
+                        items: widget.firebaseEvents,
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            dropdownValue = newValue!;
+                            _subject = newValue;
+                          });
+                          var excludedGroups =
+                              appState.getGroupsAtTime(_startDate);
+                          List<Group> showGroups = [];
+                          for (Group group in appState.groups) {
+                            if (excludedGroups.contains(group.name)) {
                             } else {
-                              Fluttertoast.showToast(
-                                  msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
-                                  toastLength: Toast.LENGTH_LONG,
-                                  gravity: ToastGravity.CENTER,
-                                  timeInSecForIosWeb: 1,
-                                  backgroundColor: Colors.red,
-                                  textColor: Colors.white,
-                                  fontSize: 16.0);
+                              showGroups.add(group);
                             }
                           }
-
-                          Navigator.pop(context);
-                        }
-                      })
-                ],
-              ),
-              body: Padding(
-                padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                child: Stack(
-                  children: <Widget>[
-                    _getAppointmentEditor(
-                        context, (Colors.white), Colors.black87)
-                  ],
-                ),
-              ),
-              floatingActionButton: widget.selectedAppointment == null
-                  ? const Text('')
-                  : FloatingActionButton(
-                      onPressed: () {
-                        if (widget.selectedAppointment != null) {
-                          if (widget.selectedAppointment!.appointmentType ==
-                              AppointmentType.normal) {
-                            //Another Potential Fix?
-                            //THIS ALL CAN MOST LIKELY BE DELETED
-                            //WAS CODE FROM OLD DB
-                            //MIGHT HAVE SOME HELPFUL FEATURES FOR DELETION
-                            Map<String, dynamic> appMap = {
-                              "appointment": [
-                                widget.selectedAppointment?.startTime,
-                                widget.selectedAppointment?.endTime,
-                                widget.selectedAppointment?.color.toString(),
-                                widget.selectedAppointment?.startTimeZone,
-                                widget.selectedAppointment?.endTimeZone,
-                                widget.selectedAppointment?.notes,
-                                widget.selectedAppointment?.isAllDay,
-                                widget.selectedAppointment?.subject,
-                                widget.selectedAppointment?.resourceIds,
-                                widget.selectedAppointment?.recurrenceRule
-                              ]
-                            };
-
-                            var time = widget.selectedAppointment?.startTime;
-                            var hour = "${time?.hour}";
-                            var name = widget.selectedAppointment?.subject;
-                            DateFormat formatter = DateFormat("MM-dd-yy");
-                            var docName = formatter.format(time!);
-
-                            Provider.of<AppState>(context)
-                                .firestore
-                                .collection("schedules")
-                                .doc(docName)
-                                .update({
-                              "appointments.${widget.group.name}":
-                                  FieldValue.arrayRemove([appMap])
-                            });
-
-                            Provider.of<AppState>(context)
-                                .firestore
-                                .collection("schedules")
-                                .doc(docName)
-                                .update({
-                              "$name.$hour":
-                                  FieldValue.arrayRemove([widget.group.name])
-                            });
-
-                            widget.events.appointments?.removeAt(widget
-                                .events.appointments!
-                                .indexOf(widget.selectedAppointment));
-                            widget.events.notifyListeners(
-                                CalendarDataSourceAction.remove,
-                                <Appointment>[widget.selectedAppointment!]);
-                            Navigator.pop(context);
-                          } else {
-                            showDialog<Widget>(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return WillPopScope(
-                                      onWillPop: () async {
-                                        return true;
-                                      },
-                                      child: Theme(
-                                        data: ThemeData(
-                                          brightness: Brightness.light,
-                                          colorScheme: ColorScheme.fromSwatch(
-                                            backgroundColor:
-                                                const Color(0xff4169e1),
-                                          ),
-                                        ),
-                                        // ignore: prefer_const_literals_to_create_immutables
-                                        child: DeleteDialog(
-                                            widget.selectedAppointment!,
-                                            widget.events),
-                                      ));
-                                });
-                          }
-                        }
+                          createItems(showGroups);
+                        },
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
+                    //This is where the group select field is
+                    title: MultiSelectDialogField(
+                      title: Text("Assign Groups",
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .fontSize,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      buttonText: Text("Assign Groups",
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .headlineSmall!
+                                  .fontSize,
+                              color: Theme.of(context).colorScheme.secondary)),
+                      colorator: (group) => group.color,
+                      items: _items,
+                      initialValue: _selectedGroups,
+                      onConfirm: (results) {
+                        setState(() {
+                          _selectedGroups = results;
+                          //assignments[widget.group] = _selectedGroups;
+                        });
                       },
-                      backgroundColor: const Color(0xff4169e1),
-                      child:
-                          const Icon(Icons.delete_outline, color: Colors.white),
-                    )));
+                    ),
+                  ),
+                  Divider(
+                      height: 1.0,
+                      thickness: 3,
+                      color: Color.lerp(Theme.of(context).colorScheme.tertiary,
+                          Colors.white, 0.5)),
+                  ListTile(
+                      contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      leading: Icon(Icons.access_time,
+                          color: Theme.of(context).colorScheme.tertiary),
+                      title: Row(children: <Widget>[
+                        Expanded(
+                          child: Text('All-day',
+                              style: TextStyle(
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge!
+                                      .fontSize,
+                                  color:
+                                      Theme.of(context).colorScheme.tertiary)),
+                        ),
+                        Expanded(
+                            child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Switch(
+                                  value: _isAllDay,
+                                  onChanged: (bool value) {
+                                    setState(() {
+                                      _isAllDay = value;
+                                    });
+                                  },
+                                ))),
+                      ])),
+                  ListTile(
+                      contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      leading: const Text(''),
+                      title: Row(children: <Widget>[
+                        Expanded(
+                          flex: 7,
+                          child: GestureDetector(
+                            onTap: () async {
+                              final DateTime? date = await showDatePicker(
+                                  context: context,
+                                  initialDate: _startDate,
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2100),
+                                  builder:
+                                      (BuildContext context, Widget? child) {
+                                    return Theme(
+                                      data: Theme.of(context),
+                                      child: child!,
+                                    );
+                                  });
+
+                              if (date != null && date != _startDate) {
+                                setState(() {
+                                  final Duration difference =
+                                      _endDate.difference(_startDate);
+                                  _startDate = DateTime(
+                                      date.year,
+                                      date.month,
+                                      date.day,
+                                      _startTime.hour,
+                                      _startTime.minute);
+                                  _endDate = _startDate.add(difference);
+                                  _endTime = TimeOfDay(
+                                      hour: _endDate.hour,
+                                      minute: _endDate.minute);
+                                });
+                              }
+                            },
+                            child: Text(
+                                DateFormat('EEE, MMM dd yyyy')
+                                    .format(_startDate),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .fontSize,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .tertiary)),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 3,
+                            child: _isAllDay
+                                ? const Text('')
+                                : GestureDetector(
+                                    onTap: () async {
+                                      final TimeOfDay? time =
+                                          await showTimePicker(
+                                              context: context,
+                                              initialTime: TimeOfDay(
+                                                  hour: _startTime.hour,
+                                                  minute: _startTime.minute),
+                                              builder: (BuildContext context,
+                                                  Widget? child) {
+                                                return child!;
+                                              });
+
+                                      if (time != null && time != _startTime) {
+                                        setState(() {
+                                          _startTime = time;
+                                          final Duration difference =
+                                              _endDate.difference(_startDate);
+                                          _startDate = DateTime(
+                                              _startDate.year,
+                                              _startDate.month,
+                                              _startDate.day,
+                                              _startTime.hour,
+                                              _startTime.minute);
+                                          _endDate = _startDate.add(difference);
+                                          _endTime = TimeOfDay(
+                                              hour: _endDate.hour,
+                                              minute: _endDate.minute);
+                                        });
+                                      }
+                                    },
+                                    child: Text(
+                                        DateFormat('hh:mm a')
+                                            .format(_startDate),
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .fontSize,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary)),
+                                  )),
+                      ])),
+                  ListTile(
+                      contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      leading: const Text(''),
+                      title: Row(children: <Widget>[
+                        Expanded(
+                          flex: 7,
+                          child: GestureDetector(
+                            onTap: () async {
+                              final DateTime? date = await showDatePicker(
+                                  context: context,
+                                  initialDate: _endDate,
+                                  firstDate: DateTime(1900),
+                                  lastDate: DateTime(2100),
+                                  builder:
+                                      (BuildContext context, Widget? child) {
+                                    return child!;
+                                  });
+
+                              if (date != null && date != _endDate) {
+                                setState(() {
+                                  final Duration difference =
+                                      _endDate.difference(_startDate);
+                                  _endDate = DateTime(date.year, date.month,
+                                      date.day, _endTime.hour, _endTime.minute);
+                                  if (_endDate.isBefore(_startDate)) {
+                                    _startDate = _endDate.subtract(difference);
+                                    _startTime = TimeOfDay(
+                                        hour: _startDate.hour,
+                                        minute: _startDate.minute);
+                                  }
+                                });
+                              }
+                            },
+                            child: Text(
+                                DateFormat('EEE, MMM dd yyyy').format(_endDate),
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .titleLarge!
+                                        .fontSize,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .tertiary)),
+                          ),
+                        ),
+                        Expanded(
+                            flex: 3,
+                            child: _isAllDay
+                                ? const Text('')
+                                : GestureDetector(
+                                    onTap: () async {
+                                      final TimeOfDay? time =
+                                          await showTimePicker(
+                                              context: context,
+                                              initialTime: TimeOfDay(
+                                                  hour: _endTime.hour,
+                                                  minute: _endTime.minute),
+                                              builder: (BuildContext context,
+                                                  Widget? child) {
+                                                return child!;
+                                              });
+
+                                      if (time != null && time != _endTime) {
+                                        setState(() {
+                                          _endTime = time;
+                                          final Duration difference =
+                                              _endDate.difference(_startDate);
+                                          _endDate = DateTime(
+                                              _endDate.year,
+                                              _endDate.month,
+                                              _endDate.day,
+                                              _endTime.hour,
+                                              _endTime.minute);
+                                          if (_endDate.isBefore(_startDate)) {
+                                            _startDate =
+                                                _endDate.subtract(difference);
+                                            _startTime = TimeOfDay(
+                                                hour: _startDate.hour,
+                                                minute: _startDate.minute);
+                                          }
+                                        });
+                                      }
+                                    },
+                                    child: Text(
+                                        DateFormat('hh:mm a').format(_endDate),
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .titleLarge!
+                                                .fontSize,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .tertiary)),
+                                  )),
+                      ])),
+                  ListTile(
+                    contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                    leading: Icon(Icons.public,
+                        color: Theme.of(context).colorScheme.tertiary),
+                    title:
+                        Text(widget.timeZoneCollection[_selectedTimeZoneIndex]),
+                    onTap: () {
+                      showDialog<Widget>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return CalendarTimeZonePicker(
+                            Theme.of(context).colorScheme.tertiary,
+                            widget.timeZoneCollection,
+                            _selectedTimeZoneIndex,
+                            onChanged: (PickerChangedDetails details) {
+                              _selectedTimeZoneIndex = details.index;
+                            },
+                          );
+                        },
+                      ).then((dynamic value) => setState(() {
+                            /// update the time zone changes
+                          }));
+                    },
+                  ),
+                  ListTile(
+                    contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                    leading: Icon(Icons.refresh,
+                        color: Theme.of(context).colorScheme.tertiary),
+                    title: Text(
+                        _rule == SelectRule.doesNotRepeat
+                            ? 'Does not repeat'
+                            : _rule == SelectRule.everyDay
+                                ? 'Every day'
+                                : _rule == SelectRule.everyWeek
+                                    ? 'Every week'
+                                    : _rule == SelectRule.everyMonth
+                                        ? 'Every month'
+                                        : _rule == SelectRule.everyYear
+                                            ? 'Every year'
+                                            : 'Custom',
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .fontSize,
+                            color: Theme.of(context).colorScheme.tertiary)),
+                    onTap: () async {
+                      final dynamic properties = await showDialog<dynamic>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return WillPopScope(
+                                onWillPop: () async {
+                                  return true;
+                                },
+                                child: SelectRuleDialog(
+                                  _recurrenceProperties,
+                                  widget.colorCollection[_selectedColorIndex],
+                                  widget.events,
+                                  selectedAppointment:
+                                      widget.selectedAppointment ??
+                                          Appointment(
+                                            startTime: _startDate,
+                                            endTime: _endDate,
+                                            isAllDay: _isAllDay,
+                                            subject: _subject == ''
+                                                ? '(No title)'
+                                                : _subject,
+                                          ),
+                                  onChanged: (PickerChangedDetails details) {
+                                    setState(() {
+                                      _rule = details.selectedRule;
+                                    });
+                                  },
+                                ));
+                          });
+                      _recurrenceProperties =
+                          properties as RecurrenceProperties?;
+                    },
+                  ),
+                  if (widget.events.resources == null ||
+                      widget.events.resources!.isEmpty)
+                    Container()
+                  else
+                    ListTile(
+                      contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+                      leading: Icon(Icons.people),
+                      title: _getResourceEditor(
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w300)),
+                      onTap: () {
+                        showDialog<Widget>(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return ResourcePicker(
+                              _unSelectedResources,
+                              onChanged: (PickerChangedDetails details) {
+                                _resourceIds = _resourceIds == null
+                                    ? <Object>[details.resourceId!]
+                                    : (_resourceIds!.sublist(0)
+                                      ..add(details.resourceId!));
+                                _selectedResources = _getSelectedResources(
+                                    _resourceIds, widget.events.resources);
+                                _unSelectedResources = _getUnSelectedResources(
+                                    _selectedResources,
+                                    widget.events.resources);
+                              },
+                            );
+                          },
+                        ).then((dynamic value) => setState(() {
+                              /// update the color picker changes
+                            }));
+                      },
+                    ),
+                  Divider(
+                      height: 1.0,
+                      thickness: 3,
+                      color: Color.lerp(Theme.of(context).colorScheme.tertiary,
+                          Colors.white, 0.5)),
+                  ListTile(
+                    contentPadding: const EdgeInsets.all(5),
+                    leading: Icon(
+                      Icons.subject,
+                    ),
+                    title: Text(
+                      appState.lookupEventByName(_subject).desc,
+                      style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge!.fontSize,
+                          color: Theme.of(context).colorScheme.tertiary),
+                    ),
+                  ),
+                ],
+              ))),
+          floatingActionButton: widget.selectedAppointment == null
+              ? const Text('')
+              : FloatingActionButton(
+                  onPressed: () {
+                    if (widget.selectedAppointment != null) {
+                      if (widget.selectedAppointment!.appointmentType ==
+                          AppointmentType.normal) {
+                        //Another Potential Fix?
+                        //THIS ALL CAN MOST LIKELY BE DELETED
+                        //WAS CODE FROM OLD DB
+                        //MIGHT HAVE SOME HELPFUL FEATURES FOR DELETION
+                        Map<String, dynamic> appMap = {
+                          "appointment": [
+                            widget.selectedAppointment?.startTime,
+                            widget.selectedAppointment?.endTime,
+                            widget.selectedAppointment?.color.toString(),
+                            widget.selectedAppointment?.startTimeZone,
+                            widget.selectedAppointment?.endTimeZone,
+                            widget.selectedAppointment?.notes,
+                            widget.selectedAppointment?.isAllDay,
+                            widget.selectedAppointment?.subject,
+                            widget.selectedAppointment?.resourceIds,
+                            widget.selectedAppointment?.recurrenceRule
+                          ]
+                        };
+
+                        var time = widget.selectedAppointment?.startTime;
+                        var hour = "${time?.hour}";
+                        var name = widget.selectedAppointment?.subject;
+                        DateFormat formatter = DateFormat("MM-dd-yy");
+                        var docName = formatter.format(time!);
+
+                        Provider.of<AppState>(context)
+                            .firestore
+                            .collection("schedules")
+                            .doc(docName)
+                            .update({
+                          "appointments.${widget.group.name}":
+                              FieldValue.arrayRemove([appMap])
+                        });
+
+                        Provider.of<AppState>(context)
+                            .firestore
+                            .collection("schedules")
+                            .doc(docName)
+                            .update({
+                          "$name.$hour":
+                              FieldValue.arrayRemove([widget.group.name])
+                        });
+
+                        widget.events.appointments?.removeAt(widget
+                            .events.appointments!
+                            .indexOf(widget.selectedAppointment));
+                        widget.events.notifyListeners(
+                            CalendarDataSourceAction.remove,
+                            <Appointment>[widget.selectedAppointment!]);
+                        Navigator.pop(context);
+                      } else {
+                        showDialog<Widget>(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return WillPopScope(
+                                  onWillPop: () async {
+                                    return true;
+                                  },
+                                  child: Theme(
+                                    data: ThemeData(
+                                      brightness: Brightness.light,
+                                      colorScheme: ColorScheme.fromSwatch(
+                                        backgroundColor:
+                                            const Color(0xff4169e1),
+                                      ),
+                                    ),
+                                    // ignore: prefer_const_literals_to_create_immutables
+                                    child: DeleteDialog(
+                                        widget.selectedAppointment!,
+                                        widget.events),
+                                  ));
+                            });
+                      }
+                    }
+                  },
+                  backgroundColor: const Color(0xff4169e1),
+                  child: const Icon(Icons.delete_outline),
+                ));
     });
   }
 
@@ -1078,3 +1069,11 @@ CalendarResource _getResourceFromId(
   return resourceCollection
       .firstWhere((CalendarResource resource) => resource.id == resourceId);
 }
+// class AppointmentOptions extends StatelessWidget {
+
+//   AppointmentOptions({super.key}) {}
+
+//   Widget build(BuildContext context) {
+//     return
+//   }
+// }
