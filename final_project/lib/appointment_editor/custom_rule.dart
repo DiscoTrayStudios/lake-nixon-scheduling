@@ -1010,3 +1010,29 @@ bool _isDateInDateCollection(List<DateTime>? dates, DateTime date) {
 
   return false;
 }
+
+typedef PickerChanged = void Function(
+    PickerChangedDetails pickerChangedDetails);
+
+/// Details for the [_PickerChanged].
+class PickerChangedDetails {
+  PickerChangedDetails(
+      {this.index = 1,
+      this.resourceId,
+      this.selectedRule = SelectRule.doesNotRepeat});
+
+  final int index;
+
+  final Object? resourceId;
+
+  final SelectRule? selectedRule;
+}
+
+enum SelectRule {
+  doesNotRepeat,
+  everyDay,
+  everyWeek,
+  everyMonth,
+  everyYear,
+  custom
+}
