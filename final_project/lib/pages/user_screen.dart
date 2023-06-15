@@ -63,14 +63,14 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
         Container(
             alignment: Alignment.bottomCenter,
             padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
-            child: const Text(
+            child: Text(
               'Authenticating',
               style: TextStyle(
-                  fontFamily: 'Fruit',
                   //nixongreen
-                  color: Color.fromRGBO(81, 146, 78, 1),
+                  color: Theme.of(context).colorScheme.secondary,
                   fontWeight: FontWeight.w500,
-                  fontSize: 30),
+                  fontSize:
+                      Theme.of(context).textTheme.headlineLarge!.fontSize),
             )),
       ])),
     );

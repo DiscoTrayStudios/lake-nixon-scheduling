@@ -126,7 +126,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             fontSize: Theme.of(context)
                                 .textTheme
                                 .headlineLarge!
-                                .fontSize),
+                                .fontSize,
+                            color: Theme.of(context).colorScheme.onSecondary),
                       ),
                       onPressed: () async {
                         try {

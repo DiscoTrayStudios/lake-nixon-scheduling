@@ -212,12 +212,7 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
         /// The key set here to maintain the state, when we change
         /// the parent of the widget
         key: _globalKey,
-        data: ThemeData(
-          brightness: Brightness.light,
-          colorScheme: ColorScheme.fromSwatch(
-            backgroundColor: theme,
-          ),
-        ),
+        data: Theme.of(context),
         child: _getLakeNixonCalender(
             _calendarController,
             AppointmentDataSource(Provider.of<AppState>(context)
@@ -229,8 +224,8 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.group.name} calendar",
-            style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
-        backgroundColor: nixonblue,
+            style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Row(children: <Widget>[
         Expanded(

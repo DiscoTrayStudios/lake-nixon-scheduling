@@ -213,9 +213,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         Navigator.pop(context);
                       }
                     },
-                    child: const Text(
+                    child: Text(
                       "Submit",
-                      style: TextStyle(fontFamily: 'Fruit', fontSize: 20),
+                      style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge!.fontSize,
+                          color: Theme.of(context).colorScheme.onSecondary),
                     ),
                   ),
                   const SizedBox(height: 10),
