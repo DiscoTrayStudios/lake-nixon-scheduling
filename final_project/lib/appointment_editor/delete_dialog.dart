@@ -17,7 +17,7 @@ class DeleteDialog extends StatefulWidget {
 }
 
 class DeleteDialogState extends State<DeleteDialog> {
-  Delete _delete = Delete.event;
+  // Delete _delete = Delete.event;
 
   @override
   void initState() {
@@ -51,28 +51,28 @@ class DeleteDialogState extends State<DeleteDialog> {
                 Container(
                   width: 20,
                 ),
-                RadioListTile<Delete>(
-                  title: const Text('This event'),
-                  value: Delete.event,
-                  groupValue: _delete,
-                  activeColor: const Color(0xff4169e1),
-                  onChanged: (Delete? value) {
-                    setState(() {
-                      _delete = value!;
-                    });
-                  },
-                ),
-                RadioListTile<Delete>(
-                  title: const Text('All events'),
-                  value: Delete.series,
-                  groupValue: _delete,
-                  activeColor: const Color(0xff4169e1),
-                  onChanged: (Delete? value) {
-                    setState(() {
-                      _delete = value!;
-                    });
-                  },
-                ),
+                // RadioListTile<Delete>(
+                //   title: const Text('This event'),
+                //   value: Delete.event,
+                //   groupValue: _delete,
+                //   activeColor: const Color(0xff4169e1),
+                //   onChanged: (Delete? value) {
+                //     setState(() {
+                //       _delete = value!;
+                //     });
+                //   },
+                // ),
+                // RadioListTile<Delete>(
+                //   title: const Text('All events'),
+                //   value: Delete.series,
+                //   groupValue: _delete,
+                //   activeColor: const Color(0xff4169e1),
+                //   onChanged: (Delete? value) {
+                //     setState(() {
+                //       _delete = value!;
+                //     });
+                //   },
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
@@ -129,70 +129,70 @@ class DeleteDialogState extends State<DeleteDialog> {
                         CollectionReference schedules =
                             FirebaseFirestore.instance.collection("schedules");
                         final snapshot = await schedules.get();
-                        if (_delete == Delete.event) {
-                          if (widget.selectedAppointment.recurrenceId != null) {
-                            schedules.doc(docName).delete();
-                            widget.events.appointments!
-                                .remove(widget.selectedAppointment);
-                            widget.events.notifyListeners(
-                                CalendarDataSourceAction.remove,
-                                <Appointment>[widget.selectedAppointment]);
-                          }
-                          widget.events.appointments!.removeAt(widget
-                              .events.appointments!
-                              .indexOf(parentAppointment));
-                          widget.events.notifyListeners(
-                              CalendarDataSourceAction.remove,
-                              <Appointment>[parentAppointment!]);
-                          parentAppointment.recurrenceExceptionDates != null
-                              ? parentAppointment.recurrenceExceptionDates!
-                                  .add(widget.selectedAppointment.startTime)
-                              : parentAppointment.recurrenceExceptionDates =
-                                  <DateTime>[
-                                  widget.selectedAppointment.startTime
-                                ];
-                          widget.events.appointments!.add(parentAppointment);
-                          widget.events.notifyListeners(
-                              CalendarDataSourceAction.add,
-                              <Appointment>[parentAppointment]);
-                        } else {
-                          if (parentAppointment!.recurrenceExceptionDates ==
-                              null) {
-                            schedules.doc(docName).delete();
-                            widget.events.appointments!.removeAt(widget
-                                .events.appointments!
-                                .indexOf(parentAppointment));
-                            widget.events.notifyListeners(
-                                CalendarDataSourceAction.remove,
-                                <Appointment>[parentAppointment]);
-                          } else {
-                            final List<DateTime>? exceptionDates =
-                                parentAppointment.recurrenceExceptionDates;
-                            for (int i = 0; i < exceptionDates!.length; i++) {
-                              final Appointment? changedOccurrence =
-                                  widget.events.getOccurrenceAppointment(
-                                      parentAppointment, exceptionDates[i], '');
-                              if (changedOccurrence != null) {
-                                widget.events.appointments!
-                                    .remove(changedOccurrence);
-                                widget.events.notifyListeners(
-                                    CalendarDataSourceAction.remove,
-                                    <Appointment>[changedOccurrence]);
-                              }
-                            }
-                            widget.events.appointments!.removeAt(widget
-                                .events.appointments!
-                                .indexOf(parentAppointment));
-                            widget.events.notifyListeners(
-                                CalendarDataSourceAction.remove,
-                                <Appointment>[parentAppointment]);
-                          }
-                          db.collection("schedules").doc(docName).delete().then(
-                                (doc) => debugPrint("Document deleted"),
-                                onError: (e) =>
-                                    debugPrint("Error updating document $e"),
-                              );
-                        }
+                        // if (_delete == Delete.event) {
+                        //   if (widget.selectedAppointment.recurrenceId != null) {
+                        //     schedules.doc(docName).delete();
+                        //     widget.events.appointments!
+                        //         .remove(widget.selectedAppointment);
+                        //     widget.events.notifyListeners(
+                        //         CalendarDataSourceAction.remove,
+                        //         <Appointment>[widget.selectedAppointment]);
+                        //   }
+                        //   widget.events.appointments!.removeAt(widget
+                        //       .events.appointments!
+                        //       .indexOf(parentAppointment));
+                        //   widget.events.notifyListeners(
+                        //       CalendarDataSourceAction.remove,
+                        //       <Appointment>[parentAppointment!]);
+                        //   parentAppointment.recurrenceExceptionDates != null
+                        //       ? parentAppointment.recurrenceExceptionDates!
+                        //           .add(widget.selectedAppointment.startTime)
+                        //       : parentAppointment.recurrenceExceptionDates =
+                        //           <DateTime>[
+                        //           widget.selectedAppointment.startTime
+                        //         ];
+                        //   widget.events.appointments!.add(parentAppointment);
+                        //   widget.events.notifyListeners(
+                        //       CalendarDataSourceAction.add,
+                        //       <Appointment>[parentAppointment]);
+                        // } else {
+                        //   if (parentAppointment!.recurrenceExceptionDates ==
+                        //       null) {
+                        //     schedules.doc(docName).delete();
+                        //     widget.events.appointments!.removeAt(widget
+                        //         .events.appointments!
+                        //         .indexOf(parentAppointment));
+                        //     widget.events.notifyListeners(
+                        //         CalendarDataSourceAction.remove,
+                        //         <Appointment>[parentAppointment]);
+                        //   } else {
+                        //     final List<DateTime>? exceptionDates =
+                        //         parentAppointment.recurrenceExceptionDates;
+                        //     for (int i = 0; i < exceptionDates!.length; i++) {
+                        //       final Appointment? changedOccurrence =
+                        //           widget.events.getOccurrenceAppointment(
+                        //               parentAppointment, exceptionDates[i], '');
+                        //       if (changedOccurrence != null) {
+                        //         widget.events.appointments!
+                        //             .remove(changedOccurrence);
+                        //         widget.events.notifyListeners(
+                        //             CalendarDataSourceAction.remove,
+                        //             <Appointment>[changedOccurrence]);
+                        //       }
+                        //     }
+                        //     widget.events.appointments!.removeAt(widget
+                        //         .events.appointments!
+                        //         .indexOf(parentAppointment));
+                        //     widget.events.notifyListeners(
+                        //         CalendarDataSourceAction.remove,
+                        //         <Appointment>[parentAppointment]);
+                        //   }
+                        //   db.collection("schedules").doc(docName).delete().then(
+                        //         (doc) => debugPrint("Document deleted"),
+                        //         onError: (e) =>
+                        //             debugPrint("Error updating document $e"),
+                        //       );
+                        // }
                         Navigator.pop(context);
                       },
                       child: const Text(

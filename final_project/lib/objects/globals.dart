@@ -80,19 +80,19 @@ Color nixongreen = const Color.fromRGBO(81, 146, 78, 1);
 
 FirebaseFirestore db = FirebaseFirestore.instance;
 
-List<Event> dbEvents = [];
+// List<Event> dbEvents = [];
 
-Map<Group, List<Appointment>> events = {};
+// Map<Group, List<Appointment>> events = {};
 
-var assignments = {};
+// var assignments = {};
 
-var events2 = {};
+// var events2 = {};
 
-enum Edit { event, series }
+// enum Edit { event, series }
 
-enum Delete { event, series }
+// enum Delete { event, series }
 
-enum EndRule { never, endDate, count }
+// enum EndRule { never, endDate, count }
 
 List<String> weekDay = <String>[
   'Monday',
@@ -148,21 +148,21 @@ List<Group> groups = <Group>[
 // }
 
 // will probably be changed/deleted. used for getSavedEvents
-Group? indexGroups(String name) {
-  Group? group;
-  events.forEach((key, value) {
-    if (key.name == name) {
-      group = key;
-    }
-  });
-  return group;
-}
+// Group? indexGroups(String name) {
+//   Group? group;
+//   events.forEach((key, value) {
+//     if (key.name == name) {
+//       group = key;
+//     }
+//   });
+//   return group;
+// }
 
-// will probably  need to be changed;
-void createGroup(Group group) {
-  if (events.containsKey(group)) {
-  } else {
-    events[group] = <Appointment>[];
-    assignments[group] = <Group>[];
-  }
-}
+// // will probably  need to be changed;
+// void createGroup(Group group) {
+//   if (events.containsKey(group)) {
+//   } else {
+//     events[group] = <Appointment>[];
+//     assignments[group] = <Group>[];
+//   }
+// }
