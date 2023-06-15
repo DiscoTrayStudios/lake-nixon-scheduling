@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project/pages/user_calendar_page.dart';
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/calendar_page.dart';
+import 'package:provider/provider.dart';
 
 class GroupPage extends StatefulWidget {
   const GroupPage({super.key, required this.title});
@@ -92,18 +93,13 @@ class _GroupPageState extends State<GroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("List of Groups",
-            style: TextStyle(
-                //check here later --- can't insert nixonbrown for some reason?
-                color: Color.fromRGBO(137, 116, 73, 1),
-                fontFamily: 'Fruit')),
-        backgroundColor: nixonblue,
+        title: const Text("List of Groups"),
       ),
       body: Container(
           padding: const EdgeInsets.fromLTRB(10, 20, 40, 0),
           child: ListView(
             // padding: const EdgeInsets.symmetric(vertical: 8.0),
-            children: groups.map((group) {
+            children: Provider.of<AppState>(context).groups.map((group) {
               return GroupItem(
                 group: group,
                 onTap: _handleCalendar,

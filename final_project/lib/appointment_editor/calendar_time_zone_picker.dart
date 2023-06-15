@@ -38,49 +38,40 @@ class CalendarTimeZonePickerState extends State<CalendarTimeZonePicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: ThemeData(
-          brightness: Brightness.light,
-          colorScheme: ColorScheme.fromSwatch(
-            backgroundColor: theme,
-          ),
-        ),
-        child: AlertDialog(
-          content: SizedBox(
-              width: double.maxFinite,
-              child: ListView.builder(
-                padding: EdgeInsets.zero,
-                itemCount: widget.timeZoneCollection.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return SizedBox(
-                      height: 50,
-                      child: ListTile(
-                        contentPadding:
-                            const EdgeInsets.symmetric(horizontal: 10),
-                        leading: Icon(
-                          index == _selectedTimeZoneIndex
-                              ? Icons.check_box
-                              : Icons.check_box_outline_blank,
-                          color: widget.backgroundColor,
-                        ),
-                        title: Text(widget.timeZoneCollection[index]),
-                        onTap: () {
-                          setState(() {
-                            _selectedTimeZoneIndex = index;
-                            widget
-                                .onChanged(PickerChangedDetails(index: index));
-                          });
+    return AlertDialog(
+      content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            padding: EdgeInsets.zero,
+            itemCount: widget.timeZoneCollection.length,
+            itemBuilder: (BuildContext context, int index) {
+              return SizedBox(
+                  height: 50,
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                    leading: Icon(
+                      index == _selectedTimeZoneIndex
+                          ? Icons.check_box
+                          : Icons.check_box_outline_blank,
+                      color: widget.backgroundColor,
+                    ),
+                    title: Text(widget.timeZoneCollection[index]),
+                    onTap: () {
+                      setState(() {
+                        _selectedTimeZoneIndex = index;
+                        widget.onChanged(PickerChangedDetails(index: index));
+                      });
 
-                          // ignore: always_specify_types
-                          Future.delayed(const Duration(milliseconds: 200), () {
-                            // When task is over, close the dialog
-                            Navigator.pop(context);
-                          });
-                        },
-                      ));
-                },
-              )),
-        ));
+                      // ignore: always_specify_types
+                      Future.delayed(const Duration(milliseconds: 200), () {
+                        // When task is over, close the dialog
+                        Navigator.pop(context);
+                      });
+                    },
+                  ));
+            },
+          )),
+    );
   }
 }
 
