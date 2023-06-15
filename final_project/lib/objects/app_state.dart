@@ -179,13 +179,12 @@ class AppState extends ChangeNotifier {
   //^^ I think this has been fixed but I'll keep that there just to make sure its not forgotten if I didn't fix it
   // This creates the event dropdown with the amount of groups in each event
   List<DropdownMenuItem<String>> createDropdown(
-      List<DropdownMenuItem> items, startTime) {
+      List<Event> items, DateTime startTime) {
     List<DropdownMenuItem<String>> newItems = [];
-    for (DropdownMenuItem item in items) {
-      var event = item.value;
-      var currentAmount = getCurrentAmount(event, startTime);
+    for (Event event in items) {
+      var currentAmount = getCurrentAmount(event.name, startTime);
       newItems.add(DropdownMenuItem(
-          value: event, child: Text("$event  $currentAmount")));
+          value: event.name, child: Text("${event.name}  $currentAmount")));
     }
     return newItems;
   }

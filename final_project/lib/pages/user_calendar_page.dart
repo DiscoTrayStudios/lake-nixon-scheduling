@@ -58,7 +58,6 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
   final List<String> _colorNames = <String>[];
   final List<Color> _colorCollection = <Color>[];
   final List<String> _timeZoneCollection = <String>[];
-  late AppointmentDataSource _events;
   List<DropdownMenuItem<String>> firebaseEvents = [];
   List<Appointment> savedEvents = [];
 
@@ -66,40 +65,37 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
   void initState() {
     _currentView = CalendarView.workWeek;
     _calendarController.view = _currentView;
-    bool user = widget.isUser;
+    // bool user = widget.isUser;
     //_checkAuth();
-    getEvents();
+    // getEvents();
     // getSavedEvents();
-    _events = AppointmentDataSource(
-        Provider.of<AppState>(context).allAppointments([widget.group], []));
-    debugPrint(_events.toString());
 
     super.initState();
   }
 
-  Future<void> getEvents() async {
-    CollectionReference events =
-        FirebaseFirestore.instance.collection("events");
-    final snapshot = await events.get();
-    if (snapshot.size > 0) {
-      List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-      for (var element in data) {
-        var event = element.data() as Map;
-        var tmp = Event(
-            name: event["name"],
-            ageMin: event["ageMin"],
-            groupMax: event["groupMax"],
-            desc: event["desc"]);
-        // dbEvents.add(tmp);
+  // Future<void> getEvents() async {
+  //   CollectionReference events =
+  //       FirebaseFirestore.instance.collection("events");
+  //   final snapshot = await events.get();
+  //   if (snapshot.size > 0) {
+  //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
+  //     for (var element in data) {
+  //       var event = element.data() as Map;
+  //       var tmp = Event(
+  //           name: event["name"],
+  //           ageMin: event["ageMin"],
+  //           groupMax: event["groupMax"],
+  //           desc: event["desc"]);
+  //       // dbEvents.add(tmp);
 
-        firebaseEvents.add(
-            DropdownMenuItem(value: event["name"], child: Text(event["name"])));
-      }
-    } else {
-      debugPrint('No data available.');
-    }
-    // debugPrint(dbEvents.toString());
-  }
+  //       firebaseEvents.add(
+  //           DropdownMenuItem(value: event["name"], child: Text(event["name"])));
+  //     }
+  //   } else {
+  //     debugPrint('No data available.');
+  //   }
+  //   // debugPrint(dbEvents.toString());
+  // }
 
   // Future<void> getSavedEvents() async {
   //   CollectionReference schedules =
@@ -224,7 +220,11 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
           ),
         ),
         child: _getLakeNixonCalender(
-            _calendarController, _events, _onViewChanged, _onCalendarTapped));
+            _calendarController,
+            AppointmentDataSource(Provider.of<AppState>(context)
+                .allAppointments([widget.group], [])),
+            _onViewChanged,
+            _onCalendarTapped));
 
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(

@@ -247,8 +247,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                 //get the filtering to work.
                 title: DropdownButton(
                   value: dropdownValue,
-                  items: appState.createDropdown(
-                      widget.firebaseEvents, _startDate),
+                  items: widget.firebaseEvents,
                   onChanged: (String? newValue) {
                     setState(() {
                       dropdownValue = newValue!;
