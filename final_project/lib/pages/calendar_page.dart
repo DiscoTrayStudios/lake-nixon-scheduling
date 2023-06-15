@@ -63,7 +63,6 @@ class _CalendarPageState extends State<CalendarPage> {
   final List<String> _colorNames = <String>[];
   final List<Color> _colorCollection = <Color>[];
   final List<String> _timeZoneCollection = <String>[];
-  late AppointmentDataSource _events;
   List<DropdownMenuItem<String>> firebaseEvents = [];
   List<Appointment> savedEvents = [];
   List<Group> _selectedGroups = [];
@@ -80,6 +79,7 @@ class _CalendarPageState extends State<CalendarPage> {
     // getEvents();
     //getSavedEvents();
     // _events = AppointmentDataSource(_getDataSource(widget.group));
+    _getDataSource();
 
     super.initState();
   }
@@ -111,80 +111,80 @@ class _CalendarPageState extends State<CalendarPage> {
   // }
 
 // This helps initalize the calendars data source
-  // List<Appointment> _getDataSource(Group group) {
-  //   _colorNames.add('Green');
-  //   _colorNames.add('Purple');
-  //   _colorNames.add('Red');
-  //   _colorNames.add('Orange');
-  //   _colorNames.add('Caramel');
-  //   _colorNames.add('Light Green');
-  //   _colorNames.add('Blue');
-  //   _colorNames.add('Peach');
-  //   _colorNames.add('Gray');
-  //   _colorNames.add('Light Blue');
-  //   _colorNames.add('Light Orange');
-  //   _colorNames.add('Violet');
-  //   _colorNames.add('Light Gray');
-  //   _colorNames.add('Green2');
-  //   _colorNames.add('Navy');
-  //   _colorNames.add('Yellow');
-  //   _colorNames.add('Pink');
-  //   _colorNames.add('Blue2');
-  //   _colorNames.add('Brown');
-  //   _colorNames.add('Dark Navy');
-  //   _colorNames.add('Lighter Green');
-  //   _colorNames.add('Orange2');
-  //   _colorNames.add('Blue3');
-  //   _colorNames.add('Fade Blue');
-  //   _colorNames.add('Orange3');
-  //   _colorNames.add('Light Green2');
-  //   _colorNames.add('Admin');
+  void _getDataSource() {
+    _colorNames.add('Green');
+    _colorNames.add('Purple');
+    _colorNames.add('Red');
+    _colorNames.add('Orange');
+    _colorNames.add('Caramel');
+    _colorNames.add('Light Green');
+    _colorNames.add('Blue');
+    _colorNames.add('Peach');
+    _colorNames.add('Gray');
+    _colorNames.add('Light Blue');
+    _colorNames.add('Light Orange');
+    _colorNames.add('Violet');
+    _colorNames.add('Light Gray');
+    _colorNames.add('Green2');
+    _colorNames.add('Navy');
+    _colorNames.add('Yellow');
+    _colorNames.add('Pink');
+    _colorNames.add('Blue2');
+    _colorNames.add('Brown');
+    _colorNames.add('Dark Navy');
+    _colorNames.add('Lighter Green');
+    _colorNames.add('Orange2');
+    _colorNames.add('Blue3');
+    _colorNames.add('Fade Blue');
+    _colorNames.add('Orange3');
+    _colorNames.add('Light Green2');
+    _colorNames.add('Admin');
 
-  //   //_colorNames.add("Green");
+    //_colorNames.add("Green");
 
-  //   _colorCollection.add(const Color(0xFF0F8644));
-  //   _colorCollection.add(const Color(0xFF8B1FA9));
-  //   _colorCollection.add(const Color(0xFFD20100));
-  //   _colorCollection.add(const Color(0xFFFC571D));
-  //   _colorCollection.add(const Color(0xFF36B37B));
-  //   _colorCollection.add(const Color(0xFF01A1EF));
-  //   _colorCollection.add(const Color(0xFF3D4FB5));
-  //   _colorCollection.add(const Color(0xFFE47C73));
-  //   _colorCollection.add(const Color(0xFF636363));
-  //   _colorCollection.add(const Color(0xFF5DADE2));
-  //   _colorCollection.add(const Color(0xFFDC7633));
-  //   _colorCollection.add(const Color(0xFFDEB6F1));
-  //   _colorCollection.add(const Color(0xFF909497));
-  //   _colorCollection.add(const Color(0xFF117864));
-  //   _colorCollection.add(const Color(0xFF2E4053));
-  //   _colorCollection.add(const Color(0xFFF4D03F));
-  //   _colorCollection.add(const Color(0xFFEA45E1));
-  //   _colorCollection.add(const Color(0xFF2471A3));
-  //   _colorCollection.add(const Color(0xFF504040));
-  //   _colorCollection.add(const Color(0xFF1C2833));
-  //   _colorCollection.add(const Color(0xFF60EA7A));
-  //   _colorCollection.add(const Color(0xFFD35400));
-  //   _colorCollection.add(const Color(0xFF456CEA));
-  //   _colorCollection.add(const Color(0xFF566573));
-  //   _colorCollection.add(const Color(0xFFD68910));
-  //   _colorCollection.add(const Color(0xFFABEBC6));
-  //   _colorCollection.add(const Color(0xFFFFFFFF));
+    _colorCollection.add(const Color(0xFF0F8644));
+    _colorCollection.add(const Color(0xFF8B1FA9));
+    _colorCollection.add(const Color(0xFFD20100));
+    _colorCollection.add(const Color(0xFFFC571D));
+    _colorCollection.add(const Color(0xFF36B37B));
+    _colorCollection.add(const Color(0xFF01A1EF));
+    _colorCollection.add(const Color(0xFF3D4FB5));
+    _colorCollection.add(const Color(0xFFE47C73));
+    _colorCollection.add(const Color(0xFF636363));
+    _colorCollection.add(const Color(0xFF5DADE2));
+    _colorCollection.add(const Color(0xFFDC7633));
+    _colorCollection.add(const Color(0xFFDEB6F1));
+    _colorCollection.add(const Color(0xFF909497));
+    _colorCollection.add(const Color(0xFF117864));
+    _colorCollection.add(const Color(0xFF2E4053));
+    _colorCollection.add(const Color(0xFFF4D03F));
+    _colorCollection.add(const Color(0xFFEA45E1));
+    _colorCollection.add(const Color(0xFF2471A3));
+    _colorCollection.add(const Color(0xFF504040));
+    _colorCollection.add(const Color(0xFF1C2833));
+    _colorCollection.add(const Color(0xFF60EA7A));
+    _colorCollection.add(const Color(0xFFD35400));
+    _colorCollection.add(const Color(0xFF456CEA));
+    _colorCollection.add(const Color(0xFF566573));
+    _colorCollection.add(const Color(0xFFD68910));
+    _colorCollection.add(const Color(0xFFABEBC6));
+    _colorCollection.add(const Color(0xFFFFFFFF));
 
-  //   //_colorCollection.add(const Color(0xFF0A8043));
-  //   _timeZoneCollection.add("Central Standard Time");
+    //_colorCollection.add(const Color(0xFF0A8043));
+    _timeZoneCollection.add("Central Standard Time");
 
-  //   _timeZoneCollection.add('Central Standard Time');
+    // _timeZoneCollection.add('Central Standard Time');
 
-  //   if (widget.master) {
-  //     List<Appointment> appointments = <Appointment>[];
-  //     events.forEach((key, value) {
-  //       appointments.insertAll(appointments.length, value);
-  //     });
-  //     return appointments;
-  //   } else {
-  //     return events[group] as List<Appointment>;
-  //   }
-  // }
+    // if (widget.master) {
+    //   List<Appointment> appointments = <Appointment>[];
+    //   events.forEach((key, value) {
+    //     appointments.insertAll(appointments.length, value);
+    //   });
+    //   return appointments;
+    // } else {
+    //   return events[group] as List<Appointment>;
+    // }
+  }
 
 //This is what handles changing the calendar view
   void _onViewChanged(ViewChangedDetails viewChangedDetails) {
@@ -228,6 +228,10 @@ class _CalendarPageState extends State<CalendarPage> {
 
       final DateTime selectedDate = calendarTapDetails.date!;
       final CalendarElement targetElement = calendarTapDetails.targetElement;
+
+      firebaseEvents = Provider.of<AppState>(context, listen: false)
+          .createDropdown(Provider.of<AppState>(context, listen: false).events,
+              selectedDate);
       //This is what takes you to the appointment editor
       Navigator.push<Widget>(
         context,
@@ -238,7 +242,8 @@ class _CalendarPageState extends State<CalendarPage> {
                 selectedDate,
                 _colorCollection,
                 _colorNames,
-                _events,
+                AppointmentDataSource(Provider.of<AppState>(context)
+                    .allAppointments(_selectedGroups, _selectedEvents)),
                 _timeZoneCollection,
                 widget.group,
                 firebaseEvents)),

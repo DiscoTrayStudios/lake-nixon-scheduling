@@ -18,14 +18,11 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  late AppState appState;
-
   @override
   void initState() {
     // for (Group g in groups) {
     //   createGroup(g);
     // }
-    appState = Provider.of<AppState>(context, listen: false);
     // getSavedEvents(appState.firestore);
     super.initState();
   }
@@ -163,7 +160,7 @@ class _StartPageState extends State<StartPage> {
                       style: TextStyle(fontFamily: 'Fruit', fontSize: 30),
                     ),
                     onPressed: () async {
-                      await appState.auth.signOut();
+                      await Provider.of<AppState>(context).auth.signOut();
                       logoutScreenPush();
                     },
                   ),
