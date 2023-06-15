@@ -5,7 +5,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/group_page.dart';
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/pages/login_page.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -89,10 +88,11 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
-            title: const Text(
+            title: Text(
               "Welcome to Lake Nixon!",
               style: TextStyle(
-                  fontFamily: 'Fruit', color: Colors.white, fontSize: 35),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize: Theme.of(context).textTheme.displaySmall!.fontSize),
             )),
         body: Padding(
             padding: const EdgeInsets.all(10),
@@ -107,11 +107,16 @@ class _SplashScreenState extends State<SplashScreen> {
                       height: 80,
                       child: ElevatedButton(
                         style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStatePropertyAll<Color>(nixongreen)),
-                        child: const Text(
+                            backgroundColor: MaterialStatePropertyAll<Color>(
+                                Theme.of(context).colorScheme.secondary)),
+                        child: Text(
                           'Select Group',
-                          style: TextStyle(fontSize: 60, fontFamily: 'Fruit'),
+                          style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .displayLarge!
+                                  .fontSize,
+                              color: Theme.of(context).colorScheme.onSecondary),
                         ),
                         onPressed: () {
                           groupPagePush();
@@ -123,11 +128,16 @@ class _SplashScreenState extends State<SplashScreen> {
                   padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
                   child: ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(nixonbrown)),
-                    child: const Text(
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.tertiary)),
+                    child: Text(
                       "Logout",
-                      style: TextStyle(fontFamily: 'Fruit', fontSize: 30),
+                      style: TextStyle(
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .fontSize,
+                          color: Theme.of(context).colorScheme.onTertiary),
                     ),
                     onPressed: () {
                       logout();

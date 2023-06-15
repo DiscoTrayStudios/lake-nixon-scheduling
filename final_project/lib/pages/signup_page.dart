@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/pages/login_page.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -41,13 +40,14 @@ class _SignupScreenState extends State<SignupScreen> {
                 Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
-                    child: const Text(
+                    child: Text(
                       'Sign up',
                       style: TextStyle(
-                          fontSize: 30,
-                          fontFamily: 'Fruit',
-                          //nixongreen
-                          color: Color.fromRGBO(81, 146, 78, 1)),
+                          color: Theme.of(context).colorScheme.onSecondary,
+                          fontSize: Theme.of(context)
+                              .textTheme
+                              .headlineLarge!
+                              .fontSize),
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
@@ -75,11 +75,15 @@ class _SignupScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: ElevatedButton(
                       style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStatePropertyAll<Color>(nixongreen)),
-                      child: const Text(
+                          backgroundColor: MaterialStatePropertyAll<Color>(
+                              Theme.of(context).colorScheme.secondary)),
+                      child: Text(
                         'Create',
-                        style: TextStyle(fontFamily: 'Fruit', fontSize: 30),
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .headlineLarge!
+                                .fontSize),
                       ),
                       onPressed: () async {
                         bool success = false;
@@ -108,19 +112,29 @@ class _SignupScreenState extends State<SignupScreen> {
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                textColor:
+                                    Theme.of(context).colorScheme.onError,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize);
                             const Text('The password provided is too weak.');
                           } else if (e.code == 'email-already-in-use') {
                             Fluttertoast.showToast(
                                 msg: "An account already exists for that email",
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                                timeInSecForIosWeb: 3,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                textColor:
+                                    Theme.of(context).colorScheme.onError,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize);
                             const Text(
                                 'The account already exists for that email.');
                           }
@@ -138,13 +152,12 @@ class _SignupScreenState extends State<SignupScreen> {
                         alignment: Alignment.bottomLeft,
                         child: ElevatedButton(
                             style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll<Color>(
-                                        nixonbrown)),
+                                backgroundColor: MaterialStatePropertyAll<
+                                        Color>(
+                                    Theme.of(context).colorScheme.tertiary)),
                             onPressed: goBack,
                             child: const Text(
                               'Back',
-                              style: TextStyle(fontFamily: 'Fruit'),
                             ))))
               ],
             )));

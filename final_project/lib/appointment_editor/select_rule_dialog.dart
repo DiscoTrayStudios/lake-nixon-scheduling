@@ -101,7 +101,6 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                   value: SelectRule.doesNotRepeat,
                   groupValue: _rule,
                   toggleable: true,
-                  activeColor: const Color(0xff4169e1),
                   onChanged: (SelectRule? value) {
                     setState(() {
                       if (value != null) {
@@ -119,7 +118,6 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                   value: SelectRule.everyDay,
                   toggleable: true,
                   groupValue: _rule,
-                  activeColor: const Color(0xff4169e1),
                   onChanged: (SelectRule? value) {
                     setState(() {
                       if (value != null) {
@@ -143,7 +141,6 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                   value: SelectRule.everyWeek,
                   toggleable: true,
                   groupValue: _rule,
-                  activeColor: const Color(0xff4169e1),
                   onChanged: (SelectRule? value) {
                     setState(() {
                       if (value != null) {
@@ -181,7 +178,6 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                   value: SelectRule.everyMonth,
                   toggleable: true,
                   groupValue: _rule,
-                  activeColor: const Color(0xff4169e1),
                   onChanged: (SelectRule? value) {
                     setState(() {
                       if (value != null) {
@@ -207,7 +203,6 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                   value: SelectRule.everyYear,
                   toggleable: true,
                   groupValue: _rule,
-                  activeColor: const Color(0xff4169e1),
                   onChanged: (SelectRule? value) {
                     setState(() {
                       if (value != null) {
@@ -235,7 +230,6 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                   value: SelectRule.custom,
                   toggleable: true,
                   groupValue: _rule,
-                  activeColor: const Color(0xff4169e1),
                   onChanged: (SelectRule? value) async {
                     final dynamic properties = await Navigator.push<dynamic>(
                       context,

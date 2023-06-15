@@ -8,7 +8,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/appointment_editor/appointment_editor.dart';
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/globals.dart';
 import 'package:final_project/objects/event.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/objects/lake_nixon_event.dart';
@@ -285,12 +284,7 @@ class _CalendarPageState extends State<CalendarPage> {
         /// The key set here to maintain the state, when we change
         /// the parent of the widget
         key: _globalKey,
-        data: ThemeData(
-          brightness: Brightness.light,
-          colorScheme: ColorScheme.fromSwatch(
-            backgroundColor: theme,
-          ),
-        ),
+        data: Theme.of(context),
         child: _getCalendar(context, widget.group.name));
     final double screenHeight = MediaQuery.of(context).size.height;
     return Consumer<AppState>(builder: (context, appState, child) {
@@ -298,8 +292,8 @@ class _CalendarPageState extends State<CalendarPage> {
         appBar: AppBar(
           flexibleSpace: const FlexibleSpaceBar(),
           title: Text("${widget.group.name} calendar",
-              style: TextStyle(color: nixonbrown, fontFamily: 'Fruit')),
-          backgroundColor: nixonblue,
+              style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
+          backgroundColor: Theme.of(context).colorScheme.primary,
           actions: [
             MultiSelectDialogField(
               title: const Text("Filter Groups"),

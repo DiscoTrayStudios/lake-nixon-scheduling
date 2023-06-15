@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:final_project/objects/globals.dart';
-
 class Group {
   const Group({required this.name, required this.color, required this.age});
 
@@ -37,24 +35,29 @@ class GroupItem extends StatelessWidget {
       elevation: 10.0,
       child: ListTile(
         //group.color
-        tileColor: nixonyellow,
-        iconColor: nixonblue,
+        tileColor: Theme.of(context).colorScheme.surfaceVariant,
+        iconColor: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(
-          side: const BorderSide(color: Colors.black, width: 1),
+          side: BorderSide(
+              color: Theme.of(context).colorScheme.outline, width: 1),
           borderRadius: BorderRadius.circular(5),
         ),
         onTap: () {
           onTap(group);
         },
         leading: CircleAvatar(
-          backgroundColor: nixonblue,
+          backgroundColor: Theme.of(context).colorScheme.primary,
           child: Text(group.abbrev(),
               style: TextStyle(
-                  color: nixonbrown, fontFamily: 'Fruit', fontSize: 30)),
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  fontSize:
+                      Theme.of(context).textTheme.displaySmall!.fontSize)),
         ),
         title: Text(
           group.name,
-          style: TextStyle(color: nixonbrown),
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              fontSize: Theme.of(context).textTheme.headlineMedium!.fontSize),
         ),
       ),
     );

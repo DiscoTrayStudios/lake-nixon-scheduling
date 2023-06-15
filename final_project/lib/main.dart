@@ -8,6 +8,7 @@ import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/pages/start_page.dart';
 import 'package:final_project/firebase_options.dart';
 import 'package:final_project/pages/login_page.dart';
+import 'package:final_project/objects/theme.dart';
 
 // Initialize firebase and run the app
 Future<void> main() async {
@@ -32,9 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+        theme: lakeNixonTheme(),
         //home: CalendarPage(title: 'Calendar Page'),
         //home: GroupPage(title: "List of groups"),
         home: checkLogin(FirebaseAuth.instance));

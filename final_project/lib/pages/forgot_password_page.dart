@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:final_project/objects/globals.dart';
-
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
 
@@ -63,29 +61,31 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     height: 200,
                   ),
                   const SizedBox(height: 70),
-                  const Text(
+                  Text(
                     'Forgot Password?',
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                      fontFamily: 'Fruit',
-                      fontSize: 45,
+                      fontSize:
+                          Theme.of(context).textTheme.displayMedium!.fontSize,
                       //nixonbrown
-                      color: Color.fromRGBO(137, 116, 73, 1),
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
+                  Text(
                     'Enter your email below to be sent a link to reset password.',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize:
+                          Theme.of(context).textTheme.titleMedium!.fontSize,
                       color: Colors.black,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const Text(
+                  Text(
                     'E-mail',
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize:
+                          Theme.of(context).textTheme.titleLarge!.fontSize,
                       fontFamily: 'Fruit',
                       color: Colors.black,
                     ),
@@ -101,8 +101,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   const SizedBox(height: 10),
                   ElevatedButton(
                     style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStatePropertyAll<Color>(nixongreen)),
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.secondary)),
                     onPressed: () async {
                       if (_emailController.text.isEmpty) {
                         Fluttertoast.showToast(
@@ -110,18 +110,26 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 3,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            textColor: Theme.of(context).colorScheme.onError,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .fontSize);
                       } else if (!_emailController.text.contains("@")) {
                         Fluttertoast.showToast(
                             msg: "Please enter an email with proper format",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 3,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            textColor: Theme.of(context).colorScheme.onError,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .fontSize);
                       } else {
                         try {
                           FirebaseAuth.instance.sendPasswordResetEmail(
@@ -151,9 +159,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                textColor:
+                                    Theme.of(context).colorScheme.onError,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize);
                             debugPrint('No user found for that email.');
                           } else if (e.code == 'invalid-email') {
                             Fluttertoast.showToast(
@@ -161,18 +174,28 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                textColor:
+                                    Theme.of(context).colorScheme.onError,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize);
                           } else if (e.code == 'internal-error') {
                             Fluttertoast.showToast(
                                 msg: "Please input in email format",
                                 toastLength: Toast.LENGTH_LONG,
                                 gravity: ToastGravity.CENTER,
                                 timeInSecForIosWeb: 3,
-                                backgroundColor: Colors.red,
-                                textColor: Colors.white,
-                                fontSize: 16.0);
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.error,
+                                textColor:
+                                    Theme.of(context).colorScheme.onError,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyLarge!
+                                    .fontSize);
                           }
                         }
                         Fluttertoast.showToast(
@@ -180,23 +203,31 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 3,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
+                            backgroundColor:
+                                Theme.of(context).colorScheme.error,
+                            textColor: Theme.of(context).colorScheme.onError,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .fontSize);
                         Navigator.pop(context);
                       }
                     },
-                    child: const Text(
+                    child: Text(
                       "Submit",
-                      style: TextStyle(fontFamily: 'Fruit', fontSize: 20),
+                      style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge!.fontSize,
+                          color: Theme.of(context).colorScheme.onSecondary),
                     ),
                   ),
                   const SizedBox(height: 10),
-                  const Text(
+                  Text(
                     '(Note: Also check junk mailbox for link).',
                     style: TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                   )
                 ],
