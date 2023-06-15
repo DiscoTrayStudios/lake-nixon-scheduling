@@ -61,7 +61,6 @@ class _CalendarPageState extends State<CalendarPage> {
   Appointment? _selectedAppointment;
   final List<String> _colorNames = <String>[];
   final List<Color> _colorCollection = <Color>[];
-  final List<String> _timeZoneCollection = <String>[];
   List<DropdownMenuItem<String>> firebaseEvents = [];
   List<Appointment> savedEvents = [];
   List<Group> _selectedGroups = [];
@@ -170,7 +169,6 @@ class _CalendarPageState extends State<CalendarPage> {
     _colorCollection.add(const Color(0xFFFFFFFF));
 
     //_colorCollection.add(const Color(0xFF0A8043));
-    _timeZoneCollection.add("Central Standard Time");
 
     // _timeZoneCollection.add('Central Standard Time');
 
@@ -243,7 +241,6 @@ class _CalendarPageState extends State<CalendarPage> {
                 _colorNames,
                 AppointmentDataSource(Provider.of<AppState>(context)
                     .allAppointments(_selectedGroups, _selectedEvents)),
-                _timeZoneCollection,
                 widget.group,
                 firebaseEvents)),
       ).then((value) {

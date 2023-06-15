@@ -7,7 +7,7 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:final_project/appointment_editor/calendar_time_zone_picker.dart';
+import 'package:final_project/appointment_editor/custom_rule.dart';
 import 'package:final_project/appointment_editor/delete_dialog.dart';
 import 'package:final_project/appointment_editor/edit_dialog.dart';
 import 'package:final_project/appointment_editor/resource_picker.dart';
@@ -29,7 +29,6 @@ class AppointmentEditor extends StatefulWidget {
       this.colorCollection,
       this.colorNames,
       this.events,
-      this.timeZoneCollection,
       this.group,
       this.firebaseEvents,
       {this.selectedResource,
@@ -54,9 +53,6 @@ class AppointmentEditor extends StatefulWidget {
 
   /// Holds the events value
   final AppointmentDataSource events;
-
-  /// Collection of time zone values
-  final List<String> timeZoneCollection;
 
   /// Selected calendar resource
   final CalendarResource? selectedResource;
@@ -86,7 +82,6 @@ Future<List<DropdownMenuItem<String>>> createDropdown() async {
 
 class _AppointmentEditorState extends State<AppointmentEditor> {
   int _selectedColorIndex = 0;
-  int _selectedTimeZoneIndex = 0;
   late DateTime _startDate;
   late TimeOfDay _startTime;
   late DateTime _endDate;
@@ -150,12 +145,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
       _selectedColorIndex =
           widget.colorCollection.indexOf(widget.selectedAppointment!.color);
-      _selectedTimeZoneIndex =
-          widget.selectedAppointment!.startTimeZone == null ||
-                  widget.selectedAppointment!.startTimeZone == ''
-              ? 0
-              : widget.timeZoneCollection
-                  .indexOf(widget.selectedAppointment!.startTimeZone!);
       _subject = widget.selectedAppointment!.subject == '(No title)'
           ? ''
           : widget.selectedAppointment!.subject;
@@ -176,7 +165,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     } else {
       _isAllDay = widget.targetElement == CalendarElement.allDayPanel;
       _selectedColorIndex = 0;
-      _selectedTimeZoneIndex = 0;
       _subject = '';
       _notes = '';
       //_location = '';
@@ -266,14 +254,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           startTime: _startDate,
                           endTime: _endDate,
                           color: widget.colorCollection[_selectedColorIndex],
-                          startTimeZone: _selectedTimeZoneIndex == 0
-                              ? ''
-                              : widget
-                                  .timeZoneCollection[_selectedTimeZoneIndex],
-                          endTimeZone: _selectedTimeZoneIndex == 0
-                              ? ''
-                              : widget
-                                  .timeZoneCollection[_selectedTimeZoneIndex],
                           notes: _notes,
                           isAllDay: _isAllDay,
                           subject: _subject == '' ? '(No title)' : _subject,
@@ -316,14 +296,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           startTime: _startDate,
                           endTime: _endDate,
                           color: widget.colorCollection[_selectedColorIndex],
-                          startTimeZone: _selectedTimeZoneIndex == 0
-                              ? ''
-                              : widget
-                                  .timeZoneCollection[_selectedTimeZoneIndex],
-                          endTimeZone: _selectedTimeZoneIndex == 0
-                              ? ''
-                              : widget
-                                  .timeZoneCollection[_selectedTimeZoneIndex],
                           notes: _notes,
                           isAllDay: _isAllDay,
                           subject: _subject == '' ? '(No title)' : _subject,
@@ -355,12 +327,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                         startTime: _startDate,
                         endTime: _endDate,
                         color: widget.colorCollection[_selectedColorIndex],
-                        startTimeZone: _selectedTimeZoneIndex == 0
-                            ? ''
-                            : widget.timeZoneCollection[_selectedTimeZoneIndex],
-                        endTimeZone: _selectedTimeZoneIndex == 0
-                            ? ''
-                            : widget.timeZoneCollection[_selectedTimeZoneIndex],
                         notes: _notes,
                         isAllDay: _isAllDay,
                         subject: _subject == '' ? '(No title)' : _subject,
@@ -379,14 +345,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           startTime: _startDate,
                           endTime: _endDate,
                           color: g.color,
-                          startTimeZone: _selectedTimeZoneIndex == 0
-                              ? ''
-                              : widget
-                                  .timeZoneCollection[_selectedTimeZoneIndex],
-                          endTimeZone: _selectedTimeZoneIndex == 0
-                              ? ''
-                              : widget
-                                  .timeZoneCollection[_selectedTimeZoneIndex],
                           notes: _notes,
                           isAllDay: _isAllDay,
                           subject: _subject == '' ? '(No title)' : _subject,
@@ -763,30 +721,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                                 .tertiary)),
                                   )),
                       ])),
-                  ListTile(
-                    contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-                    leading: Icon(Icons.public,
-                        color: Theme.of(context).colorScheme.tertiary),
-                    title:
-                        Text(widget.timeZoneCollection[_selectedTimeZoneIndex]),
-                    onTap: () {
-                      showDialog<Widget>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CalendarTimeZonePicker(
-                            Theme.of(context).colorScheme.tertiary,
-                            widget.timeZoneCollection,
-                            _selectedTimeZoneIndex,
-                            onChanged: (PickerChangedDetails details) {
-                              _selectedTimeZoneIndex = details.index;
-                            },
-                          );
-                        },
-                      ).then((dynamic value) => setState(() {
-                            /// update the time zone changes
-                          }));
-                    },
-                  ),
                   ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
                     leading: Icon(Icons.refresh,

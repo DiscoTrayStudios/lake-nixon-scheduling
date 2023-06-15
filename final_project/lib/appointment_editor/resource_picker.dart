@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:final_project/appointment_editor/calendar_time_zone_picker.dart';
+import 'package:final_project/appointment_editor/custom_rule.dart';
 
 class ResourcePicker extends StatefulWidget {
   const ResourcePicker(this.resourceCollection,
