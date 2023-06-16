@@ -40,6 +40,24 @@ class AppState extends ChangeNotifier {
   StreamSubscription<QuerySnapshot>? appointmentSubscription;
   StreamSubscription<QuerySnapshot>? groupSubscription;
 
+  List<String> weekDay = <String>[
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+  ];
+  List<String> weekDayPosition = <String>[
+    'first',
+    'second',
+    'third',
+    'fourth',
+    'last'
+  ];
+  List<String> mobileRecurrence = <String>['day', 'week', 'month', 'year'];
+
   Future<void> init(FirebaseAuth auth, FirebaseFirestore firestore) async {
     auth.userChanges().listen(
       (user) {
