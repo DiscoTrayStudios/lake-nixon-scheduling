@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:final_project/appointment_editor/custom_rule.dart';
+import 'package:final_project/widgets/appt_editor_custom_rule.dart';
 
 // this class is never called
 
