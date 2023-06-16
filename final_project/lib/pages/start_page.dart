@@ -26,23 +26,6 @@ class _StartPageState extends State<StartPage> {
     super.initState();
   }
 
-  Future<void> groupPagePush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const GroupPage(title: "List of groups"),
-      ),
-    );
-  }
-
-  Future<void> masterCalendar(Group group) async {
-    //debugPrint("Chat");
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const MasterPage(),
-      ),
-    );
-  }
-
   Future<void> logoutScreenPush() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -117,6 +100,7 @@ class _StartPageState extends State<StartPage> {
                     child: SizedBox(
                       height: 80,
                       child: ElevatedButton(
+                        key: const Key('groupsNavButton'),
                         style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll<Color>(
                                 Theme.of(context).colorScheme.secondary)),
@@ -129,7 +113,7 @@ class _StartPageState extends State<StartPage> {
                                     .displayMedium!
                                     .fontSize)),
                         onPressed: () {
-                          groupPagePush();
+                          Navigator.of(context).pushNamed('/groupsPage');
                         },
                       ),
                     )),
@@ -137,6 +121,7 @@ class _StartPageState extends State<StartPage> {
                   height: 100,
                   padding: const EdgeInsets.all(10),
                   child: ElevatedButton(
+                    key: const Key('masterCalendarNavButton'),
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.secondary)),
@@ -148,8 +133,7 @@ class _StartPageState extends State<StartPage> {
                                 .displayMedium!
                                 .fontSize)),
                     onPressed: () {
-                      masterCalendar(const Group(
-                          name: "Admin", color: Color(0xFFFFFFFF), age: 99999));
+                      Navigator.of(context).pushNamed('/masterCalendarPage');
                     },
                   ),
                 ),
@@ -157,6 +141,7 @@ class _StartPageState extends State<StartPage> {
                   alignment: Alignment.bottomCenter,
                   padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
                   child: ElevatedButton(
+                    key: const Key('logOutNavButton'),
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.tertiary)),
@@ -167,11 +152,12 @@ class _StartPageState extends State<StartPage> {
                                 .textTheme
                                 .displaySmall!
                                 .fontSize)),
-                    onPressed: () async {
-                      await Provider.of<AppState>(context, listen: false)
+                    onPressed: () {
+                      Provider.of<AppState>(context, listen: false)
                           .auth
                           .signOut();
-                      logoutScreenPush();
+                      Navigator.of(context).pushReplacementNamed('/loginPage');
+                      ;
                     },
                   ),
                 ),

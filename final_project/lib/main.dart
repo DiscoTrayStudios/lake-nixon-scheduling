@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/pages/master_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:final_project/pages/start_page.dart';
 import 'package:final_project/firebase_options.dart';
 import 'package:final_project/pages/login_page.dart';
 import 'package:final_project/objects/theme.dart';
+import 'package:final_project/pages/group_page.dart';
 
 // Initialize firebase and run the app
 Future<void> main() async {
@@ -36,7 +38,12 @@ class MyApp extends StatelessWidget {
         theme: lakeNixonTheme(),
         //home: CalendarPage(title: 'Calendar Page'),
         //home: GroupPage(title: "List of groups"),
-        home: checkLogin(FirebaseAuth.instance));
+        home: checkLogin(FirebaseAuth.instance),
+        routes: {
+          '/groupsPage': (context) => const GroupPage(title: 'List of Groups'),
+          '/masterCalendarPage': (context) => const MasterPage(),
+          'loginPage': (context) => const LoginScreen(),
+        });
   }
 }
 
