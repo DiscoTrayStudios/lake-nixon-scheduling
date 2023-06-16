@@ -13,7 +13,7 @@ class UserSplashScreen extends StatefulWidget {
 }
 
 class _UserSplashScreenState extends State<UserSplashScreen> {
-  String role = "user";
+  bool admin = false;
 
   @override
   void initState() {
@@ -45,13 +45,13 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
         .get();
 
     setState(() {
-      role = snap['role'];
+      admin = snap['admin'];
     });
 
-    if (role == 'user') {
-      userPagePush();
-    } else {
+    if (admin) {
       startPagePush();
+    } else {
+      userPagePush();
     }
   }
 
