@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/event.dart';
 import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/firebase_options.dart';
 import 'package:final_project/objects/group.dart';
 
 /// to do:
@@ -60,22 +58,111 @@ class AppState extends ChangeNotifier {
 
   Future<void> init(FirebaseAuth auth, FirebaseFirestore firestore) async {
     auth.userChanges().listen(
-      (user) {
+      (user) async {
         eventSubscription?.cancel();
         appointmentSubscription?.cancel();
         groupSubscription?.cancel();
-        getEvents(firestore);
-        getAppointments(firestore);
-        //createGroups();
-        getGroups(firestore);
-        firstSnapshot = false;
-        notifyListeners();
+        if (user != null) {
+          startEventsListener(firestore);
+          startAppointmentsListener(firestore);
+          startGroupsListener(firestore);
+          firstSnapshot = false;
+
+          QuerySnapshot<Map<String, dynamic>> eventData =
+              await firestore.collection('events').get();
+
+          QuerySnapshot<Map<String, dynamic>> appointmentData =
+              await firestore.collection('events').get();
+
+          QuerySnapshot<Map<String, dynamic>> groupData =
+              await firestore.collection('events').get();
+
+          getEventsFromData(eventData);
+          getAppointmentsFromData(appointmentData);
+          getGroupsFromData(groupData);
+
+          notifyListeners();
+        }
       },
       onError: (error) {
         debugPrint(error);
       },
     );
     notifyListeners();
+  }
+
+// Takes the appointments from firebase and turns them into a class called
+// LakeAppointment and puts them in a list we can use throughout the program
+  Future<void> startAppointmentsListener(FirebaseFirestore firestore) async {
+    appointmentSubscription =
+        firestore.collection('appointments').snapshots().listen((snapshot) {
+      getAppointmentsFromData(snapshot);
+    });
+  }
+
+// get all of the events from firebase
+  Future<void> startEventsListener(FirebaseFirestore firestore) async {
+    eventSubscription =
+        firestore.collection('events').snapshots().listen((snapshot) {
+      getEventsFromData(snapshot);
+    });
+  }
+
+//gets all of the groups from firebase
+  Future<void> startGroupsListener(FirebaseFirestore firestore) async {
+    groupSubscription =
+        firestore.collection('groups').snapshots().listen((snapshot) {
+      getGroupsFromData(snapshot);
+    });
+  }
+
+  // generates events from a firestore QuerySnapshot
+  void getEventsFromData(QuerySnapshot<Map<String, dynamic>> data) {
+    _events.clear();
+    for (var document in data.docs) {
+      _events.add(Event(
+          ageMin: document.data()['ageMin'],
+          groupMax: document.data()['groupMax'],
+          name: document.data()['name'],
+          desc: document.data()['desc']));
+    }
+  }
+
+  // generates appointments from a firestore QuerySnapshot
+  void getAppointmentsFromData(QuerySnapshot<Map<String, dynamic>> data) {
+    _appointments.clear();
+    for (var document in data.docs) {
+      String valueString =
+          document.data()['color'].split("(0x")[1].split(")")[0];
+      int value = int.parse(valueString, radix: 16);
+      Color color = Color(value);
+      Timestamp start = document.data()['start_time'];
+      Timestamp end = document.data()['end_time'];
+      var lake = LakeAppointment(
+          color: color,
+          endTime: end.toDate(),
+          group: document.data()['group'],
+          notes: document.data()['notes'],
+          startTime: start.toDate(),
+          subject: document.data()['subject'],
+          startHour: document.data()['start_hour']);
+      _appointments.add(lake);
+    }
+  }
+
+  // generates groups from a firestore QuerySnapshot
+  void getGroupsFromData(QuerySnapshot<Map<String, dynamic>> data) {
+    _groups.clear();
+    for (var document in data.docs) {
+      String valueString =
+          document.data()['color'].split("(0x")[1].split(")")[0];
+      int value = int.parse(valueString, radix: 16);
+      Color color = Color(value);
+      _groups.add(Group(
+          name: document.data()['name'],
+          color: color,
+          age: document.data()['age']));
+    }
   }
 
 //Used to create the group checkboxes for appointment editor
@@ -92,32 +179,6 @@ class AppState extends ChangeNotifier {
         .map((event) => MultiSelectItem<String>(event.name, event.name))
         .toList();
     return items;
-  }
-
-// Takes the appointments from firebase and turns them into a class called
-// LakeAppointment and puts them in a list we can use throughout the program
-  Future<void> getAppointments(FirebaseFirestore firestore) async {
-    appointmentSubscription =
-        firestore.collection('appointments').snapshots().listen((snapshot) {
-      _appointments.clear();
-      for (var document in snapshot.docs) {
-        String valueString =
-            document.data()['color'].split("(0x")[1].split(")")[0];
-        int value = int.parse(valueString, radix: 16);
-        Color color = Color(value);
-        Timestamp start = document.data()['start_time'];
-        Timestamp end = document.data()['end_time'];
-        var lake = LakeAppointment(
-            color: color,
-            endTime: end.toDate(),
-            group: document.data()['group'],
-            notes: document.data()['notes'],
-            startTime: start.toDate(),
-            subject: document.data()['subject'],
-            startHour: document.data()['start_hour']);
-        _appointments.add(lake);
-      }
-    });
   }
 
 //Returns a list of appointments for the group you give as a parameter
@@ -258,39 +319,6 @@ class AppState extends ChangeNotifier {
       }
     }
     return groups;
-  }
-
-// get all of the events from firebase
-  Future<void> getEvents(FirebaseFirestore firestore) async {
-    eventSubscription =
-        firestore.collection('events').snapshots().listen((snapshot) {
-      _events.clear();
-      for (var document in snapshot.docs) {
-        _events.add(Event(
-            ageMin: document.data()['ageMin'],
-            groupMax: document.data()['groupMax'],
-            name: document.data()['name'],
-            desc: document.data()['desc']));
-      }
-    });
-  }
-
-//gets all of the groups from firebase
-  Future<void> getGroups(FirebaseFirestore firestore) async {
-    groupSubscription =
-        firestore.collection('groups').snapshots().listen((snapshot) {
-      _groups.clear();
-      for (var document in snapshot.docs) {
-        String valueString =
-            document.data()['color'].split("(0x")[1].split(")")[0];
-        int value = int.parse(valueString, radix: 16);
-        Color color = Color(value);
-        _groups.add(Group(
-            name: document.data()['name'],
-            color: color,
-            age: document.data()['age']));
-      }
-    });
   }
 
   // give this function an event name and it will give you the index for event in the global list
