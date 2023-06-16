@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:syncfusion_flutter_core/core.dart';
-
-import 'package:final_project/objects/globals.dart';
 
 class CustomRule extends StatefulWidget {
   const CustomRule(this.selectedAppointment, this.appointmentColor, this.events,
@@ -39,11 +38,11 @@ class CustomRuleState extends State<CustomRule> {
 
   @override
   void initState() {
-    _updateAppointmentProperties();
     super.initState();
+    _updateAppointmentProperties(context);
   }
 
-  void _updateAppointmentProperties() {
+  void _updateAppointmentProperties(BuildContext context) {
     _width = 180;
     _startDate = widget.selectedAppointment.startTime;
     _selectedDate = _startDate.add(const Duration(days: 30));
@@ -57,7 +56,7 @@ class CustomRuleState extends State<CustomRule> {
     _month = _startDate.month;
     _weekNumber = _getWeekNumber(_startDate);
     _weekNumberDay =
-        '${weekDayPosition[_weekNumber == -1 ? 4 : _weekNumber - 1]} ${weekDay[_dayOfWeek - 1]}';
+        '${Provider.of(context).weekDayPosition[_weekNumber == -1 ? 4 : _weekNumber - 1]} ${Provider.of(context).weekDay[_dayOfWeek - 1]}';
     if (_days == null) {
       _mobileInitialWeekdays(_startDate.weekday);
     }
@@ -422,7 +421,9 @@ class CustomRuleState extends State<CustomRule> {
                         color: Theme.of(context).colorScheme.tertiary,
                         fontWeight: FontWeight.w400),
                     value: _selectedRecurrenceType,
-                    items: mobileRecurrence.map((String item) {
+                    items: Provider.of(context)
+                        .mobileRecurrence
+                        .map((String item) {
                       return DropdownMenuItem<String>(
                         value: item,
                         child: Text(item),
