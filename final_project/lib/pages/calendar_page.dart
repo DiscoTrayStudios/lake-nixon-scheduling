@@ -6,7 +6,7 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:final_project/appointment_editor/appointment_editor.dart';
+import 'package:final_project/pages/appointment_editor.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/event.dart';
 import 'package:final_project/objects/group.dart';

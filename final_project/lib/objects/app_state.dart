@@ -57,6 +57,20 @@ class AppState extends ChangeNotifier {
   List<String> mobileRecurrence = <String>['day', 'week', 'month', 'year'];
 
   Future<void> init(FirebaseAuth auth, FirebaseFirestore firestore) async {
+    if (auth.currentUser != null) {
+      QuerySnapshot<Map<String, dynamic>> eventData =
+          await firestore.collection('events').get();
+
+      QuerySnapshot<Map<String, dynamic>> appointmentData =
+          await firestore.collection('appointments').get();
+
+      QuerySnapshot<Map<String, dynamic>> groupData =
+          await firestore.collection('groups').get();
+
+      getEventsFromData(eventData);
+      getAppointmentsFromData(appointmentData);
+      getGroupsFromData(groupData);
+    }
     auth.userChanges().listen(
       (user) async {
         eventSubscription?.cancel();
@@ -72,10 +86,10 @@ class AppState extends ChangeNotifier {
               await firestore.collection('events').get();
 
           QuerySnapshot<Map<String, dynamic>> appointmentData =
-              await firestore.collection('events').get();
+              await firestore.collection('appointments').get();
 
           QuerySnapshot<Map<String, dynamic>> groupData =
-              await firestore.collection('events').get();
+              await firestore.collection('groups').get();
 
           getEventsFromData(eventData);
           getAppointmentsFromData(appointmentData);
