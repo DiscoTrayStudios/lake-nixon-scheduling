@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:final_project/appointment_editor/calendar_time_zone_picker.dart';
+import 'package:final_project/appointment_editor/custom_rule.dart';
 
 // this class is never called
 
