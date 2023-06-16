@@ -18,7 +18,7 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends State<GroupPage> {
-  String role = "user";
+  bool admin = false;
   var eventController = TextEditingController();
   var ageLimitController = TextEditingController();
   var groupSizeController = TextEditingController();
@@ -68,13 +68,13 @@ class _GroupPageState extends State<GroupPage> {
         .get();
 
     setState(() {
-      role = snap['role'];
+      admin = snap['admin'];
     });
 
-    if (role == 'user') {
-      userPush(group);
-    } else {
+    if (admin) {
       adminPush(group);
+    } else {
+      userPush(group);
     }
   }
 
