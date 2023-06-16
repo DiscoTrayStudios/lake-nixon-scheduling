@@ -258,8 +258,7 @@ class _CalendarPageState extends State<CalendarPage> {
             AppointmentDataSource(
                 appState.allAppointments(_selectedGroups, _selectedEvents)),
             _onViewChanged,
-            _onCalendarTapped,
-            appState);
+            _onCalendarTapped);
       });
     } else {
       return Consumer<AppState>(builder: (context, appState, child) {
@@ -361,8 +360,7 @@ SfCalendar _getMasterCalender(
     [CalendarController? calendarController,
     CalendarDataSource? calendarDataSource,
     ViewChangedCallback? viewChangedCallback,
-    dynamic calendarTapCallback,
-    AppState? appState]) {
+    dynamic calendarTapCallback]) {
   return SfCalendar(
     controller: calendarController,
     dataSource: calendarDataSource,
