@@ -7,10 +7,9 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 
 import 'package:final_project/pages/start_page.dart';
-import 'package:final_project/pages/group_page.dart';
 import 'package:final_project/objects/app_state.dart';
 
-@GenerateNiceMocks([MockSpec<NavigatorObserver>(), MockSpec<GroupPage>()])
+@GenerateNiceMocks([MockSpec<NavigatorObserver>()])
 import 'start_page_test.mocks.dart';
 
 void main() {
