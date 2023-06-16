@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/groupsPage': (context) => const GroupPage(title: 'List of Groups'),
           '/masterCalendarPage': (context) => const MasterPage(),
-          'loginPage': (context) => const LoginScreen(),
+          '/loginPage': (context) => const LoginScreen(),
         });
   }
 }
