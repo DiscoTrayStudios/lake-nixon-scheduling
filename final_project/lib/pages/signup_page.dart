@@ -99,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           await FirebaseFirestore.instance
                               .collection("users")
                               .doc(user?.uid)
-                              .set({'uid': user?.uid, 'admin': false});
+                              .set({'admin': false});
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
                             Fluttertoast.showToast(
