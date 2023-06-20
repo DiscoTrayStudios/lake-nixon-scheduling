@@ -231,7 +231,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     } else {}
     _subject = dropdownValue;
     super.initState();
-    updateDropdown();
   }
 
   @override
@@ -245,12 +244,14 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     if (widget.selectedAppointment != null) {
       _startDate = widget.selectedAppointment!.startTime!;
       _endDate = widget.selectedAppointment!.endTime!;
+
       // _isAllDay = widget.selectedAppointment!.isAllDay;
 
       //_selectedGroups = widget.selectedAppointment!.;
 
       _subject = widget.selectedAppointment!.subject!;
       _notes = widget.selectedAppointment!.notes;
+
       //_location = widget.selectedAppointment!.location;
       // _recurrenceProperties =
       //     widget.selectedAppointment!.recurrenceRule != null &&
@@ -265,6 +266,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       // }
     } else {
       // _isAllDay = widget.targetElement == CalendarElement.allDayPanel;
+
       _subject = '';
       _notes = '';
       //_location = '';
@@ -308,8 +310,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   //   }
   // }
 
-  void updateDropdown() {}
-
   // Widget _getAppointmentEditor(
   //     BuildContext context, Color backgroundColor, Color defaultColor) {
   //   return
@@ -320,193 +320,206 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     return Consumer<AppState>(builder: (context, appState, child) {
       createItems(appState.groups);
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          leading: IconButton(
-            icon: Icon(
-              Icons.close,
-              color: Theme.of(context).colorScheme.onPrimary,
+          appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            leading: IconButton(
+              icon: Icon(
+                Icons.close,
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: <Widget>[
-            IconButton(
-                padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                icon: Icon(
-                  Icons.done,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                ),
-                onPressed: () async {
-                  //updateDropdown();
-                  if (widget.selectedAppointment != null) {
-                    // if (widget.selectedAppointment!.appointmentType !=
-                    //     AppointmentType.normal) {
-                    //   final Appointment newAppointment = Appointment(
-                    //     startTime: _startDate,
-                    //     endTime: _endDate,
-                    //     color: widget.colorCollection[_selectedColorIndex],
-                    //     notes: _notes,
-                    //     isAllDay: _isAllDay,
-                    //     subject: _subject == '' ? '(No title)' : _subject,
-                    //     // recurrenceExceptionDates: widget
-                    //     //     .selectedAppointment!.recurrenceExceptionDates,
-                    //     id: widget.selectedAppointment!.id,
-                    //     // recurrenceId: widget.selectedAppointment!.recurrenceId,
-                    //     recurrenceRule: _recurrenceProperties == null
-                    //         ? null
-                    //         : SfCalendar.generateRRule(
-                    //             _recurrenceProperties!, _startDate, _endDate),
-                    //   );
+            actions: <Widget>[
+              IconButton(
+                  padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  icon: Icon(
+                    Icons.done,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  onPressed: () async {
+                    //updateDropdown();
+                    if (widget.selectedAppointment != null) {
+                      final List<Appointment> appointments = <Appointment>[];
 
-                    //   showDialog<Widget>(
-                    //       context: context,
-                    //       builder: (BuildContext context) {
-                    //         return WillPopScope(
-                    //             onWillPop: () async {
-                    //               return true;
-                    //             },
-                    //             child: EditDialog(
-                    //                 newAppointment,
-                    //                 widget.selectedAppointment!,
-                    //                 _recurrenceProperties,
-                    //                 widget.events));
-                    //       });
-                    // } else {
-                    //   final List<Appointment> appointment = <Appointment>[];
-                    //   if (widget.selectedAppointment != null) {
-                    //     widget.events.appointments!.removeAt(widget
-                    //         .events.appointments!
-                    //         .indexOf(widget.selectedAppointment));
-                    //     widget.events.notifyListeners(
-                    //         CalendarDataSourceAction.remove,
-                    //         <Appointment>[widget.selectedAppointment!]);
-                    //   }
-                    //   appointment.add(Appointment(
-                    //     startTime: _startDate,
-                    //     endTime: _endDate,
-                    //     color: widget.colorCollection[_selectedColorIndex],
-                    //     notes: _notes,
-                    //     isAllDay: _isAllDay,
-                    //     subject: _subject == '' ? '(No title)' : _subject,
-                    //     id: widget.selectedAppointment!.id,
-                    //     recurrenceRule: _recurrenceProperties == null
-                    //         ? null
-                    //         : SfCalendar.generateRRule(
-                    //             _recurrenceProperties!, _startDate, _endDate),
-                    //   ));
-                    //   widget.events.appointments!.add(appointment[0]);
+                      // appState.deleteAppt();
 
-                    //   widget.events.notifyListeners(
-                    //       CalendarDataSourceAction.add, appointment);
-                    //   Navigator.pop(context);
-                    // }
-                  } else {
-                    final List<Appointment> appointments = <Appointment>[];
-
-                    Map<String, Map<String, dynamic>> groupToApp = {};
-                    for (Group g in _selectedGroups) {
-                      Appointment tmpApp = Appointment(
-                        startTime: _startDate,
-                        endTime: _endDate,
-                        color: g.color,
-                        notes: _notes,
-                        isAllDay: _isAllDay,
-                        subject: _subject,
-                      );
-                      //Turning the already created appointment into something we can put into firebase
-                      Map<String, dynamic> appMap = {
-                        "start_time": tmpApp.startTime,
-                        "end_time": tmpApp.endTime,
-                        "color": tmpApp.color.toString(),
-                        "notes": tmpApp.notes,
-                        "subject": tmpApp.subject,
-                        "group": g.name,
-                        "start_hour": "${tmpApp.startTime.hour}"
-                      };
-                      //associating a group with a specific appointment
-                      groupToApp[g.name] = appMap;
-                      //adding here it what actually puts in on the calendar
-                      appointments.add(tmpApp);
-                    }
-                    //appState.addAppointments(groupToApp);
-
-                    int groupAmount = _selectedGroups.length;
-                    //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
-                    //If it does, it takes us to the else statement
-                    if (appState.checkEvent(
-                        _subject, _startTime.hour.toString(), groupAmount)) {
-                      //If it doesnt we come in here and we add the appoinments to the app state
-                      appState.addAppointments(groupToApp, appState.firestore);
-                      //This for loop adds all of the appointments to the calendar backend which separate from ours.
-                      for (Map<String, dynamic> app in groupToApp.values) {
-                        widget.events
-                            .notifyListeners(CalendarDataSourceAction.add, [
-                          appState.createAppointment(app["start_time"],
-                              app["end_time"], app["color"], app["subject"])
-                        ]);
+                      Map<String, Map<String, dynamic>> groupToApp = {};
+                      for (Group g in _selectedGroups) {
+                        Appointment tmpApp = Appointment(
+                          startTime: _startDate,
+                          endTime: _endDate,
+                          color: g.color,
+                          notes: _notes,
+                          isAllDay: _isAllDay,
+                          subject: _subject,
+                        );
+                        //Turning the already created appointment into something we can put into firebase
+                        Map<String, dynamic> appMap = {
+                          "start_time": tmpApp.startTime,
+                          "end_time": tmpApp.endTime,
+                          "color": tmpApp.color.toString(),
+                          "notes": tmpApp.notes,
+                          "subject": tmpApp.subject,
+                          "group": g.name,
+                          "start_hour": "${tmpApp.startTime.hour}"
+                        };
+                        //associating a group with a specific appointment
+                        groupToApp[g.name] = appMap;
+                        //adding here it what actually puts in on the calendar
+                        appointments.add(tmpApp);
+                      }
+                      ;
+                      //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
+                      //If it does, it takes us to the else statement
+                      if (appState.checkEvent(
+                          _subject, _startTime.hour.toString(), 1)) {
+                        //If it doesnt we come in here and we add the appoinments to the app state
+                        appState.addAppointments(
+                            groupToApp, appState.firestore);
+                        //This for loop adds all of the appointments to the calendar backend which separate from ours.
+                        for (Map<String, dynamic> app in groupToApp.values) {
+                          widget.events
+                              .notifyListeners(CalendarDataSourceAction.add, [
+                            appState.createAppointment(app["start_time"],
+                                app["end_time"], app["color"], app["subject"])
+                          ]);
+                        }
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "CANT EDIT EVENT DUE TO RESTRICTIONS",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
                       }
                     } else {
-                      Fluttertoast.showToast(
-                          msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.CENTER,
-                          timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.red,
-                          textColor: Colors.white,
-                          fontSize: 16.0);
+                      final List<Appointment> appointments = <Appointment>[];
+
+                      Map<String, Map<String, dynamic>> groupToApp = {};
+                      for (Group g in _selectedGroups) {
+                        Appointment tmpApp = Appointment(
+                          startTime: _startDate,
+                          endTime: _endDate,
+                          color: g.color,
+                          notes: _notes,
+                          isAllDay: _isAllDay,
+                          subject: _subject,
+                        );
+                        //Turning the already created appointment into something we can put into firebase
+                        Map<String, dynamic> appMap = {
+                          "start_time": tmpApp.startTime,
+                          "end_time": tmpApp.endTime,
+                          "color": tmpApp.color.toString(),
+                          "notes": tmpApp.notes,
+                          "subject": tmpApp.subject,
+                          "group": g.name,
+                          "start_hour": "${tmpApp.startTime.hour}"
+                        };
+                        //associating a group with a specific appointment
+                        groupToApp[g.name] = appMap;
+                        //adding here it what actually puts in on the calendar
+                        appointments.add(tmpApp);
+                      }
+                      //appState.addAppointments(groupToApp);
+
+                      int groupAmount = _selectedGroups.length;
+                      //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
+                      //If it does, it takes us to the else statement
+                      if (appState.checkEvent(
+                          _subject, _startTime.hour.toString(), groupAmount)) {
+                        //If it doesnt we come in here and we add the appoinments to the app state
+                        appState.addAppointments(
+                            groupToApp, appState.firestore);
+                        //This for loop adds all of the appointments to the calendar backend which separate from ours.
+                        for (Map<String, dynamic> app in groupToApp.values) {
+                          widget.events
+                              .notifyListeners(CalendarDataSourceAction.add, [
+                            appState.createAppointment(app["start_time"],
+                                app["end_time"], app["color"], app["subject"])
+                          ]);
+                        }
+                      } else {
+                        Fluttertoast.showToast(
+                            msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.CENTER,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
+                      }
                     }
-                  }
-                  widget.onAppointmentEdited();
-                  Navigator.pop(context);
-                })
-          ],
-        ),
-        body: Padding(
-            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                EventSelector(
-                    widget.selectedDate, onEventSelectorChanged, dropdownValue),
-                GroupSelector(
-                    appState.groups, _selectedGroups, onGroupSelectorConfirmed),
-                Divider(
-                    height: 1.0,
-                    thickness: 3,
-                    color: Color.lerp(Theme.of(context).colorScheme.tertiary,
-                        Colors.white, 0.5)),
-                TimeSelector(
-                    // _isAllDay,
-                    // onAllDaySwitchFlipped,
-                    _startDate,
-                    _endDate,
-                    onStartDatePicked,
-                    onStartTimePicked,
-                    onEndDatePicked,
-                    onEndTimePicked),
-                Divider(
-                    height: 1.0,
-                    thickness: 3,
-                    color: Color.lerp(Theme.of(context).colorScheme.tertiary,
-                        Colors.white, 0.5)),
-                ListTile(
-                  contentPadding: const EdgeInsets.all(5),
-                  leading: const Icon(
-                    Icons.subject,
+                    widget.onAppointmentEdited();
+                    Navigator.pop(context);
+                  })
+            ],
+          ),
+          body: Padding(
+              padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: <Widget>[
+                  EventSelector(widget.selectedDate, onEventSelectorChanged,
+                      dropdownValue),
+                  if (widget.selectedAppointment == null)
+                    GroupSelector(appState.groups, _selectedGroups,
+                        onGroupSelectorConfirmed)
+                  else
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(5, 0, 5, 10),
+                      child: Center(
+                          child: Text(
+                        widget.selectedAppointment!.group!,
+                        style: TextStyle(
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .headlineSmall!
+                                .fontSize,
+                            color: widget.selectedAppointment!.color!),
+                      )),
+                    ),
+                  Divider(
+                      height: 1.0,
+                      thickness: 3,
+                      color: Color.lerp(Theme.of(context).colorScheme.tertiary,
+                          Colors.white, 0.5)),
+                  TimeSelector(
+                      // _isAllDay,
+                      // onAllDaySwitchFlipped,
+                      _startDate,
+                      _endDate,
+                      onStartDatePicked,
+                      onStartTimePicked,
+                      onEndDatePicked,
+                      onEndTimePicked),
+                  Divider(
+                      height: 1.0,
+                      thickness: 3,
+                      color: Color.lerp(Theme.of(context).colorScheme.tertiary,
+                          Colors.white, 0.5)),
+                  ListTile(
+                    contentPadding: const EdgeInsets.all(5),
+                    leading: const Icon(
+                      Icons.subject,
+                    ),
+                    title: Text(
+                      appState.lookupEventByName(_subject).desc,
+                      style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge!.fontSize,
+                          color: Theme.of(context).colorScheme.tertiary),
+                    ),
                   ),
-                  title: Text(
-                    appState.lookupEventByName(_subject).desc,
-                    style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.titleLarge!.fontSize,
-                        color: Theme.of(context).colorScheme.tertiary),
-                  ),
-                ),
-              ],
-            )),
-      );
+                ],
+              )),
+          floatingActionButton: widget.selectedAppointment == null
+              ? null
+              : FloatingActionButton(
+                  child: const Icon(Icons.delete_forever), onPressed: () {}));
     });
   }
 }

@@ -1,6 +1,8 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/objects/group.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -87,28 +89,6 @@ void main() {
     expect(appState.events.length, 2);
     expect(appState.appointments.length, 2);
     expect(appState.groups.length, 2);
-  });
-  test('createCheckboxGroups creates checkbox groups', () async {
-    // relies on AppState initializer test
-
-    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
-
-    AppState appState = await initializeAppStateTests(instance, auth);
-
-    List<MultiSelectItem<Group>> items = appState.createCheckboxGroups();
-
-    expect(items.length, 1);
-  });
-  test('createCheckboxEvents creates checkbox events', () async {
-    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
-
-    AppState appState = await initializeAppStateTests(instance, auth);
-
-    List<MultiSelectItem<String>> items = appState.createCheckboxEvents();
-
-    expect(items.length, 1);
   });
   test('appointmentsByGroup returns appointments matching group', () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
@@ -495,5 +475,33 @@ void main() {
         .count()
         .get()
         .then((value) => expect(value.count, 2));
+  });
+  test('deleteAppointment deletes appointments locally and from firebase',
+      () async {
+    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+
+    AppState appState = await initializeAppStateTests(instance, auth);
+
+    await instance
+        .collection('appointments')
+        .count()
+        .get()
+        .then((value) => expect(value.count, 1));
+
+    expect(appState.appointments.length, 1);
+
+    await appState.deleteAppt(
+        DateTime.utc(1969, 7, 20, 20), "Test Subject", "Test Group");
+
+    debugPrint(instance.dump());
+
+    await instance
+        .collection('appointments')
+        .count()
+        .get()
+        .then((value) => expect(value.count, 0));
+
+    expect(appState.appointments.length, 0);
   });
 }

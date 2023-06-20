@@ -281,6 +281,18 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteAppt(
+      DateTime startTime, String subject, String group) async {
+    QuerySnapshot<Map<String, dynamic>> query = await firestore
+        .collection('appointments')
+        .where('start_time', isEqualTo: startTime)
+        .where('subject', isEqualTo: subject)
+        .where('group', isEqualTo: group)
+        .get();
+
+    query.docs[0].reference.delete();
+  }
+
 //Returns the appointments happening at a certain time
   List<LakeAppointment> getApptsAtTime(DateTime startTime) {
     List<LakeAppointment> apps = [];
