@@ -179,22 +179,6 @@ class AppState extends ChangeNotifier {
     }
   }
 
-//Used to create the group checkboxes for appointment editor
-  List<MultiSelectItem<Group>> createCheckboxGroups() {
-    var items = groups
-        .map((group) => MultiSelectItem<Group>(group, group.name))
-        .toList();
-    return items;
-  }
-
-//Used to create the checkbox events for the appointment editor
-  List<MultiSelectItem<String>> createCheckboxEvents() {
-    var items = events
-        .map((event) => MultiSelectItem<String>(event.name, event.name))
-        .toList();
-    return items;
-  }
-
 //Returns a list of appointments for the group you give as a parameter
   List<Appointment> appointmentsByGroup(String group) {
     List<Appointment> apps = [];
@@ -267,21 +251,6 @@ class AppState extends ChangeNotifier {
     return "$count/$total";
   }
 
-  //Move this function to appontment_editor.dart
-  //FIX THE START TIME ISSUE AND MAKE IT DAY SPECIFIC NOT TIME SPECIFIC
-  //^^ I think this has been fixed but I'll keep that there just to make sure its not forgotten if I didn't fix it
-  // This creates the event dropdown with the amount of groups in each event
-  List<DropdownMenuItem<String>> createDropdown(
-      List<Event> items, DateTime startTime) {
-    List<DropdownMenuItem<String>> newItems = [];
-    for (Event event in items) {
-      var currentAmount = getCurrentAmount(event.name, startTime);
-      newItems.add(DropdownMenuItem(
-          value: event.name, child: Text("${event.name}  $currentAmount")));
-    }
-    return newItems;
-  }
-
   //Takes a firebase appointment and turns it into a calendar appointment
   Appointment createAppointment(startTime, endTime, color, subject) {
     if (color.runtimeType == String) {
@@ -313,7 +282,7 @@ class AppState extends ChangeNotifier {
   }
 
 //Returns the appointments happening at a certain time
-  List<LakeAppointment> getApptsAtTime(startTime) {
+  List<LakeAppointment> getApptsAtTime(DateTime startTime) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
       if (app.startTime!.isAtSameMomentAs(startTime)) {

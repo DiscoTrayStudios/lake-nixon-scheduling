@@ -1,4 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/appointment_data_source.dart';
+import 'package:final_project/objects/multi_select_dialog_helpers.dart';
+import 'package:final_project/pages/appointment_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
@@ -8,7 +10,6 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/pages/appointment_editor.dart';
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/event.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/objects/lake_nixon_event.dart';
 
@@ -59,8 +60,6 @@ class _CalendarPageState extends State<CalendarPage> {
   final CalendarController _calendarController = CalendarController();
   //LakeNixonEvent? _selectedAppointment;
   Appointment? _selectedAppointment;
-  final List<String> _colorNames = <String>[];
-  final List<Color> _colorCollection = <Color>[];
   List<DropdownMenuItem<String>> firebaseEvents = [];
   List<Appointment> savedEvents = [];
   List<Group> _selectedGroups = [];
@@ -77,110 +76,8 @@ class _CalendarPageState extends State<CalendarPage> {
     // getEvents();
     //getSavedEvents();
     // _events = AppointmentDataSource(_getDataSource(widget.group));
-    _getDataSource();
 
     super.initState();
-  }
-
-// Gets all of the events from firebase
-  // Future<void> getEvents() async {
-  //   CollectionReference events =
-  //       FirebaseFirestore.instance.collection("events");
-  //   final snapshot = await events.get();
-  //   if (snapshot.size > 0 && dbEvents.isEmpty) {
-  //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-  //     for (var element in data) {
-  //       var event = element.data() as Map;
-  //       var tmp = Event(
-  //           name: event["name"],
-  //           ageMin: event["ageMin"],
-  //           groupMax: event["groupMax"],
-  //           desc: event["desc"]);
-  //       dbEvents.add(tmp);
-  //     }
-  //   } else {
-  //     debugPrint('No data available.3');
-  //   }
-  //   for (Event event in dbEvents) {
-  //     firebaseEvents
-  //         .add(DropdownMenuItem(value: event.name, child: Text(event.name)));
-  //   }
-  //   debugPrint(dbEvents.toString());
-  // }
-
-// This helps initalize the calendars data source
-  void _getDataSource() {
-    _colorNames.add('Green');
-    _colorNames.add('Purple');
-    _colorNames.add('Red');
-    _colorNames.add('Orange');
-    _colorNames.add('Caramel');
-    _colorNames.add('Light Green');
-    _colorNames.add('Blue');
-    _colorNames.add('Peach');
-    _colorNames.add('Gray');
-    _colorNames.add('Light Blue');
-    _colorNames.add('Light Orange');
-    _colorNames.add('Violet');
-    _colorNames.add('Light Gray');
-    _colorNames.add('Green2');
-    _colorNames.add('Navy');
-    _colorNames.add('Yellow');
-    _colorNames.add('Pink');
-    _colorNames.add('Blue2');
-    _colorNames.add('Brown');
-    _colorNames.add('Dark Navy');
-    _colorNames.add('Lighter Green');
-    _colorNames.add('Orange2');
-    _colorNames.add('Blue3');
-    _colorNames.add('Fade Blue');
-    _colorNames.add('Orange3');
-    _colorNames.add('Light Green2');
-    _colorNames.add('Admin');
-
-    //_colorNames.add("Green");
-
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-    _colorCollection.add(const Color(0xFF01A1EF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
-    _colorCollection.add(const Color(0xFF5DADE2));
-    _colorCollection.add(const Color(0xFFDC7633));
-    _colorCollection.add(const Color(0xFFDEB6F1));
-    _colorCollection.add(const Color(0xFF909497));
-    _colorCollection.add(const Color(0xFF117864));
-    _colorCollection.add(const Color(0xFF2E4053));
-    _colorCollection.add(const Color(0xFFF4D03F));
-    _colorCollection.add(const Color(0xFFEA45E1));
-    _colorCollection.add(const Color(0xFF2471A3));
-    _colorCollection.add(const Color(0xFF504040));
-    _colorCollection.add(const Color(0xFF1C2833));
-    _colorCollection.add(const Color(0xFF60EA7A));
-    _colorCollection.add(const Color(0xFFD35400));
-    _colorCollection.add(const Color(0xFF456CEA));
-    _colorCollection.add(const Color(0xFF566573));
-    _colorCollection.add(const Color(0xFFD68910));
-    _colorCollection.add(const Color(0xFFABEBC6));
-    _colorCollection.add(const Color(0xFFFFFFFF));
-
-    //_colorCollection.add(const Color(0xFF0A8043));
-
-    // _timeZoneCollection.add('Central Standard Time');
-
-    // if (widget.master) {
-    //   List<Appointment> appointments = <Appointment>[];
-    //   events.forEach((key, value) {
-    //     appointments.insertAll(appointments.length, value);
-    //   });
-    //   return appointments;
-    // } else {
-    //   return events[group] as List<Appointment>;
-    // }
   }
 
 //This is what handles changing the calendar view
@@ -208,41 +105,21 @@ class _CalendarPageState extends State<CalendarPage> {
       return;
     }
 
-    _selectedAppointment = null;
-
     /// Navigates the calendar to day view,
     /// when we tap on month cells in mobile.
     if (_calendarController.view == CalendarView.month) {
       _calendarController.view = CalendarView.day;
     } else {
-      if (calendarTapDetails.appointments != null &&
-          calendarTapDetails.targetElement == CalendarElement.appointment) {
-        final dynamic appointment = calendarTapDetails.appointments![0];
-        if (appointment is Appointment) {
-          _selectedAppointment = appointment;
-        }
-      }
-
       final DateTime selectedDate = calendarTapDetails.date!;
-      final CalendarElement targetElement = calendarTapDetails.targetElement;
 
-      firebaseEvents = Provider.of<AppState>(context, listen: false)
-          .createDropdown(Provider.of<AppState>(context, listen: false).events,
-              selectedDate);
       //This is what takes you to the appointment editor
       Navigator.push<Widget>(
         context,
         MaterialPageRoute<Widget>(
-            builder: (BuildContext context) => AppointmentEditor(
-                _selectedAppointment,
-                targetElement,
-                selectedDate,
-                _colorCollection,
-                _colorNames,
+            builder: (BuildContext context) => AppointmentSelector(
                 AppointmentDataSource(Provider.of<AppState>(context)
                     .allAppointments(_selectedGroups, _selectedEvents)),
-                widget.group,
-                firebaseEvents)),
+                selectedDate)),
       ).then((value) {
         setState(() {});
       });
@@ -282,7 +159,6 @@ class _CalendarPageState extends State<CalendarPage> {
         key: _globalKey,
         data: Theme.of(context),
         child: _getCalendar(context, widget.group.name));
-    final double screenHeight = MediaQuery.of(context).size.height;
     return Consumer<AppState>(builder: (context, appState, child) {
       return Scaffold(
         appBar: AppBar(
@@ -293,7 +169,7 @@ class _CalendarPageState extends State<CalendarPage> {
           actions: [
             MultiSelectDialogField(
               title: const Text("Filter Groups"),
-              items: appState.createCheckboxGroups(),
+              items: createCheckboxGroups(appState.groups),
               initialValue: _selectedGroups,
               onConfirm: (results) {
                 setState(() {
@@ -304,7 +180,7 @@ class _CalendarPageState extends State<CalendarPage> {
             ),
             MultiSelectDialogField(
               title: const Text("Filter Events"),
-              items: appState.createCheckboxEvents(),
+              items: createCheckboxEvents(appState.events),
               initialValue: _selectedEvents,
               onConfirm: (results) {
                 setState(() {
@@ -377,50 +253,4 @@ SfCalendar _getMasterCalender(
         nonWorkingDays: <int>[DateTime.saturday, DateTime.sunday]),
     onTap: tapped(false, calendarTapCallback),
   );
-}
-
-/// An object to set the appointment collection data source to calendar, which
-/// used to map the custom appointment data to the calendar appointment, and
-/// allows to add, remove or reset the appointment collection.
-class AppointmentDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
-  AppointmentDataSource(List<Appointment> source) {
-    this.appointments = source;
-  }
-
-  @override
-  DateTime getStartTime(int index) {
-    return _getMeetingData(index).startTime;
-  }
-
-  @override
-  DateTime getEndTime(int index) {
-    return _getMeetingData(index).endTime;
-  }
-
-  @override
-  String getSubject(int index) {
-    return _getMeetingData(index).subject;
-  }
-
-  @override
-  Color getColor(int index) {
-    return _getMeetingData(index).color;
-  }
-
-  @override
-  bool isAllDay(int index) {
-    return _getMeetingData(index).isAllDay;
-  }
-
-  Appointment _getMeetingData(int index) {
-    final dynamic meeting = appointments[index];
-    late final Appointment meetingData;
-    if (meeting is Appointment) {
-      meetingData = meeting;
-    }
-
-    return meetingData;
-  }
 }
