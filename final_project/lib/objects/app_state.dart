@@ -254,10 +254,9 @@ class AppState extends ChangeNotifier {
 // Gets the amount of groups in an event at a specific time and returns that as a value that shows how many are in the event
 // out of how many can be in the event. This is used in the event dropdown so you can see when selecting how full they are.
   String getCurrentAmount(String event, startTime) {
-    var apps = getApptsAtTime(startTime);
     var count = 0;
     var total = lookupEventByName(event).groupMax;
-    for (LakeAppointment app in apps) {
+    for (LakeAppointment app in _appointments) {
       if (app.subject == event) {
         count++;
       }
@@ -353,7 +352,9 @@ class AppState extends ChangeNotifier {
   List<LakeAppointment> getApptsAtTime(DateTime startTime) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
-      if (app.startTime!.isAtSameMomentAs(startTime)) {
+      if (app.startTime!.isAtSameMomentAs(startTime) ||
+          (app.startTime!.isBefore(startTime) &&
+              app.endTime!.isAfter(startTime))) {
         apps.add(app);
       }
     }
