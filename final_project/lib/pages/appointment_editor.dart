@@ -53,6 +53,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   String dropdownValue = "Lunch";
   late String _subject;
 
+  late DateTime _ogStartDate;
+  late String _ogSubject;
+  late String _ogGroup;
+
   // RecurrenceProperties? _recurrenceProperties;
   // late RecurrenceType _recurrenceType;
   // RecurrenceRange? _recurrenceRange;
@@ -233,12 +237,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(AppointmentEditor oldWidget) {
-    _updateAppointmentProperties();
-    super.didUpdateWidget(oldWidget);
-  }
-
   /// Updates the required editor's default field
   void _updateAppointmentProperties() {
     if (widget.selectedAppointment != null) {
@@ -264,6 +262,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       // } else {
       //   _updateMobileRecurrenceProperties();
       // }
+
+      _ogStartDate = widget.selectedAppointment!.startTime!;
+      _ogSubject = widget.selectedAppointment!.subject!;
+      _ogGroup = widget.selectedAppointment!.group!;
     } else {
       // _isAllDay = widget.targetElement == CalendarElement.allDayPanel;
 
@@ -370,7 +372,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                         //adding here it what actually puts in on the calendar
                         appointments.add(tmpApp);
                       }
-                      ;
                       //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
                       //If it does, it takes us to the else statement
                       if (appState.checkEvent(
@@ -519,7 +520,24 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
           floatingActionButton: widget.selectedAppointment == null
               ? null
               : FloatingActionButton(
-                  child: const Icon(Icons.delete_forever), onPressed: () {}));
+                  child: const Icon(Icons.delete_forever),
+                  onPressed: () {
+                    appState.deleteAppt(
+                        startTime: _ogStartDate,
+                        subject: _ogSubject,
+                        group: _ogGroup);
+
+                    widget.events
+                        .notifyListeners(CalendarDataSourceAction.remove, [
+                      appState.createAppointment(
+                          widget.selectedAppointment!.startTime!,
+                          widget.selectedAppointment!.endTime!,
+                          widget.selectedAppointment!.color,
+                          widget.selectedAppointment!.subject!)
+                    ]);
+
+                    Navigator.pop(context);
+                  }));
     });
   }
 }
