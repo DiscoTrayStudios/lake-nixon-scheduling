@@ -140,6 +140,7 @@ class AppState extends ChangeNotifier {
           name: document.data()['name'],
           desc: document.data()['desc']));
     }
+    notifyListeners();
   }
 
   // generates appointments from a firestore QuerySnapshot
@@ -162,6 +163,7 @@ class AppState extends ChangeNotifier {
           startHour: document.data()['start_hour']);
       _appointments.add(lake);
     }
+    notifyListeners();
   }
 
   // generates groups from a firestore QuerySnapshot
@@ -177,6 +179,7 @@ class AppState extends ChangeNotifier {
           color: color,
           age: document.data()['age']));
     }
+    notifyListeners();
   }
 
 //Returns a list of appointments for the group you give as a parameter
@@ -186,6 +189,17 @@ class AppState extends ChangeNotifier {
       if (app.group == group) {
         apps.add(createAppointment(
             app.startTime, app.endTime, app.color, app.subject));
+      }
+    }
+    return apps;
+  }
+
+//Returns a list of LakeAppointments for the event you give as a parameter
+  List<LakeAppointment> lakeAppointmentsByEvent(String event) {
+    List<LakeAppointment> apps = [];
+    for (LakeAppointment app in _appointments) {
+      if (app.subject == event) {
+        apps.add(app);
       }
     }
     return apps;
@@ -315,6 +329,8 @@ class AppState extends ChangeNotifier {
         await firestore.collection('appointments').get();
 
     getAppointmentsFromData(appointmentData);
+
+    notifyListeners();
   }
 
   Future<void> editAppt(
@@ -372,10 +388,28 @@ class AppState extends ChangeNotifier {
   Future<void> createEvent(FirebaseFirestore firestore, String name, int ageMin,
       int groupMax, String desc) async {
     CollectionReference events = firestore.collection("events");
-    final snapshot = await events.get();
 
-    int count = snapshot.size;
-    events.doc("$count").set(
+    events.doc().set(
         {"name": name, "ageMin": ageMin, "groupMax": groupMax, "desc": desc});
+  }
+
+  Future<void> deleteEvent(Event event) async {
+    QuerySnapshot<Map<String, dynamic>> query = await firestore
+        .collection('events')
+        .where('ageMin', isEqualTo: event.ageMin)
+        .where('desc', isEqualTo: event.desc)
+        .where('groupMax', isEqualTo: event.groupMax)
+        .where('name', isEqualTo: event.name)
+        .get();
+
+    await firestore.runTransaction((Transaction transaction) async =>
+        transaction.delete(query.docs[0].reference));
+
+    QuerySnapshot<Map<String, dynamic>> eventData =
+        await firestore.collection('events').get();
+
+    getEventsFromData(eventData);
+
+    notifyListeners();
   }
 }

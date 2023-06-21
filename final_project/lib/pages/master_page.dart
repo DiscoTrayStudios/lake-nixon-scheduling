@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/pages/event_editor.dart';
 import 'package:flutter/material.dart';
 import "package:syncfusion_flutter_calendar/calendar.dart";
 import 'package:provider/provider.dart';
@@ -21,81 +22,6 @@ final List<CalendarView> _allowedViews = <CalendarView>[
 ];
 
 class _MasterPageState extends State<MasterPage> {
-  var eventController = TextEditingController();
-  var ageLimitController = TextEditingController();
-  var groupSizeController = TextEditingController();
-  var descController = TextEditingController();
-
-  Future<void> _eventInfoPopupForm(BuildContext context) async {
-    final provider = Provider.of<AppState>(context, listen: false);
-
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            'Add Event',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-          ),
-          content: SingleChildScrollView(
-            child: SizedBox(
-              height: 200,
-              width: 200,
-              child: Column(
-                children: [
-                  // call FormFieldTemplate for each
-                  // will allow for easier universal use for future code iterations
-                  FormFieldTemplate(
-                      controller: eventController,
-                      decoration: 'Event',
-                      formkey: "EventField"),
-                  FormFieldTemplate(
-                      controller: ageLimitController,
-                      decoration: 'Age Limit',
-                      formkey: "MarkField"),
-                  FormFieldTemplate(
-                      controller: groupSizeController,
-                      decoration: 'Group Size',
-                      formkey: "YearField"),
-                  FormFieldTemplate(
-                      controller: descController,
-                      decoration: 'Description',
-                      formkey: "DescField")
-                ],
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              key: const Key("OKButton"),
-              onPressed: () async {
-                // This is how you get the database from Firebase
-
-                provider.createEvent(
-                    provider.firestore,
-                    eventController.text,
-                    int.parse(ageLimitController.text),
-                    int.parse(groupSizeController.text),
-                    descController.text);
-
-                eventController.clear();
-                ageLimitController.clear();
-                groupSizeController.clear();
-                descController.clear();
-                Navigator.pop(context);
-              },
-              child: const Text('Send'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Future<void> masterPush() async {
     await Navigator.of(context).push(
       MaterialPageRoute(
@@ -144,7 +70,7 @@ class _MasterPageState extends State<MasterPage> {
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.secondary)),
                     child: Text(
-                      "Add event",
+                      "View Events",
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondary,
                           fontSize: Theme.of(context)
@@ -153,7 +79,11 @@ class _MasterPageState extends State<MasterPage> {
                               .fontSize),
                     ),
                     onPressed: () {
-                      _eventInfoPopupForm(context);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                            builder: (context) => const EventEditor()),
+                      );
+                      ;
                     },
                   ),
                 ),
@@ -178,27 +108,5 @@ class _MasterPageState extends State<MasterPage> {
                 ),
               ],
             )));
-  }
-}
-
-class FormFieldTemplate extends StatelessWidget {
-  const FormFieldTemplate(
-      {super.key,
-      required this.controller,
-      required this.decoration,
-      required this.formkey});
-
-  // key for field, controller, and string decoration
-  final String formkey;
-  final TextEditingController controller;
-  final String decoration;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      key: Key(formkey),
-      controller: controller,
-      decoration: InputDecoration(hintText: decoration),
-    );
   }
 }
