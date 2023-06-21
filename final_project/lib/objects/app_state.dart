@@ -412,4 +412,13 @@ class AppState extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  bool nameInEvents(String name) {
+    for (Event event in _events) {
+      if (name == event.name) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

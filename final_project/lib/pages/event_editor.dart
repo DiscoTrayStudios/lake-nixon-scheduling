@@ -4,6 +4,7 @@ import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/widgets/event_selector_item.dart';
 import 'package:final_project/widgets/form_field_template.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class EventEditor extends StatefulWidget {
@@ -88,18 +89,29 @@ class _EventEditorState extends State<EventEditor> {
               onPressed: () async {
                 // This is how you get the database from Firebase
 
-                provider.createEvent(
-                    provider.firestore,
-                    eventController.text,
-                    int.parse(ageLimitController.text),
-                    int.parse(groupSizeController.text),
-                    descController.text);
+                if (provider.nameInEvents(eventController.text)) {
+                  Fluttertoast.showToast(
+                      msg: "EVENT NAME ALREADY IN USE",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: Colors.red,
+                      textColor: Colors.white,
+                      fontSize: 16.0);
+                } else {
+                  provider.createEvent(
+                      provider.firestore,
+                      eventController.text,
+                      int.parse(ageLimitController.text),
+                      int.parse(groupSizeController.text),
+                      descController.text);
 
-                eventController.clear();
-                ageLimitController.clear();
-                groupSizeController.clear();
-                descController.clear();
-                Navigator.pop(context);
+                  eventController.clear();
+                  ageLimitController.clear();
+                  groupSizeController.clear();
+                  descController.clear();
+                  Navigator.pop(context);
+                }
               },
               child: const Text('Send'),
             ),
