@@ -265,20 +265,36 @@ class AppState extends ChangeNotifier {
   //Checks how many groups are in an event and a specific time
   //and then checks to see if the amount the user wanted
   //to add is more than the limit and returns true or false.
-  bool checkEvent(String event, String startHour, int groupCount) {
-    var current = 0;
-    var event0 = lookupEventByName(event);
-    for (LakeAppointment app in _appointments) {
+  bool checkEvent(
+      String event, DateTime startTime, DateTime endTime, int groupCount,
+      [DateTime? originalStartTime, DateTime? originalEndTime]) {
+    Event event0 = lookupEventByName(event);
+    for (DateTime time = startTime;
+        time.isBefore(endTime);
+        time = time.add(const Duration(hours: 1))) {
+      int current = 0;
       // If the event capacity is not filled up, the current app is this event and they start at the same hour
-      if (app.subject == event && app.startHour == startHour) {
-        current += 1;
+      for (LakeAppointment app in _appointments) {
+        if (app.subject == event &&
+            (app.startTime == time ||
+                (app.startTime!.isBefore(time) &&
+                    app.endTime!.isAfter(time)))) {
+          current += 1;
+        }
+      }
+      if ((originalStartTime == null || originalEndTime == null) &&
+          current + groupCount > event0.groupMax) {
+        return false;
+      } else if (originalStartTime != null && originalEndTime != null) {
+        if (((originalStartTime.isBefore(time) ||
+                    originalStartTime.isAtSameMomentAs(time)) &&
+                originalEndTime.isAfter(time)) &&
+            current + groupCount - 1 > event0.groupMax) {
+          return false;
+        }
       }
     }
-    if (current + groupCount <= event0.groupMax) {
-      return true;
-    } else {
-      return false;
-    }
+    return true;
   }
 
   Future<void> deleteAppt(
@@ -299,6 +315,22 @@ class AppState extends ChangeNotifier {
         await firestore.collection('appointments').get();
 
     getAppointmentsFromData(appointmentData);
+  }
+
+  Future<void> editAppt(
+      {required DateTime startTime,
+      required String subject,
+      required String group,
+      required Map<String, dynamic> data}) async {
+    QuerySnapshot<Map<String, dynamic>> query = await firestore
+        .collection('appointments')
+        .where('start_time', isEqualTo: startTime)
+        .where('subject', isEqualTo: subject)
+        .where('group', isEqualTo: group)
+        .get();
+
+    await firestore.runTransaction((Transaction transaction) async =>
+        transaction.update(query.docs[0].reference, data));
   }
 
 //Returns the appointments happening at a certain time
