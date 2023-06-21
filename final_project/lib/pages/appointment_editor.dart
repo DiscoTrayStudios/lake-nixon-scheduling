@@ -53,9 +53,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   String dropdownValue = "Lunch";
   late String _subject;
 
-  late DateTime _ogStartDate;
-  late String _ogSubject;
-  late String _ogGroup;
+  late DateTime _originalStartDate;
+  late String _originalSubject;
+  late String _originalGroup;
 
   // RecurrenceProperties? _recurrenceProperties;
   // late RecurrenceType _recurrenceType;
@@ -263,9 +263,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       //   _updateMobileRecurrenceProperties();
       // }
 
-      _ogStartDate = widget.selectedAppointment!.startTime!;
-      _ogSubject = widget.selectedAppointment!.subject!;
-      _ogGroup = widget.selectedAppointment!.group!;
+      _originalStartDate = widget.selectedAppointment!.startTime!;
+      _originalSubject = widget.selectedAppointment!.subject!;
+      _originalGroup = widget.selectedAppointment!.group!;
     } else {
       // _isAllDay = widget.targetElement == CalendarElement.allDayPanel;
 
@@ -343,53 +343,32 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   onPressed: () async {
                     //updateDropdown();
                     if (widget.selectedAppointment != null) {
-                      final List<Appointment> appointments = <Appointment>[];
-
-                      // appState.deleteAppt();
-
-                      Map<String, Map<String, dynamic>> groupToApp = {};
-                      for (Group g in _selectedGroups) {
-                        Appointment tmpApp = Appointment(
-                          startTime: _startDate,
-                          endTime: _endDate,
-                          color: g.color,
-                          notes: _notes,
-                          isAllDay: _isAllDay,
-                          subject: _subject,
-                        );
-                        //Turning the already created appointment into something we can put into firebase
-                        Map<String, dynamic> appMap = {
-                          "start_time": tmpApp.startTime,
-                          "end_time": tmpApp.endTime,
-                          "color": tmpApp.color.toString(),
-                          "notes": tmpApp.notes,
-                          "subject": tmpApp.subject,
-                          "group": g.name,
-                          "start_hour": "${tmpApp.startTime.hour}"
-                        };
-                        //associating a group with a specific appointment
-                        groupToApp[g.name] = appMap;
-                        //adding here it what actually puts in on the calendar
-                        appointments.add(tmpApp);
-                      }
-                      //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
-                      //If it does, it takes us to the else statement
                       if (appState.checkEvent(
-                          _subject, _startTime.hour.toString(), 1)) {
-                        //If it doesnt we come in here and we add the appoinments to the app state
-                        appState.addAppointments(
-                            groupToApp, appState.firestore);
-                        //This for loop adds all of the appointments to the calendar backend which separate from ours.
-                        for (Map<String, dynamic> app in groupToApp.values) {
-                          widget.events
-                              .notifyListeners(CalendarDataSourceAction.add, [
-                            appState.createAppointment(app["start_time"],
-                                app["end_time"], app["color"], app["subject"])
-                          ]);
-                        }
+                          _subject,
+                          _startDate,
+                          _endDate,
+                          1,
+                          widget.selectedAppointment!.startTime!,
+                          widget.selectedAppointment!.endTime!)) {
+                        Map<String, dynamic> data = {
+                          "start_time": _startDate,
+                          "end_time": _endDate,
+                          "color":
+                              widget.selectedAppointment!.color!.toString(),
+                          "notes": _notes,
+                          "subject": _subject,
+                          "group": widget.selectedAppointment!.group!,
+                          "start_hour": "${_startDate.hour}"
+                        };
+
+                        appState.editAppt(
+                            startTime: _originalStartDate,
+                            subject: _originalSubject,
+                            group: _originalGroup,
+                            data: data);
                       } else {
                         Fluttertoast.showToast(
-                            msg: "CANT EDIT EVENT DUE TO RESTRICTIONS",
+                            msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
@@ -431,7 +410,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
                       //If it does, it takes us to the else statement
                       if (appState.checkEvent(
-                          _subject, _startTime.hour.toString(), groupAmount)) {
+                          _subject, _startDate, _endDate, groupAmount)) {
                         //If it doesnt we come in here and we add the appoinments to the app state
                         appState.addAppointments(
                             groupToApp, appState.firestore);
@@ -523,9 +502,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   child: const Icon(Icons.delete_forever),
                   onPressed: () {
                     appState.deleteAppt(
-                        startTime: _ogStartDate,
-                        subject: _ogSubject,
-                        group: _ogGroup);
+                        startTime: _originalStartDate,
+                        subject: _originalSubject,
+                        group: _originalGroup);
 
                     widget.events
                         .notifyListeners(CalendarDataSourceAction.remove, [
