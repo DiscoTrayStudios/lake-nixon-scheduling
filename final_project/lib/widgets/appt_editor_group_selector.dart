@@ -35,6 +35,10 @@ class _GroupSelectorState extends State<GroupSelector> {
                 fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
                 color: Theme.of(context).colorScheme.secondary)),
         colorator: (group) => group.color,
+        chipDisplay: MultiSelectChipDisplay<Group>(
+            textStyle: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
+                color: Theme.of(context).colorScheme.onTertiary)),
         items: createCheckboxGroups(widget.availableGroups),
         initialValue: widget.selectedGroups,
         onConfirm: (results) => widget.onConfirm(results),
