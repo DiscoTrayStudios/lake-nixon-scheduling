@@ -179,22 +179,6 @@ class AppState extends ChangeNotifier {
     }
   }
 
-//Used to create the group checkboxes for appointment editor
-  List<MultiSelectItem<Group>> createCheckboxGroups() {
-    var items = groups
-        .map((group) => MultiSelectItem<Group>(group, group.name))
-        .toList();
-    return items;
-  }
-
-//Used to create the checkbox events for the appointment editor
-  List<MultiSelectItem<String>> createCheckboxEvents() {
-    var items = events
-        .map((event) => MultiSelectItem<String>(event.name, event.name))
-        .toList();
-    return items;
-  }
-
 //Returns a list of appointments for the group you give as a parameter
   List<Appointment> appointmentsByGroup(String group) {
     List<Appointment> apps = [];
@@ -267,21 +251,6 @@ class AppState extends ChangeNotifier {
     return "$count/$total";
   }
 
-  //Move this function to appontment_editor.dart
-  //FIX THE START TIME ISSUE AND MAKE IT DAY SPECIFIC NOT TIME SPECIFIC
-  //^^ I think this has been fixed but I'll keep that there just to make sure its not forgotten if I didn't fix it
-  // This creates the event dropdown with the amount of groups in each event
-  List<DropdownMenuItem<String>> createDropdown(
-      List<Event> items, DateTime startTime) {
-    List<DropdownMenuItem<String>> newItems = [];
-    for (Event event in items) {
-      var currentAmount = getCurrentAmount(event.name, startTime);
-      newItems.add(DropdownMenuItem(
-          value: event.name, child: Text("${event.name}  $currentAmount")));
-    }
-    return newItems;
-  }
-
   //Takes a firebase appointment and turns it into a calendar appointment
   Appointment createAppointment(startTime, endTime, color, subject) {
     if (color.runtimeType == String) {
@@ -312,8 +281,28 @@ class AppState extends ChangeNotifier {
     }
   }
 
+  Future<void> deleteAppt(
+      {required DateTime startTime,
+      required String subject,
+      required String group}) async {
+    QuerySnapshot<Map<String, dynamic>> query = await firestore
+        .collection('appointments')
+        .where('start_time', isEqualTo: startTime)
+        .where('subject', isEqualTo: subject)
+        .where('group', isEqualTo: group)
+        .get();
+
+    await firestore.runTransaction((Transaction transaction) async =>
+        transaction.delete(query.docs[0].reference));
+
+    QuerySnapshot<Map<String, dynamic>> appointmentData =
+        await firestore.collection('appointments').get();
+
+    getAppointmentsFromData(appointmentData);
+  }
+
 //Returns the appointments happening at a certain time
-  List<LakeAppointment> getApptsAtTime(startTime) {
+  List<LakeAppointment> getApptsAtTime(DateTime startTime) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
       if (app.startTime!.isAtSameMomentAs(startTime)) {
@@ -357,51 +346,4 @@ class AppState extends ChangeNotifier {
     events.doc("$count").set(
         {"name": name, "ageMin": ageMin, "groupMax": groupMax, "desc": desc});
   }
-
-  // Future<void> createEvents() async {
-  //   var events = FirebaseFirestore.instance.collection("events");
-  //   for (Event event in _events) {
-  //     events.doc(event.name).set({
-  //       "name": event.name,
-  //       "ageMin": event.ageMin,
-  //       "groupMax": event.groupMax,
-  //       "desc": ""
-  //     });
-  //   }
-  // }
 }
-
-// Future<void> createGroups() async {
-//   var groups = FirebaseFirestore.instance.collection("groups");
-//   for (Group group in _groups) {
-//     groups.doc(group.name).set({
-//       "name": group.name,
-//       "color": group.color.toString(),
-//       "age": group.age,
-//     });
-//   }
-// }
-
-// List<Group> _groups = <Group>[
-//   const Group(name: "Chipmunks", color: Color(0xFF0F8644), age: 1),
-//   const Group(name: "Hummingbirds", color: Color(0xFF8B1FA9), age: 1),
-//   const Group(name: "Tadpoles", color: Color(0xFFD20100), age: 1),
-//   const Group(name: "Sparrows", color: Color(0xFF5DADE2), age: 1),
-//   const Group(name: "Salamanders", color: Color(0xFFDC7633), age: 1),
-//   const Group(name: "Robins", color: Color(0xFFDEB6F1), age: 1),
-//   const Group(name: "Minks", color: Color(0xFF909497), age: 3),
-//   const Group(name: "Otters", color: Color(0xFF117864), age: 3),
-//   const Group(name: "Raccoons", color: Color(0xFF2E4053), age: 3),
-//   const Group(name: "Kingfishers", color: Color(0xFFF4D03F), age: 3),
-//   const Group(name: "Squirrels", color: Color(0xFFEA45E1), age: 3),
-//   const Group(name: "Blue Jays", color: Color(0xFF2471A3), age: 3),
-//   const Group(name: "Deer", color: Color(0xFF504040), age: 5),
-//   const Group(name: "Crows", color: Color(0xFF1C2833), age: 5),
-//   const Group(name: "Bears", color: Color(0xFF60EA7A), age: 5),
-//   const Group(name: "Foxes", color: Color(0xFFD35400), age: 5),
-//   const Group(name: "Herons", color: Color(0xFF456CEA), age: 5),
-//   const Group(name: "Wolves", color: Color(0xFF566573), age: 5),
-//   const Group(name: "Copperheads", color: Color(0xFFD68910), age: 6),
-//   const Group(name: "Timber Rattlers", color: Color(0xFFABEBC6), age: 8),
-//   const Group(name: "Admin", color: Color.fromARGB(255, 0, 0, 0), age: 9999)
-// ];

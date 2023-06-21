@@ -1,11 +1,14 @@
+import 'package:final_project/objects/app_state.dart';
+import 'package:final_project/objects/event.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EventSelector extends StatefulWidget {
-  const EventSelector(this.firebaseEvents, this.onChanged, this.dropdownValue,
+  const EventSelector(this.selectedDate, this.onChanged, this.dropdownValue,
       {super.key});
 
-  final List<DropdownMenuItem<String>> firebaseEvents;
+  final DateTime selectedDate;
 
   final OnChangedCallBack onChanged;
 
@@ -18,6 +21,18 @@ class EventSelector extends StatefulWidget {
 typedef OnChangedCallBack = Function(String?);
 
 class _EventSelectorState extends State<EventSelector> {
+  List<DropdownMenuItem<String>> createDropdown(
+      List<Event> items, DateTime startTime) {
+    List<DropdownMenuItem<String>> newItems = [];
+    for (Event event in items) {
+      var currentAmount = Provider.of<AppState>(context)
+          .getCurrentAmount(event.name, startTime);
+      newItems.add(DropdownMenuItem(
+          value: event.name, child: Text("${event.name}  $currentAmount")));
+    }
+    return newItems;
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -38,7 +53,8 @@ class _EventSelectorState extends State<EventSelector> {
               fontStyle: Theme.of(context).textTheme.titleMedium!.fontStyle,
               fontFamily: "Fruit"),
           value: widget.dropdownValue,
-          items: widget.firebaseEvents,
+          items: createDropdown(
+              Provider.of<AppState>(context).events, widget.selectedDate),
           onChanged: (String? newValue) => widget.onChanged(newValue),
         ),
       ),

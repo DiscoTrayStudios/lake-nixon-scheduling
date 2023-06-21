@@ -1,14 +1,15 @@
 import 'package:final_project/objects/group.dart';
+import 'package:final_project/objects/multi_select_dialog_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 class GroupSelector extends StatefulWidget {
-  const GroupSelector(this.items, this.selectedGroups, this.onConfirm,
+  const GroupSelector(this.availableGroups, this.selectedGroups, this.onConfirm,
       {super.key});
 
-  final List<Group> selectedGroups;
+  final List<Group> availableGroups;
 
-  final List<MultiSelectItem<Group>> items;
+  final List<Group> selectedGroups;
 
   final OnConfirmCallback onConfirm;
 
@@ -34,7 +35,7 @@ class _GroupSelectorState extends State<GroupSelector> {
                 fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
                 color: Theme.of(context).colorScheme.secondary)),
         colorator: (group) => group.color,
-        items: widget.items,
+        items: createCheckboxGroups(widget.availableGroups),
         initialValue: widget.selectedGroups,
         onConfirm: (results) => widget.onConfirm(results),
       ),
