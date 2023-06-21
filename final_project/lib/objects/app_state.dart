@@ -256,7 +256,7 @@ class AppState extends ChangeNotifier {
   String getCurrentAmount(String event, startTime) {
     var count = 0;
     var total = lookupEventByName(event).groupMax;
-    for (LakeAppointment app in _appointments) {
+    for (LakeAppointment app in getApptsAtTime(startTime)) {
       if (app.subject == event) {
         count++;
       }
@@ -287,11 +287,8 @@ class AppState extends ChangeNotifier {
         time = time.add(const Duration(hours: 1))) {
       int current = 0;
       // If the event capacity is not filled up, the current app is this event and they start at the same hour
-      for (LakeAppointment app in _appointments) {
-        if (app.subject == event &&
-            (app.startTime == time ||
-                (app.startTime!.isBefore(time) &&
-                    app.endTime!.isAfter(time)))) {
+      for (LakeAppointment app in getApptsAtTime(time)) {
+        if (app.subject == event) {
           current += 1;
         }
       }
@@ -304,7 +301,10 @@ class AppState extends ChangeNotifier {
                 originalEndTime.isAfter(time)) &&
             current + groupCount - 1 > event0.groupMax) {
           return false;
-        }
+        } else if ((originalStartTime.isAfter(time) ||
+                (originalEndTime.isBefore(time) ||
+                    originalEndTime.isAtSameMomentAs(time))) &&
+            current + groupCount > event0.groupMax) {}
       }
     }
     return true;
@@ -364,9 +364,8 @@ class AppState extends ChangeNotifier {
 // Gets the groups in events at certain time
   List<String> getGroupsAtTime(startTime) {
     List<String> groups = [];
-    for (LakeAppointment app in _appointments) {
-      if (app.startTime!.isAtSameMomentAs(startTime) &&
-          !groups.contains(app.group!)) {
+    for (LakeAppointment app in getApptsAtTime(startTime)) {
+      if (!groups.contains(app.group!)) {
         groups.add(app.group!);
       }
     }
@@ -421,5 +420,38 @@ class AppState extends ChangeNotifier {
       }
     }
     return false;
+  }
+
+  List<Group> filterGroupsByAge(int age, List<Group> groups) {
+    List<Group> outGroups = [];
+
+    for (Group group in groups) {
+      if (age <= group.age) {
+        outGroups.add(group);
+      }
+    }
+
+    return outGroups;
+  }
+
+  List<Group> filterGroupsByTime(
+      DateTime startTime, DateTime endTime, List<Group> groups) {
+    List<String> excludedGroups = [];
+    for (DateTime time = startTime;
+        time.isBefore(endTime);
+        time = time.add(const Duration(hours: 1))) {
+      excludedGroups.addAll(getGroupsAtTime(startTime));
+    }
+
+    excludedGroups = [
+      ...{...excludedGroups}
+    ];
+    List<Group> showGroups = [];
+    for (Group group in groups) {
+      if (!excludedGroups.contains(group.name)) {
+        showGroups.add(group);
+      }
+    }
+    return showGroups;
   }
 }
