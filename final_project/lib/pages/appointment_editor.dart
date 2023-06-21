@@ -3,19 +3,14 @@ import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/widgets/appt_editor_event_selector.dart';
 import 'package:final_project/widgets/appt_editor_group_selector.dart';
 import 'package:final_project/widgets/appt_editor_time_selector.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:final_project/widgets/appt_editor_custom_rule.dart';
-import 'package:final_project/widgets/appt_editor_edit_dialog.dart';
-import 'package:final_project/widgets/appt_editor_select_rule_dialog.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
-import 'package:final_project/pages/calendar_page.dart';
 
 Color theme = const Color(0xffffffff);
 
