@@ -282,7 +282,9 @@ class AppState extends ChangeNotifier {
   }
 
   Future<void> deleteAppt(
-      DateTime startTime, String subject, String group) async {
+      {required DateTime startTime,
+      required String subject,
+      required String group}) async {
     QuerySnapshot<Map<String, dynamic>> query = await firestore
         .collection('appointments')
         .where('start_time', isEqualTo: startTime)
@@ -290,7 +292,13 @@ class AppState extends ChangeNotifier {
         .where('group', isEqualTo: group)
         .get();
 
-    query.docs[0].reference.delete();
+    await firestore.runTransaction((Transaction transaction) async =>
+        transaction.delete(query.docs[0].reference));
+
+    QuerySnapshot<Map<String, dynamic>> appointmentData =
+        await firestore.collection('appointments').get();
+
+    getAppointmentsFromData(appointmentData);
   }
 
 //Returns the appointments happening at a certain time

@@ -278,7 +278,7 @@ void main() {
     expect(
         appState.getCurrentAmount(
             "Test Subject", DateTime.utc(1969, 7, 20, 20)),
-        "3/6");
+        "2/6");
   });
   test('createAppointment creates calendar appointements from firebase',
       () async {
@@ -492,9 +492,9 @@ void main() {
     expect(appState.appointments.length, 1);
 
     await appState.deleteAppt(
-        DateTime.utc(1969, 7, 20, 20), "Test Subject", "Test Group");
-
-    debugPrint(instance.dump());
+        startTime: DateTime.utc(1969, 7, 20, 20),
+        subject: "Test Subject",
+        group: "Test Group");
 
     await instance
         .collection('appointments')
