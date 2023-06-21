@@ -59,23 +59,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   // SelectRule? _rule = SelectRule.doesNotRepeat;
 
-  late List<MultiSelectItem<Group>> _items;
-
   void onEventSelectorChanged(String? newValue) {
+    AppState appState = Provider.of<AppState>(context, listen: false);
     setState(() {
       dropdownValue = newValue!;
       _subject = newValue;
     });
-    var excludedGroups = Provider.of<AppState>(context, listen: false)
-        .getGroupsAtTime(_startDate);
-    List<Group> showGroups = [];
-    for (Group group in Provider.of<AppState>(context, listen: false).groups) {
-      if (excludedGroups.contains(group.name)) {
-      } else {
-        showGroups.add(group);
-      }
-    }
-    createItems(showGroups);
   }
 
   void onGroupSelectorConfirmed(List<Group> results) {
@@ -212,12 +201,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   //   _recurrenceProperties = properties as RecurrenceProperties?;
   // }
 
-  void createItems(List<Group> groups) {
-    _items = groups
-        .map((group) => MultiSelectItem<Group>(group, group.name))
-        .toList();
-  }
-
   List<Group> _selectedGroups = [];
 
   @override
@@ -315,7 +298,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   @override
   Widget build(BuildContext context) {
     return Consumer<AppState>(builder: (context, appState, child) {
-      createItems(appState.groups);
+      _selectedGroups = appState.filterGroupsByAge(
+          appState.lookupEventByName(_subject).ageMin,
+          appState.filterGroupsByTime(_startDate, _endDate, _selectedGroups));
       return Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.primary,
@@ -441,7 +426,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   EventSelector(widget.selectedDate, onEventSelectorChanged,
                       dropdownValue),
                   if (widget.selectedAppointment == null)
-                    GroupSelector(appState.groups, _selectedGroups,
+                    GroupSelector(
+                        appState.filterGroupsByAge(
+                            appState.lookupEventByName(_subject).ageMin,
+                            appState.filterGroupsByTime(
+                                _startDate, _endDate, appState.groups)),
+                        _selectedGroups,
                         onGroupSelectorConfirmed)
                   else
                     Padding(
