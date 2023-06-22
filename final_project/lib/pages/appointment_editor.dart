@@ -320,12 +320,20 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                     //updateDropdown();
                     if (widget.selectedAppointment != null) {
                       if (appState.checkEvent(
-                          _subject,
-                          _startDate,
-                          _endDate,
-                          1,
-                          widget.selectedAppointment!.startTime!,
-                          widget.selectedAppointment!.endTime!)) {
+                              _subject,
+                              _startDate,
+                              _endDate,
+                              1,
+                              widget.selectedAppointment!.startTime!,
+                              widget.selectedAppointment!.endTime!) &&
+                          appState.checkGroupTime(
+                              group: widget.selectedAppointment!.group!,
+                              startTime: _startDate,
+                              endTime: _endDate,
+                              originalStartTime:
+                                  widget.selectedAppointment!.startTime,
+                              originalEndTime:
+                                  widget.selectedAppointment!.endTime)) {
                         Map<String, dynamic> data = {
                           "start_time": _startDate,
                           "end_time": _endDate,
@@ -356,6 +364,8 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                     } else {
                       final List<Appointment> appointments = <Appointment>[];
 
+                      bool _groupsOccupied = true;
+
                       Map<String, Map<String, dynamic>> groupToApp = {};
                       for (Group g in _selectedGroups) {
                         Appointment tmpApp = Appointment(
@@ -380,6 +390,13 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                         groupToApp[g.name] = appMap;
                         //adding here it what actually puts in on the calendar
                         appointments.add(tmpApp);
+
+                        if (!appState.checkGroupTime(
+                            group: g.name,
+                            startTime: _startDate,
+                            endTime: _endDate)) {
+                          _groupsOccupied = false;
+                        }
                       }
                       //appState.addAppointments(groupToApp);
 
@@ -387,7 +404,8 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
                       //If it does, it takes us to the else statement
                       if (appState.checkEvent(
-                          _subject, _startDate, _endDate, groupAmount)) {
+                              _subject, _startDate, _endDate, groupAmount) &&
+                          _groupsOccupied) {
                         //If it doesnt we come in here and we add the appoinments to the app state
                         appState.addAppointments(
                             groupToApp, appState.firestore);
