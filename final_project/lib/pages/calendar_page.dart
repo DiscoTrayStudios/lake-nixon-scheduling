@@ -113,16 +113,31 @@ class _CalendarPageState extends State<CalendarPage> {
       final DateTime selectedDate = calendarTapDetails.date!;
 
       //This is what takes you to the appointment editor
-      Navigator.push<Widget>(
-        context,
-        MaterialPageRoute<Widget>(
-            builder: (BuildContext context) => AppointmentSelector(
-                AppointmentDataSource(Provider.of<AppState>(context)
-                    .allAppointments(_selectedGroups, _selectedEvents)),
-                selectedDate)),
-      ).then((value) {
-        setState(() {});
-      });
+      if (calendarTapDetails.appointments != null) {
+        Navigator.push<Widget>(
+          context,
+          MaterialPageRoute<Widget>(
+              builder: (BuildContext context) => AppointmentSelector(
+                  AppointmentDataSource(Provider.of<AppState>(context)
+                      .allAppointments(_selectedGroups, _selectedEvents)),
+                  selectedDate)),
+        ).then((value) {
+          setState(() {});
+        });
+      } else {
+        Navigator.push<Widget>(
+          context,
+          MaterialPageRoute<Widget>(
+              builder: (BuildContext context) => AppointmentEditor(
+                    AppointmentDataSource(Provider.of<AppState>(context)
+                        .allAppointments(_selectedGroups, _selectedEvents)),
+                    null,
+                    selectedDate,
+                  )),
+        ).then((value) {
+          setState(() {});
+        });
+      }
     }
   }
 
