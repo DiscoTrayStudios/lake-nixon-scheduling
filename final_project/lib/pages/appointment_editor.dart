@@ -342,6 +342,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             subject: _originalSubject,
                             group: _originalGroup,
                             data: data);
+                        Navigator.pop(context);
                       } else {
                         Fluttertoast.showToast(
                             msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
@@ -398,6 +399,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                                 app["end_time"], app["color"], app["subject"])
                           ]);
                         }
+                        Navigator.pop(context);
                       } else {
                         Fluttertoast.showToast(
                             msg: "CANT ADD EVENT DUE TO RESTRICTIONS",
@@ -409,7 +411,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             fontSize: 16.0);
                       }
                     }
-                    Navigator.pop(context);
                   })
             ],
           ),
