@@ -190,6 +190,9 @@ class _CalendarPageState extends State<CalendarPage> {
               title: const Text("Filter Groups"),
               items: createCheckboxGroups(appState.groups),
               initialValue: _selectedGroups,
+              chipDisplay: MultiSelectChipDisplay<Group>.none(),
+              buttonIcon: const Icon(Icons.filter_list),
+              buttonText: const Text('Groups'),
               onConfirm: (results) {
                 setState(() {
                   _selectedGroups = results;
@@ -201,6 +204,9 @@ class _CalendarPageState extends State<CalendarPage> {
               title: const Text("Filter Events"),
               items: createCheckboxEvents(appState.events),
               initialValue: _selectedEvents,
+              chipDisplay: MultiSelectChipDisplay<String>.none(),
+              buttonIcon: const Icon(Icons.filter_list),
+              buttonText: const Text('Events'),
               onConfirm: (results) {
                 setState(() {
                   _selectedEvents = results;
