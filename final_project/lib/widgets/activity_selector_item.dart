@@ -1,17 +1,17 @@
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 typedef OnPressedCallback = Function(int);
-typedef OnDeleteCallback = Function(Event, AppState);
+typedef OnDeleteCallback = Function(Activity, AppState);
 
-class EventSelectorItem extends StatelessWidget {
-  const EventSelectorItem(
+class ActivitySelectorItem extends StatelessWidget {
+  const ActivitySelectorItem(
       this.event, this.selected, this.index, this.onPressed, this.onDelete,
       {super.key});
 
-  final Event event;
+  final Activity event;
 
   final bool selected;
 

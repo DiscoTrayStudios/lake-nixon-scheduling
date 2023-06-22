@@ -11,9 +11,9 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:final_project/pages/appointment_editor.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/lake_nixon_event.dart';
+import 'package:final_project/objects/lake_nixon_activity.dart';
 
-List<LakeNixonEvent> appointments = <LakeNixonEvent>[];
+List<LakeNixonActivity> appointments = <LakeNixonActivity>[];
 
 //late bool isUser;
 
@@ -47,7 +47,7 @@ final List<CalendarView> _allowedViews = <CalendarView>[
 class _CalendarPageState extends State<CalendarPage> {
   _CalendarPageState();
 
-  //AppointmentDataSource _events = AppointmentDataSource(<Appointment>[]);
+  //AppointmentDataSource _activities = AppointmentDataSource(<Appointment>[]);
   late CalendarView _currentView;
 
   //bool isUser = true;
@@ -58,12 +58,12 @@ class _CalendarPageState extends State<CalendarPage> {
   final GlobalKey _globalKey = GlobalKey();
   final ScrollController _controller = ScrollController();
   final CalendarController _calendarController = CalendarController();
-  //LakeNixonEvent? _selectedAppointment;
+  //LakeNixonActivity? _selectedAppointment;
   Appointment? _selectedAppointment;
-  List<DropdownMenuItem<String>> firebaseEvents = [];
-  List<Appointment> savedEvents = [];
+  List<DropdownMenuItem<String>> firebaseActivities = [];
+  List<Appointment> savedActivities = [];
   List<Group> _selectedGroups = [];
-  List<String> _selectedEvents = [];
+  List<String> _selectedActivities = [];
 
   //bool get user => widget.isUser;
   //bool user = widget.isUser;
@@ -73,9 +73,9 @@ class _CalendarPageState extends State<CalendarPage> {
     _calendarController.view = _currentView;
     bool user = widget.isUser;
     //_checkAuth();
-    // getEvents();
-    //getSavedEvents();
-    // _events = AppointmentDataSource(_getDataSource(widget.group));
+    // getActivities();
+    //getSavedActivities();
+    // _activities = AppointmentDataSource(_getDataSource(widget.group));
 
     super.initState();
   }
@@ -96,7 +96,7 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
-// Handles when you click calendar events
+// Handles when you click calendar activities
   void _onCalendarTapped(CalendarTapDetails calendarTapDetails) {
     /// Condition added to open the editor, when the calendar elements tapped
     /// other than the header.
@@ -119,12 +119,13 @@ class _CalendarPageState extends State<CalendarPage> {
           MaterialPageRoute<Widget>(
               builder: (BuildContext context) => AppointmentSelector(
                   AppointmentDataSource(Provider.of<AppState>(context)
-                      .allAppointments(_selectedGroups, _selectedEvents)),
+                      .allAppointments(_selectedGroups, _selectedActivities)),
                   selectedDate,
                   selectedGroups:
                       _selectedGroups.isEmpty ? null : _selectedGroups,
-                  selectedEvents:
-                      _selectedEvents.isEmpty ? null : _selectedEvents)),
+                  selectedActivities: _selectedActivities.isEmpty
+                      ? null
+                      : _selectedActivities)),
         ).then((value) {
           setState(() {});
         });
@@ -134,7 +135,7 @@ class _CalendarPageState extends State<CalendarPage> {
           MaterialPageRoute<Widget>(
               builder: (BuildContext context) => AppointmentEditor(
                     AppointmentDataSource(Provider.of<AppState>(context)
-                        .allAppointments(_selectedGroups, _selectedEvents)),
+                        .allAppointments(_selectedGroups, _selectedActivities)),
                     null,
                     selectedDate,
                   )),
@@ -152,7 +153,7 @@ class _CalendarPageState extends State<CalendarPage> {
         return _getMasterCalender(
             _calendarController,
             AppointmentDataSource(
-                appState.allAppointments(_selectedGroups, _selectedEvents)),
+                appState.allAppointments(_selectedGroups, _selectedActivities)),
             _onViewChanged,
             _onCalendarTapped);
       });
@@ -190,6 +191,9 @@ class _CalendarPageState extends State<CalendarPage> {
               title: const Text("Filter Groups"),
               items: createCheckboxGroups(appState.groups),
               initialValue: _selectedGroups,
+              chipDisplay: MultiSelectChipDisplay<Group>.none(),
+              buttonIcon: const Icon(Icons.filter_list),
+              buttonText: const Text('Groups'),
               onConfirm: (results) {
                 setState(() {
                   _selectedGroups = results;
@@ -198,12 +202,15 @@ class _CalendarPageState extends State<CalendarPage> {
               },
             ),
             MultiSelectDialogField(
-              title: const Text("Filter Events"),
-              items: createCheckboxEvents(appState.events),
-              initialValue: _selectedEvents,
+              title: const Text("Filter Activities"),
+              items: createCheckboxActivities(appState.activities),
+              initialValue: _selectedActivities,
+              chipDisplay: MultiSelectChipDisplay<String>.none(),
+              buttonIcon: const Icon(Icons.filter_list),
+              buttonText: const Text('Activities'),
               onConfirm: (results) {
                 setState(() {
-                  _selectedEvents = results;
+                  _selectedActivities = results;
                   //assignments[widget.group] = _selectedGroups;
                 });
               },

@@ -1,6 +1,6 @@
 import 'package:final_project/objects/appointment_data_source.dart';
 import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/widgets/appt_editor_event_selector.dart';
+import 'package:final_project/widgets/appt_editor_activity_selector.dart';
 import 'package:final_project/widgets/appt_editor_group_selector.dart';
 import 'package:final_project/widgets/appt_editor_time_selector.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ Color theme = const Color(0xffffffff);
 class AppointmentEditor extends StatefulWidget {
   /// Holds the value of appointment editor
   const AppointmentEditor(
-      this.events, this.selectedAppointment, this.selectedDate,
+      this.activities, this.selectedAppointment, this.selectedDate,
       {super.key});
 
   /// Selected appointment
@@ -27,7 +27,7 @@ class AppointmentEditor extends StatefulWidget {
 
   final DateTime selectedDate;
 
-  final AppointmentDataSource events;
+  final AppointmentDataSource activities;
 
   @override
   State<AppointmentEditor> createState() => _AppointmentEditorState();
@@ -58,7 +58,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   // SelectRule? _rule = SelectRule.doesNotRepeat;
 
-  void onEventSelectorChanged(String? newValue) {
+  void onActivitySelectorChanged(String? newValue) {
     setState(() {
       dropdownValue = newValue!;
       _subject = newValue;
@@ -158,7 +158,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   //             child: SelectRuleDialog(
   //               _recurrenceProperties,
   //               widget.colorCollection[_selectedColorIndex],
-  //               widget.events,
+  //               widget.activities,
   //               selectedAppointment: widget.selectedAppointment ??
   //                   Appointment(
   //                     startTime: _startDate,
@@ -182,7 +182,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   void initState() {
     _updateAppointmentProperties();
     _selectedGroups;
-    //getEvents();
+    //getActivities();
     if (widget.selectedAppointment != null) {
       dropdownValue = widget.selectedAppointment!.subject!;
     } else {}
@@ -274,7 +274,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   Widget build(BuildContext context) {
     return Consumer<AppState>(builder: (context, appState, child) {
       _selectedGroups = appState.filterGroupsByAge(
-          appState.lookupEventByName(_subject).ageMin,
+          appState.lookupActivityByName(_subject).ageMin,
           appState.filterGroupsByTime(_startDate, _endDate, _selectedGroups));
       return Scaffold(
           appBar: AppBar(
@@ -298,7 +298,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   onPressed: () async {
                     //updateDropdown();
                     if (widget.selectedAppointment != null) {
-                      if (appState.checkEvent(
+                      if (appState.checkActivity(
                               _subject,
                               _startDate,
                               _endDate,
@@ -321,7 +321,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           "notes": _notes,
                           "subject": _subject,
                           "group": widget.selectedAppointment!.group!,
-                          "start_hour": "${_startDate.hour}"
                         };
 
                         appState.editAppt(
@@ -363,7 +362,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           "notes": tmpApp.notes,
                           "subject": tmpApp.subject,
                           "group": g.name,
-                          "start_hour": "${tmpApp.startTime.hour}"
                         };
                         //associating a group with a specific appointment
                         groupToApp[g.name] = appMap;
@@ -382,7 +380,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       int groupAmount = _selectedGroups.length;
                       //Now we check if the amounts of groups trying to be added exceeds the limits set in pace
                       //If it does, it takes us to the else statement
-                      if (appState.checkEvent(
+                      if (appState.checkActivity(
                               _subject, _startDate, _endDate, groupAmount) &&
                           groupsOccupied) {
                         //If it doesnt we come in here and we add the appoinments to the app state
@@ -390,7 +388,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             groupToApp, appState.firestore);
                         //This for loop adds all of the appointments to the calendar backend which separate from ours.
                         for (Map<String, dynamic> app in groupToApp.values) {
-                          widget.events
+                          widget.activities
                               .notifyListeners(CalendarDataSourceAction.add, [
                             appState.createAppointment(app["start_time"],
                                 app["end_time"], app["color"], app["subject"])
@@ -416,12 +414,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: <Widget>[
-                  EventSelector(widget.selectedDate, onEventSelectorChanged,
-                      dropdownValue),
+                  ActivitySelector(widget.selectedDate,
+                      onActivitySelectorChanged, dropdownValue),
                   if (widget.selectedAppointment == null)
                     GroupSelector(
                         appState.filterGroupsByAge(
-                            appState.lookupEventByName(_subject).ageMin,
+                            appState.lookupActivityByName(_subject).ageMin,
                             appState.filterGroupsByTime(
                                 _startDate, _endDate, appState.groups)),
                         _selectedGroups,
@@ -466,7 +464,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       Icons.subject,
                     ),
                     title: Text(
-                      appState.lookupEventByName(_subject).desc,
+                      appState.lookupActivityByName(_subject).desc,
                       style: TextStyle(
                           fontSize:
                               Theme.of(context).textTheme.titleLarge!.fontSize,
@@ -485,7 +483,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                         subject: _originalSubject,
                         group: _originalGroup);
 
-                    widget.events
+                    widget.activities
                         .notifyListeners(CalendarDataSourceAction.remove, [
                       appState.createAppointment(
                           widget.selectedAppointment!.startTime!,

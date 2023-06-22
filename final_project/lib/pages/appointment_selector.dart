@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class AppointmentSelector extends StatefulWidget {
   const AppointmentSelector(this.dataSource, this.selectedDate,
-      {this.selectedGroups, this.selectedEvents, super.key});
+      {this.selectedGroups, this.selectedActivities, super.key});
 
   final AppointmentDataSource dataSource;
 
@@ -17,7 +17,7 @@ class AppointmentSelector extends StatefulWidget {
 
   final List<Group>? selectedGroups;
 
-  final List<String>? selectedEvents;
+  final List<String>? selectedActivities;
 
   @override
   State<AppointmentSelector> createState() => _AppointmentSelectorState();
@@ -38,7 +38,7 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
     _appointments =
         Provider.of<AppState>(context).getApptsAtTime(widget.selectedDate);
 
-    if (widget.selectedGroups != null || widget.selectedEvents != null) {
+    if (widget.selectedGroups != null || widget.selectedActivities != null) {
       Set<LakeAppointment> appsToRemove = {};
       for (LakeAppointment app in _appointments) {
         if (widget.selectedGroups != null) {
@@ -53,10 +53,10 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
             appsToRemove.add(app);
           }
         }
-        if (widget.selectedEvents != null) {
+        if (widget.selectedActivities != null) {
           bool remove = true;
-          for (String event in widget.selectedEvents!) {
-            if (app.subject! == event) {
+          for (String activity in widget.selectedActivities!) {
+            if (app.subject! == activity) {
               remove = false;
               break;
             }

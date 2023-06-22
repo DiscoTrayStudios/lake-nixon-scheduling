@@ -11,10 +11,9 @@ void main() {
         color: const Color(0xFFFF9000),
         group: 'Test',
         notes: 'Notes',
-        startHour: '20',
         subject: 'Swimming');
 
     expect(lappt.toString(),
-        "Start time : 1969-07-20 20:00:00.000Z \n End time : 1969-07-20 20:30:00.000Z \n Color : Color(0xffff9000) \n group : Test \n Start hour : 20 \n Subject : Swimming \n");
+        "Start time : 1969-07-20 20:00:00.000Z \n End time : 1969-07-20 20:30:00.000Z \n Color : Color(0xffff9000) \n group : Test \n Subject : Swimming \n");
   });
 }

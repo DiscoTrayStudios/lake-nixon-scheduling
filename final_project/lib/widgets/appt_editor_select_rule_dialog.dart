@@ -5,7 +5,7 @@ import 'package:final_project/widgets/appt_editor_custom_rule.dart';
 
 class SelectRuleDialog extends StatefulWidget {
   const SelectRuleDialog(
-      this.recurrenceProperties, this.appointmentColor, this.events,
+      this.recurrenceProperties, this.appointmentColor, this.activities,
       {required this.onChanged, this.selectedAppointment, super.key});
 
   final Appointment? selectedAppointment;
@@ -14,7 +14,7 @@ class SelectRuleDialog extends StatefulWidget {
 
   final Color appointmentColor;
 
-  final CalendarDataSource events;
+  final CalendarDataSource activities;
 
   final PickerChanged onChanged;
 
@@ -236,7 +236,7 @@ class SelectRuleDialogState extends State<SelectRuleDialog> {
                           builder: (BuildContext context) => CustomRule(
                               widget.selectedAppointment!,
                               widget.appointmentColor,
-                              widget.events,
+                              widget.activities,
                               widget.recurrenceProperties)),
                     );
                     if (properties != widget.recurrenceProperties) {

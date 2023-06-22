@@ -1,13 +1,13 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 
 void main() {
-  test('Event .toString() returns name', () {
-    Event event = const Event(
+  test('Activity .toString() returns name', () {
+    Activity activity = const Activity(
         ageMin: 5, groupMax: 10, name: 'Swimming', desc: "description");
 
-    expect(event.toString(), 'Swimming');
+    expect(activity.toString(), 'Swimming');
   });
   test('Schedule class .toString() formatting', () {
     Map<String, List<String>> timeTable = {
@@ -15,7 +15,7 @@ void main() {
       '3': ['Test Group 2', 'Test Group 4']
     };
 
-    Schedule schedule = Schedule(eventName: 'Swimming', times: timeTable);
+    Schedule schedule = Schedule(activityName: 'Swimming', times: timeTable);
 
     expect(schedule.toString(),
         'Swimming : {1: [Test Group 1, Test Group 2], 3: [Test Group 2, Test Group 4]}');
@@ -26,7 +26,7 @@ void main() {
       '3': ['Test Group 2', 'Test Group 4']
     };
 
-    Schedule schedule = Schedule(eventName: 'Swimming', times: timeTable);
+    Schedule schedule = Schedule(activityName: 'Swimming', times: timeTable);
 
     expect(schedule.getList('1'), 2);
   });
@@ -36,7 +36,7 @@ void main() {
       '3': ['Test Group 2', 'Test Group 4']
     };
 
-    Schedule schedule = Schedule(eventName: 'Swimming', times: timeTable);
+    Schedule schedule = Schedule(activityName: 'Swimming', times: timeTable);
 
     expect(schedule.getTimes('1'), ['Test Group 1', 'Test Group 2']);
   });
@@ -46,7 +46,7 @@ void main() {
       '3': ['Test Group 2', 'Test Group 4']
     };
 
-    Schedule schedule = Schedule(eventName: 'Swimming', times: timeTable);
+    Schedule schedule = Schedule(activityName: 'Swimming', times: timeTable);
 
     schedule.newGroup('1', 'Test Group 5');
 
@@ -58,7 +58,7 @@ void main() {
       '3': ['Test Group 2', 'Test Group 4']
     };
 
-    Schedule schedule = Schedule(eventName: 'Swimming', times: timeTable);
+    Schedule schedule = Schedule(activityName: 'Swimming', times: timeTable);
 
     schedule.addGroup('1', 'Test Group 5');
 
