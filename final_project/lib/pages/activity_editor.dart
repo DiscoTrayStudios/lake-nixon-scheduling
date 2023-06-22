@@ -1,46 +1,47 @@
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/widgets/event_selector_item.dart';
+import 'package:final_project/widgets/activity_selector_item.dart';
 import 'package:final_project/widgets/form_field_template.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class EventEditor extends StatefulWidget {
-  const EventEditor({super.key});
+class ActivityEditor extends StatefulWidget {
+  const ActivityEditor({super.key});
 
   @override
-  State<EventEditor> createState() => _EventEditorState();
+  State<ActivityEditor> createState() => _ActivityEditorState();
 }
 
-class _EventEditorState extends State<EventEditor> {
+class _ActivityEditorState extends State<ActivityEditor> {
   int _selectedIndex = 0;
 
-  var eventController = TextEditingController();
+  var activityController = TextEditingController();
   var ageLimitController = TextEditingController();
   var groupSizeController = TextEditingController();
   var descController = TextEditingController();
 
-  void onEventPressed(int index) {
+  void onActivityPressed(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
-  void onEventDelete(Event event, AppState appState) async {
-    List<LakeAppointment> apps = appState.lakeAppointmentsByEvent(event.name);
+  void onActivityDelete(Activity activity, AppState appState) async {
+    List<LakeAppointment> apps =
+        appState.lakeAppointmentsByActivity(activity.name);
 
     for (LakeAppointment app in apps) {
       appState.deleteAppt(
           startTime: app.startTime!, subject: app.subject!, group: app.group!);
     }
 
-    await appState.deleteEvent(event);
+    await appState.deleteActivity(activity);
     _selectedIndex = 0;
   }
 
-  Future<void> _eventInfoPopupForm(BuildContext context) async {
+  Future<void> _activityInfoPopupForm(BuildContext context) async {
     final provider = Provider.of<AppState>(context, listen: false);
 
     return showDialog(
@@ -48,7 +49,7 @@ class _EventEditorState extends State<EventEditor> {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            'Add Event',
+            'Add Activity',
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           content: SingleChildScrollView(
@@ -60,9 +61,9 @@ class _EventEditorState extends State<EventEditor> {
                   // call FormFieldTemplate for each
                   // will allow for easier universal use for future code iterations
                   FormFieldTemplate(
-                      controller: eventController,
-                      decoration: 'Event',
-                      formkey: "EventField"),
+                      controller: activityController,
+                      decoration: 'Activity',
+                      formkey: "ActivityField"),
                   FormFieldTemplate(
                       controller: ageLimitController,
                       decoration: 'Age Limit',
@@ -91,7 +92,7 @@ class _EventEditorState extends State<EventEditor> {
               onPressed: () async {
                 // This is how you get the database from Firebase
 
-                if (provider.nameInEvents(eventController.text)) {
+                if (provider.nameInActivities(activityController.text)) {
                   Fluttertoast.showToast(
                       msg: "EVENT NAME ALREADY IN USE",
                       toastLength: Toast.LENGTH_LONG,
@@ -101,14 +102,14 @@ class _EventEditorState extends State<EventEditor> {
                       textColor: Colors.white,
                       fontSize: 16.0);
                 } else {
-                  provider.createEvent(
+                  provider.createActivity(
                       provider.firestore,
-                      eventController.text,
+                      activityController.text,
                       int.parse(ageLimitController.text),
                       int.parse(groupSizeController.text),
                       descController.text);
 
-                  eventController.clear();
+                  activityController.clear();
                   ageLimitController.clear();
                   groupSizeController.clear();
                   descController.clear();
@@ -126,11 +127,11 @@ class _EventEditorState extends State<EventEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Event'), actions: [
+      appBar: AppBar(title: const Text('Select Activity'), actions: [
         IconButton(
             onPressed: () {
               setState(() {
-                _eventInfoPopupForm(context);
+                _activityInfoPopupForm(context);
               });
             },
             icon: const Icon(Icons.add))
@@ -138,14 +139,14 @@ class _EventEditorState extends State<EventEditor> {
       body: Consumer<AppState>(
         builder: (BuildContext context, AppState appState, Widget? child) {
           return ListView.separated(
-              itemCount: appState.events.length,
+              itemCount: appState.activities.length,
               itemBuilder: (BuildContext context, int index) {
-                return EventSelectorItem(
-                    appState.events[index],
+                return ActivitySelectorItem(
+                    appState.activities[index],
                     _selectedIndex == index,
                     index,
-                    onEventPressed,
-                    onEventDelete);
+                    onActivityPressed,
+                    onActivityDelete);
               },
               separatorBuilder: (BuildContext context, int index) {
                 return const Divider();

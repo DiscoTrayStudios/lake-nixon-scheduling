@@ -6,15 +6,15 @@ import 'package:intl/intl.dart' show DateFormat;
 import 'package:syncfusion_flutter_core/core.dart';
 
 class CustomRule extends StatefulWidget {
-  const CustomRule(this.selectedAppointment, this.appointmentColor, this.events,
-      this.recurrenceProperties,
+  const CustomRule(this.selectedAppointment, this.appointmentColor,
+      this.activities, this.recurrenceProperties,
       {super.key});
 
   final Appointment selectedAppointment;
 
   final Color appointmentColor;
 
-  final CalendarDataSource events;
+  final CalendarDataSource activities;
 
   final RecurrenceProperties? recurrenceProperties;
 
@@ -60,7 +60,7 @@ class CustomRuleState extends State<CustomRule> {
     if (_days == null) {
       _mobileInitialWeekdays(_startDate.weekday);
     }
-    final Appointment? parentAppointment = widget.events
+    final Appointment? parentAppointment = widget.activities
         .getPatternAppointment(widget.selectedAppointment, '') as Appointment?;
     if (parentAppointment == null) {
       _firstDate = _startDate;
@@ -113,9 +113,9 @@ class CustomRuleState extends State<CustomRule> {
         break;
       case RecurrenceRange.endDate:
         // _endRule = EndRule.endDate;
-        final Appointment? parentAppointment =
-            widget.events.getPatternAppointment(widget.selectedAppointment, '')
-                as Appointment?;
+        final Appointment? parentAppointment = widget.activities
+                .getPatternAppointment(widget.selectedAppointment, '')
+            as Appointment?;
         _firstDate = parentAppointment!.startTime;
         _rangeEndDate();
         break;

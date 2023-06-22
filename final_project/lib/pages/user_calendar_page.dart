@@ -5,12 +5,12 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/lake_nixon_event.dart';
+import 'package:final_project/objects/lake_nixon_activity.dart';
 import 'package:final_project/pages/appointment_editor.dart';
 
-List<LakeNixonEvent> appointments = <LakeNixonEvent>[];
+List<LakeNixonActivity> appointments = <LakeNixonActivity>[];
 
 //late bool isUser;
 
@@ -44,7 +44,7 @@ final List<CalendarView> _allowedViews = <CalendarView>[
 class _UserCalendarPageState extends State<UserCalendarPage> {
   _UserCalendarPageState();
 
-  //AppointmentDataSource _events = AppointmentDataSource(<Appointment>[]);
+  //AppointmentDataSource _activities = AppointmentDataSource(<Appointment>[]);
   late CalendarView _currentView;
 
   /// Global key used to maintain the state, when we change the parent of the
@@ -52,13 +52,13 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
   final GlobalKey _globalKey = GlobalKey();
   final ScrollController _controller = ScrollController();
   final CalendarController _calendarController = CalendarController();
-  //LakeNixonEvent? _selectedAppointment;
+  //LakeNixonActivity? _selectedAppointment;
   Appointment? _selectedAppointment;
   final List<String> _colorNames = <String>[];
   final List<Color> _colorCollection = <Color>[];
   final List<String> _timeZoneCollection = <String>[];
-  List<DropdownMenuItem<String>> firebaseEvents = [];
-  List<Appointment> savedEvents = [];
+  List<DropdownMenuItem<String>> firebaseActivities = [];
+  List<Appointment> savedActivities = [];
 
   @override
   void initState() {
@@ -66,45 +66,45 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
     _calendarController.view = _currentView;
     // bool user = widget.isUser;
     //_checkAuth();
-    // getEvents();
-    // getSavedEvents();
+    // getActivities();
+    // getSavedActivities();
 
     super.initState();
   }
 
-  // Future<void> getEvents() async {
-  //   CollectionReference events =
+  // Future<void> getActivities() async {
+  //   CollectionReference activities =
   //       FirebaseFirestore.instance.collection("events");
-  //   final snapshot = await events.get();
+  //   final snapshot = await activities.get();
   //   if (snapshot.size > 0) {
   //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
   //     for (var element in data) {
-  //       var event = element.data() as Map;
-  //       var tmp = Event(
-  //           name: event["name"],
-  //           ageMin: event["ageMin"],
-  //           groupMax: event["groupMax"],
-  //           desc: event["desc"]);
-  //       // dbEvents.add(tmp);
+  //       var activity = element.data() as Map;
+  //       var tmp = Activity(
+  //           name: activity["name"],
+  //           ageMin: activity["ageMin"],
+  //           groupMax: activity["groupMax"],
+  //           desc: activity["desc"]);
+  //       // dbActivities.add(tmp);
 
-  //       firebaseEvents.add(
-  //           DropdownMenuItem(value: event["name"], child: Text(event["name"])));
+  //       firebaseActivities.add(
+  //           DropdownMenuItem(value: activity["name"], child: Text(activity["name"])));
   //     }
   //   } else {
   //     debugPrint('No data available.');
   //   }
-  //   // debugPrint(dbEvents.toString());
+  //   // debugPrint(dbActivities.toString());
   // }
 
-  // Future<void> getSavedEvents() async {
+  // Future<void> getSavedActivities() async {
   //   CollectionReference schedules =
   //       FirebaseFirestore.instance.collection("schedules");
   //   final snapshot = await schedules.get();
   //   if (snapshot.size > 0) {
   //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
   //     for (var element in data) {
-  //       var event = element.data() as Map;
-  //       Map apps = event["appointments"];
+  //       var activity = element.data() as Map;
+  //       Map apps = activity["appointments"];
 
   //       apps.forEach((key, value) {
   //         for (var appt in value) {
@@ -126,7 +126,7 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
   //               resourceIds: app[8],
   //               recurrenceRule: app[9]);
   //           var group = indexGroups(key);
-  //           events[group]!.add(tmp);
+  //           activities[group]!.add(tmp);
   //         }
   //       });
   //     }
@@ -159,7 +159,7 @@ class _UserCalendarPageState extends State<UserCalendarPage> {
 
   //   List<Appointment> appointments = <Appointment>[];
 
-  //   return events[group] as List<Appointment>;
+  //   return activities[group] as List<Appointment>;
   // }
 
   void _onViewChanged(ViewChangedDetails viewChangedDetails) {
