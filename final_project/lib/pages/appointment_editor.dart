@@ -321,7 +321,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           "notes": _notes,
                           "subject": _subject,
                           "group": widget.selectedAppointment!.group!,
-                          "start_hour": "${_startDate.hour}"
                         };
 
                         appState.editAppt(
@@ -363,7 +362,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                           "notes": tmpApp.notes,
                           "subject": tmpApp.subject,
                           "group": g.name,
-                          "start_hour": "${tmpApp.startTime.hour}"
                         };
                         //associating a group with a specific appointment
                         groupToApp[g.name] = appMap;

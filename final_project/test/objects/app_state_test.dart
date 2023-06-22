@@ -32,7 +32,6 @@ Future<AppState> initializeAppStateTests(
     "notes": "Test Notes",
     "subject": "Test Subject",
     "group": "Test Group",
-    "start_hour": "20"
   });
 
   await instance
@@ -78,7 +77,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group",
-      "start_hour": "20"
     });
 
     await instance
@@ -103,7 +101,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group",
-      "start_hour": "20"
     });
 
     List<Appointment> appts = appState.appointmentsByGroup("Test Group");
@@ -125,7 +122,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject 2",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     List<Appointment> appts = appState.allAppointments([], []);
@@ -149,7 +145,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject 2",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 3').set({
@@ -159,7 +154,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     List<Appointment> appts = appState.allAppointments([], ["Test Subject"]);
@@ -183,7 +177,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject 2",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 3').set({
@@ -193,7 +186,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     List<Appointment> appts = appState.allAppointments(
@@ -224,7 +216,6 @@ void main() {
         "notes": "Test Notes",
         "subject": "Test Subject",
         "group": "Test Group 2",
-        "start_hour": "20"
       },
       'appt 2': {
         "start_time": DateTime.utc(1969, 7, 20, 20),
@@ -233,7 +224,6 @@ void main() {
         "notes": "Test Notes",
         "subject": "Test Subject",
         "group": "Test Group 2",
-        "start_hour": "20"
       }
     }, instance);
 
@@ -262,7 +252,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 3').set({
@@ -272,7 +261,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject 2",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     expect(
@@ -312,7 +300,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 3').set({
@@ -322,7 +309,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 4').set({
@@ -332,7 +318,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     expect(appState.checkEvent("Test Subject", "20", 0), true);
@@ -354,7 +339,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 3').set({
@@ -364,7 +348,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "19"
     });
 
     expect(appState.getApptsAtTime(DateTime.utc(1969, 7, 20, 20)).length, 2);
@@ -383,7 +366,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 3').set({
@@ -393,7 +375,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 3",
-      "start_hour": "19"
     });
 
     List<String> groups =
@@ -417,7 +398,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     await instance.collection('appointments').doc('Test Appointment 3').set({
@@ -427,7 +407,6 @@ void main() {
       "notes": "Test Notes",
       "subject": "Test Subject",
       "group": "Test Group 2",
-      "start_hour": "20"
     });
 
     List<String> groups =

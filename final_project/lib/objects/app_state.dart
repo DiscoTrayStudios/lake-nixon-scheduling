@@ -154,13 +154,13 @@ class AppState extends ChangeNotifier {
       Timestamp start = document.data()['start_time'];
       Timestamp end = document.data()['end_time'];
       var lake = LakeAppointment(
-          color: color,
-          endTime: end.toDate(),
-          group: document.data()['group'],
-          notes: document.data()['notes'],
-          startTime: start.toDate(),
-          subject: document.data()['subject'],
-          startHour: document.data()['start_hour']);
+        color: color,
+        endTime: end.toDate(),
+        group: document.data()['group'],
+        notes: document.data()['notes'],
+        startTime: start.toDate(),
+        subject: document.data()['subject'],
+      );
       _appointments.add(lake);
     }
     notifyListeners();
