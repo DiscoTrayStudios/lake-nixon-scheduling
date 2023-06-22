@@ -48,6 +48,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   late String _originalSubject;
   late String _originalGroup;
 
+  final TimeOfDay _timeSelectorStartTime = const TimeOfDay(hour: 7, minute: 0);
+  final TimeOfDay _timeSelectorEndTime = const TimeOfDay(hour: 18, minute: 0);
+
   // RecurrenceProperties? _recurrenceProperties;
   // late RecurrenceType _recurrenceType;
   // RecurrenceRange? _recurrenceRange;
@@ -56,7 +59,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   // SelectRule? _rule = SelectRule.doesNotRepeat;
 
   void onEventSelectorChanged(String? newValue) {
-    AppState appState = Provider.of<AppState>(context, listen: false);
     setState(() {
       dropdownValue = newValue!;
       _subject = newValue;
@@ -91,25 +93,16 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
     if (date != null && date != _startDate) {
       setState(() {
-        final Duration difference = _endDate.difference(_startDate);
         _startDate = DateTime(date.year, date.month, date.day, _startTime.hour,
             _startTime.minute);
-        _endDate = _startDate.add(difference);
-        _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
+        _endDate = DateTime(
+            date.year, date.month, date.day, _endTime.hour, _endTime.minute);
       });
     }
   }
 
-  void onStartTimePicked() async {
-    final TimeOfDay? time = await showTimePicker(
-        context: context,
-        initialTime:
-            TimeOfDay(hour: _startTime.hour, minute: _startTime.minute),
-        builder: (BuildContext context, Widget? child) {
-          return child!;
-        });
-
-    if (time != null && time != _startTime) {
+  void onStartTimePicked(TimeOfDay time) async {
+    if (time != _startTime) {
       setState(() {
         _startTime = time;
         final Duration difference = _endDate.difference(_startDate);
@@ -117,53 +110,37 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
             _startTime.hour, _startTime.minute);
         _endDate = _startDate.add(difference);
         _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
-      });
-    }
-  }
 
-  void onEndDatePicked() async {
-    final DateTime? date = await showDatePicker(
-        context: context,
-        initialDate: _endDate,
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2100),
-        builder: (BuildContext context, Widget? child) {
-          return child!;
-        });
-
-    if (date != null && date != _endDate) {
-      setState(() {
-        final Duration difference = _endDate.difference(_startDate);
-        _endDate = DateTime(
-            date.year, date.month, date.day, _endTime.hour, _endTime.minute);
-        if (_endDate.isBefore(_startDate)) {
-          _startDate = _endDate.subtract(difference);
-          _startTime =
-              TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
+        if (_endTime.hour > _timeSelectorEndTime.hour) {
+          _endTime = _timeSelectorEndTime;
         }
+        _startDate = DateTime(
+            _startDate.year, _startDate.month, _startDate.day, _startTime.hour);
+        _endDate = DateTime(
+            _endDate.year, _endDate.month, _endDate.day, _endTime.hour);
       });
     }
   }
 
-  void onEndTimePicked() async {
-    final TimeOfDay? time = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay(hour: _endTime.hour, minute: _endTime.minute),
-        builder: (BuildContext context, Widget? child) {
-          return child!;
-        });
-
-    if (time != null && time != _endTime) {
+  void onEndTimePicked(TimeOfDay time) async {
+    if (time != _endTime) {
       setState(() {
         _endTime = time;
         final Duration difference = _endDate.difference(_startDate);
         _endDate = DateTime(_endDate.year, _endDate.month, _endDate.day,
             _endTime.hour, _endTime.minute);
-        if (_endDate.isBefore(_startDate)) {
+        if (!_endDate.isAfter(_startDate)) {
           _startDate = _endDate.subtract(difference);
           _startTime =
               TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
         }
+        if (_startTime.hour < _timeSelectorStartTime.hour) {
+          _startTime = _timeSelectorStartTime;
+        }
+        _startDate = DateTime(
+            _startDate.year, _startDate.month, _startDate.day, _startTime.hour);
+        _endDate = DateTime(
+            _endDate.year, _endDate.month, _endDate.day, _endTime.hour);
       });
     }
   }
@@ -364,7 +341,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                     } else {
                       final List<Appointment> appointments = <Appointment>[];
 
-                      bool _groupsOccupied = true;
+                      bool groupsOccupied = true;
 
                       Map<String, Map<String, dynamic>> groupToApp = {};
                       for (Group g in _selectedGroups) {
@@ -395,7 +372,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             group: g.name,
                             startTime: _startDate,
                             endTime: _endDate)) {
-                          _groupsOccupied = false;
+                          groupsOccupied = false;
                         }
                       }
                       //appState.addAppointments(groupToApp);
@@ -405,7 +382,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       //If it does, it takes us to the else statement
                       if (appState.checkEvent(
                               _subject, _startDate, _endDate, groupAmount) &&
-                          _groupsOccupied) {
+                          groupsOccupied) {
                         //If it doesnt we come in here and we add the appoinments to the app state
                         appState.addAppointments(
                             groupToApp, appState.firestore);
@@ -473,8 +450,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       _endDate,
                       onStartDatePicked,
                       onStartTimePicked,
-                      onEndDatePicked,
-                      onEndTimePicked),
+                      onEndTimePicked,
+                      _timeSelectorStartTime,
+                      _timeSelectorEndTime),
                   Divider(
                       height: 1.0,
                       thickness: 3,

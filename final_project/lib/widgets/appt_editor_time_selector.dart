@@ -1,3 +1,4 @@
+import 'package:final_project/widgets/time_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,8 +10,9 @@ class TimeSelector extends StatefulWidget {
       this.endDate,
       this.onStartDatePicked,
       this.onStartTimePicked,
-      this.onEndDatePicked,
       this.onEndTimePicked,
+      this.rangeStartTime,
+      this.rangeEndTime,
       {super.key});
 
   // final bool isAllDay;
@@ -23,11 +25,13 @@ class TimeSelector extends StatefulWidget {
 
   final OnTapCallback onStartDatePicked;
 
-  final OnTapCallback onStartTimePicked;
+  final OnTimePickedCallback onStartTimePicked;
 
-  final OnTapCallback onEndDatePicked;
+  final OnTimePickedCallback onEndTimePicked;
 
-  final OnTapCallback onEndTimePicked;
+  final TimeOfDay rangeStartTime;
+
+  final TimeOfDay rangeEndTime;
 
   @override
   State<TimeSelector> createState() => _TimeSelectorState();
@@ -35,6 +39,7 @@ class TimeSelector extends StatefulWidget {
 
 // typedef OnAllDaySwitcCallback = void Function(bool);
 typedef OnTapCallback = void Function();
+typedef OnTimePickedCallback = void Function(TimeOfDay);
 
 class _TimeSelectorState extends State<TimeSelector> {
   @override
@@ -80,48 +85,52 @@ class _TimeSelectorState extends State<TimeSelector> {
               ),
               Expanded(
                   flex: 3,
-                  child: GestureDetector(
-                    onTap: () async => widget.onStartTimePicked(),
-                    child: Text(DateFormat('hh:mm a').format(widget.startDate),
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .fontSize,
-                            color: Theme.of(context).colorScheme.tertiary)),
-                  )),
+                  child: TimeSelectorDropdown(
+                      startTime: widget.rangeStartTime,
+                      endTime: TimeOfDay(
+                          hour: widget.rangeEndTime.hour - 1, minute: 0),
+                      initialTime:
+                          TimeOfDay(hour: widget.startDate.hour, minute: 0),
+                      onTimePicked: widget.onStartTimePicked)
+                  // GestureDetector(
+                  //   onTap: () async => widget.onStartTimePicked(),
+                  //   child: Text(DateFormat('hh:mm a').format(widget.startDate),
+                  //       textAlign: TextAlign.right,
+                  //       style: TextStyle(
+                  //           fontSize: Theme.of(context)
+                  //               .textTheme
+                  //               .titleLarge!
+                  //               .fontSize,
+                  //           color: Theme.of(context).colorScheme.tertiary)),
+                  // )
+                  ),
             ])),
         ListTile(
             contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
             leading: const Text(''),
             title: Row(children: <Widget>[
-              Expanded(
-                flex: 7,
-                child: GestureDetector(
-                  onTap: () async => widget.onEndDatePicked(),
-                  child: Text(
-                      DateFormat('EEE, MMM dd yyyy').format(widget.endDate),
-                      textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleLarge!.fontSize,
-                          color: Theme.of(context).colorScheme.tertiary)),
-                ),
-              ),
+              const Spacer(flex: 7),
               Expanded(
                   flex: 3,
-                  child: GestureDetector(
-                    onTap: () async => widget.onEndTimePicked(),
-                    child: Text(DateFormat('hh:mm a').format(widget.endDate),
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .fontSize,
-                            color: Theme.of(context).colorScheme.tertiary)),
-                  )),
+                  child: TimeSelectorDropdown(
+                      startTime: TimeOfDay(
+                          hour: widget.rangeStartTime.hour + 1, minute: 0),
+                      endTime: widget.rangeEndTime,
+                      initialTime:
+                          TimeOfDay(hour: widget.endDate.hour, minute: 0),
+                      onTimePicked: widget.onEndTimePicked)
+                  // GestureDetector(
+                  //   onTap: () async => widget.onEndTimePicked(),
+                  //   child: Text(DateFormat('hh:mm a').format(widget.endDate),
+                  //       textAlign: TextAlign.right,
+                  //       style: TextStyle(
+                  //           fontSize: Theme.of(context)
+                  //               .textTheme
+                  //               .titleLarge!
+                  //               .fontSize,
+                  //           color: Theme.of(context).colorScheme.tertiary)),
+                  // )
+                  ),
             ])),
         // ListTile(
         //   contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
