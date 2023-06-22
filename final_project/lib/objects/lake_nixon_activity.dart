@@ -4,8 +4,8 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/group.dart';
 
-class LakeNixonEvent extends Appointment {
-  LakeNixonEvent(
+class LakeNixonActivity extends Appointment {
+  LakeNixonActivity(
       {required super.startTime,
       required super.endTime,
       int? age,

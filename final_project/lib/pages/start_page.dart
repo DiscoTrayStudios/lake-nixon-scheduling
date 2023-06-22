@@ -22,7 +22,7 @@ class _StartPageState extends State<StartPage> {
     // for (Group g in groups) {
     //   createGroup(g);
     // }
-    // getSavedEvents(appState.firestore);
+    // getSavedActivities(appState.firestore);
     super.initState();
   }
 
@@ -34,14 +34,14 @@ class _StartPageState extends State<StartPage> {
     );
   }
 
-  // Future<void> getSavedEvents(FirebaseFirestore firebase) async {
+  // Future<void> getSavedActivities(FirebaseFirestore firebase) async {
   //   CollectionReference schedules = firebase.collection("schedules");
   //   final snapshot = await schedules.get();
   //   if (snapshot.size > 0) {
   //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
   //     for (var element in data) {
-  //       var event = element.data() as Map;
-  //       Map apps = event["appointments"];
+  //       var activity = element.data() as Map;
+  //       Map apps = activity["appointments"];
 
   //       apps.forEach((key, value) {
   //         for (var appt in value) {
@@ -62,7 +62,7 @@ class _StartPageState extends State<StartPage> {
   //               resourceIds: app[8],
   //               recurrenceRule: app[9]);
   //           var group = indexGroups(key);
-  //           events[group]!.add(tmp);
+  //           activities[group]!.add(tmp);
   //         }
   //       });
   //     }

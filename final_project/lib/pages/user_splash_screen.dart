@@ -20,19 +20,19 @@ class _SplashScreenState extends State<SplashScreen> {
     // for (Group g in groups) {
     //   createGroup(g);
     // }
-    // getSavedEvents();
+    // getSavedActivities();
     super.initState();
   }
 
-  // Future<void> getSavedEvents() async {
+  // Future<void> getSavedActivities() async {
   //   CollectionReference schedules =
   //       FirebaseFirestore.instance.collection("schedules");
   //   final snapshot = await schedules.get();
   //   if (snapshot.size > 0) {
   //     List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
   //     for (var element in data) {
-  //       var event = element.data() as Map;
-  //       Map apps = event["appointments"];
+  //       var activity = element.data() as Map;
+  //       Map apps = activity["appointments"];
 
   //       apps.forEach((key, value) {
   //         for (var appt in value) {
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
   //               resourceIds: app[8],
   //               recurrenceRule: app[9]);
   //           var group = indexGroups(key);
-  //           events[group]!.add(tmp);
+  //           activities[group]!.add(tmp);
   //         }
   //       });
   //     }

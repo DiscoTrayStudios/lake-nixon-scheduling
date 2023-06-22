@@ -10,7 +10,7 @@ import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 
 Future<AppState> initializeAppStateTests(
     FakeFirebaseFirestore instance, MockFirebaseAuth auth) async {
@@ -18,7 +18,7 @@ Future<AppState> initializeAppStateTests(
 
   await auth.currentUser!.reload();
 
-  await instance.collection('events').doc('Test Event').set({
+  await instance.collection('events').doc('Test Activity').set({
     "name": "Test Subject",
     "ageMin": 1,
     "groupMax": 6,
@@ -49,7 +49,7 @@ void main() {
 
     AppState appState = await initializeAppStateTests(instance, auth);
 
-    expect(appState.events.length, 1);
+    expect(appState.activities.length, 1);
     expect(appState.appointments.length, 1);
     expect(appState.groups.length, 1);
   });
@@ -59,11 +59,11 @@ void main() {
 
     AppState appState = await initializeAppStateTests(instance, auth);
 
-    expect(appState.events.length, 1);
+    expect(appState.activities.length, 1);
     expect(appState.appointments.length, 1);
     expect(appState.groups.length, 1);
 
-    await instance.collection('events').doc('Test Event 2').set({
+    await instance.collection('events').doc('Test Activity 2').set({
       "name": "Test",
       "ageMin": 1,
       "groupMax": 6,
@@ -84,7 +84,7 @@ void main() {
         .doc('Test Group 2')
         .set({"age": 100, "color": "Color(0xff000000)", "name": "Test Group"});
 
-    expect(appState.events.length, 2);
+    expect(appState.activities.length, 2);
     expect(appState.appointments.length, 2);
     expect(appState.groups.length, 2);
   });
@@ -131,7 +131,7 @@ void main() {
     expect(appts[1].subject, "Test Subject 2");
   });
   test(
-      'allAppointments returns only matching appointments when filtered by event',
+      'allAppointments returns only matching appointments when filtered by activity',
       () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
     MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
@@ -286,7 +286,7 @@ void main() {
     expect(appt.color, const Color(0xff2471a3));
     expect(appt.subject, "Test Subject 2");
   });
-  test('checkEvent correctly identifies if there are too many groups',
+  test('checkActivity correctly identifies if there are too many groups',
       () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
     MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
@@ -320,11 +320,11 @@ void main() {
       "group": "Test Group 2",
     });
 
-    expect(appState.checkEvent("Test Subject", "20", 0), true);
-    expect(appState.checkEvent("Test Subject", "20", 1), true);
-    expect(appState.checkEvent("Test Subject", "20", 2), true);
-    expect(appState.checkEvent("Test Subject", "20", 3), false);
-    expect(appState.checkEvent("Test Subject", "20", 15), false);
+    expect(appState.checkActivity("Test Subject", "20", 0), true);
+    expect(appState.checkActivity("Test Subject", "20", 1), true);
+    expect(appState.checkActivity("Test Subject", "20", 2), true);
+    expect(appState.checkActivity("Test Subject", "20", 3), false);
+    expect(appState.checkActivity("Test Subject", "20", 15), false);
   });
   test('getApptsAtTime gets right appts', () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
@@ -352,7 +352,7 @@ void main() {
 
     expect(appState.getApptsAtTime(DateTime.utc(1969, 7, 20, 20)).length, 2);
   });
-  test('getGroupsAtTime gets all groups in an event at the given time',
+  test('getGroupsAtTime gets all groups in an activity at the given time',
       () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
     MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
@@ -415,26 +415,26 @@ void main() {
     expect(groups.length, 2);
     expect(groups.where((element) => element == "Test Group 2").length, 1);
   });
-  test('lookupEventByName gets correct event', () async {
+  test('lookupActivityByName gets correct activity', () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
     MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
 
     AppState appState = await initializeAppStateTests(instance, auth);
 
-    await instance.collection('events').doc('Test Event 2').set({
+    await instance.collection('events').doc('Test Activity 2').set({
       "name": "Test Subject 2",
       "ageMin": 3,
       "groupMax": 9,
       "desc": "Test Description"
     });
 
-    Event event = appState.lookupEventByName("Test Subject 2");
+    Activity activity = appState.lookupActivityByName("Test Subject 2");
 
-    expect(event.name, "Test Subject 2");
-    expect(event.ageMin, 3);
-    expect(event.groupMax, 9);
+    expect(activity.name, "Test Subject 2");
+    expect(activity.ageMin, 3);
+    expect(activity.groupMax, 9);
   });
-  test('createEvent adds events to firebase', () async {
+  test('createActivity adds activities to firebase', () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
     MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
 
@@ -446,8 +446,8 @@ void main() {
         .get()
         .then((value) => expect(value.count, 1));
 
-    await appState.createEvent(
-        instance, "Test Event 2", 9, 42, "Test Description");
+    await appState.createActivity(
+        instance, "Test Activity 2", 9, 42, "Test Description");
 
     await instance
         .collection('events')

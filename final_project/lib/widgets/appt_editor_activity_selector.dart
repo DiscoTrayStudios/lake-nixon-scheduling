@@ -1,11 +1,11 @@
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class EventSelector extends StatefulWidget {
-  const EventSelector(this.selectedDate, this.onChanged, this.dropdownValue,
+class ActivitySelector extends StatefulWidget {
+  const ActivitySelector(this.selectedDate, this.onChanged, this.dropdownValue,
       {super.key});
 
   final DateTime selectedDate;
@@ -15,16 +15,16 @@ class EventSelector extends StatefulWidget {
   final String dropdownValue;
 
   @override
-  State<EventSelector> createState() => _EventSelectorState();
+  State<ActivitySelector> createState() => _ActivitySelectorState();
 }
 
 typedef OnChangedCallBack = Function(String?);
 
-class _EventSelectorState extends State<EventSelector> {
+class _ActivitySelectorState extends State<ActivitySelector> {
   List<DropdownMenuItem<String>> createDropdown(
-      List<Event> items, DateTime startTime) {
+      List<Activity> items, DateTime startTime) {
     List<DropdownMenuItem<String>> newItems = [];
-    for (Event event in items) {
+    for (Activity event in items) {
       var currentAmount = Provider.of<AppState>(context)
           .getCurrentAmount(event.name, startTime);
       newItems.add(DropdownMenuItem(
@@ -37,7 +37,7 @@ class _EventSelectorState extends State<EventSelector> {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-      leading: Text("Events",
+      leading: Text("Activities",
           style: TextStyle(
               fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
               color: Theme.of(context).colorScheme.secondary)),
@@ -54,7 +54,7 @@ class _EventSelectorState extends State<EventSelector> {
               fontFamily: "Fruit"),
           value: widget.dropdownValue,
           items: createDropdown(
-              Provider.of<AppState>(context).events, widget.selectedDate),
+              Provider.of<AppState>(context).activities, widget.selectedDate),
           onChanged: (String? newValue) => widget.onChanged(newValue),
         ),
       ),

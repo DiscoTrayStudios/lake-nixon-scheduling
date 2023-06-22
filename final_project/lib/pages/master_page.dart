@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/pages/event_editor.dart';
+import 'package:final_project/pages/activity_editor.dart';
 import 'package:flutter/material.dart';
 import "package:syncfusion_flutter_calendar/calendar.dart";
 import 'package:provider/provider.dart';
@@ -70,7 +70,7 @@ class _MasterPageState extends State<MasterPage> {
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.secondary)),
                     child: Text(
-                      "View Events",
+                      "View Activities",
                       style: TextStyle(
                           color: Theme.of(context).colorScheme.onSecondary,
                           fontSize: Theme.of(context)
@@ -81,7 +81,7 @@ class _MasterPageState extends State<MasterPage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                            builder: (context) => const EventEditor()),
+                            builder: (context) => const ActivityEditor()),
                       );
                       ;
                     },

@@ -19,7 +19,7 @@ class GroupPage extends StatefulWidget {
 
 class _GroupPageState extends State<GroupPage> {
   bool admin = false;
-  var eventController = TextEditingController();
+  var activityController = TextEditingController();
   var ageLimitController = TextEditingController();
   var groupSizeController = TextEditingController();
   var descriptionController = TextEditingController();
@@ -109,17 +109,17 @@ class _GroupPageState extends State<GroupPage> {
       // floatingActionButton: FloatingActionButton(
       //     child: const Icon(Icons.add),
       //     onPressed: () async {
-      //       //_EventInfoPopupForm(context);
+      //       //_ActivityInfoPopupForm(context);
       //     })
     );
   }
 
-  Future<void> _eventInfoPopupForm(BuildContext context) async {
+  Future<void> _activityInfoPopupForm(BuildContext context) async {
     return showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Add Event'),
+          title: const Text('Add Activity'),
           content: SingleChildScrollView(
             child: SizedBox(
               height: 200,
@@ -129,9 +129,9 @@ class _GroupPageState extends State<GroupPage> {
                   // call FormFieldTemplate for each
                   // will allow for easier universal use for future code iterations
                   FormFieldTemplate(
-                      controller: eventController,
-                      decoration: 'Event',
-                      formkey: "EventField"),
+                      controller: activityController,
+                      decoration: 'Activity',
+                      formkey: "ActivityField"),
                   FormFieldTemplate(
                       controller: ageLimitController,
                       decoration: 'Age Limit',
@@ -157,9 +157,9 @@ class _GroupPageState extends State<GroupPage> {
               key: const Key("OKButton"),
               onPressed: () async {
                 // This is how you get the database from Firebase
-                CollectionReference events =
+                CollectionReference activities =
                     FirebaseFirestore.instance.collection("events");
-                final snapshot = await events.get();
+                final snapshot = await activities.get();
 
                 // Example of reading in a collection and getting each doc
 
@@ -172,14 +172,14 @@ class _GroupPageState extends State<GroupPage> {
                 //   debugPrint('No data available.');
                 // }
 
-                //This is where we write database, specfically to the event collection. You can change collection just up a couple lines
+                //This is where we write database, specfically to the activity collection. You can change collection just up a couple lines
                 int count = snapshot.size;
-                events.doc("$count").set({
-                  "name": eventController.text,
+                activities.doc("$count").set({
+                  "name": activityController.text,
                   "ageMin": int.parse(ageLimitController.text),
                   "groupMax": int.parse(groupSizeController.text)
                 });
-                eventController.clear();
+                activityController.clear();
                 ageLimitController.clear();
                 groupSizeController.clear();
                 descriptionController.clear();
@@ -194,7 +194,7 @@ class _GroupPageState extends State<GroupPage> {
   }
 }
 
-// standard template for FormFields when adding events
+// standard template for FormFields when adding activities
 class FormFieldTemplate extends StatelessWidget {
   const FormFieldTemplate(
       {super.key,

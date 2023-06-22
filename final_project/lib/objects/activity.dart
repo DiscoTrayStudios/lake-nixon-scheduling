@@ -1,6 +1,5 @@
-
-class Event {
-  const Event(
+class Activity {
+  const Activity(
       {required this.name,
       required this.ageMin,
       required this.groupMax,

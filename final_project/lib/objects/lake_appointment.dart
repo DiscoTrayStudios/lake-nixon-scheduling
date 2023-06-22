@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-// this is basically LakeNixonEvent but with only the stuff in Firebase
+// this is basically LakeNixonActivity but with only the stuff in Firebase
 class LakeAppointment {
   LakeAppointment(
       {required this.startTime,

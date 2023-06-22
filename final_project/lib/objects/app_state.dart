@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/objects/group.dart';
 
@@ -16,8 +16,8 @@ import 'package:final_project/objects/group.dart';
 /// basically move everything from globals -> here, make everything consumer
 
 class AppState extends ChangeNotifier {
-  final List<Event> _events = [];
-  List<Event> get events => _events;
+  final List<Activity> _activities = [];
+  List<Activity> get activities => _activities;
 
   final List<LakeAppointment> _appointments = [];
   List<LakeAppointment> get appointments => _appointments;
@@ -34,7 +34,7 @@ class AppState extends ChangeNotifier {
   }
 
   bool firstSnapshot = true;
-  StreamSubscription<QuerySnapshot>? eventSubscription;
+  StreamSubscription<QuerySnapshot>? activitySubscription;
   StreamSubscription<QuerySnapshot>? appointmentSubscription;
   StreamSubscription<QuerySnapshot>? groupSubscription;
 
@@ -58,7 +58,7 @@ class AppState extends ChangeNotifier {
 
   Future<void> init(FirebaseAuth auth, FirebaseFirestore firestore) async {
     if (auth.currentUser != null) {
-      QuerySnapshot<Map<String, dynamic>> eventData =
+      QuerySnapshot<Map<String, dynamic>> activityData =
           await firestore.collection('events').get();
 
       QuerySnapshot<Map<String, dynamic>> appointmentData =
@@ -67,22 +67,22 @@ class AppState extends ChangeNotifier {
       QuerySnapshot<Map<String, dynamic>> groupData =
           await firestore.collection('groups').get();
 
-      getEventsFromData(eventData);
+      getActivitiesFromData(activityData);
       getAppointmentsFromData(appointmentData);
       getGroupsFromData(groupData);
     }
     auth.userChanges().listen(
       (user) async {
-        eventSubscription?.cancel();
+        activitySubscription?.cancel();
         appointmentSubscription?.cancel();
         groupSubscription?.cancel();
         if (user != null) {
-          startEventsListener(firestore);
+          startActivitiesListener(firestore);
           startAppointmentsListener(firestore);
           startGroupsListener(firestore);
           firstSnapshot = false;
 
-          QuerySnapshot<Map<String, dynamic>> eventData =
+          QuerySnapshot<Map<String, dynamic>> activityData =
               await firestore.collection('events').get();
 
           QuerySnapshot<Map<String, dynamic>> appointmentData =
@@ -91,7 +91,7 @@ class AppState extends ChangeNotifier {
           QuerySnapshot<Map<String, dynamic>> groupData =
               await firestore.collection('groups').get();
 
-          getEventsFromData(eventData);
+          getActivitiesFromData(activityData);
           getAppointmentsFromData(appointmentData);
           getGroupsFromData(groupData);
 
@@ -114,11 +114,11 @@ class AppState extends ChangeNotifier {
     });
   }
 
-// get all of the events from firebase
-  Future<void> startEventsListener(FirebaseFirestore firestore) async {
-    eventSubscription =
+// get all of the activities from firebase
+  Future<void> startActivitiesListener(FirebaseFirestore firestore) async {
+    activitySubscription =
         firestore.collection('events').snapshots().listen((snapshot) {
-      getEventsFromData(snapshot);
+      getActivitiesFromData(snapshot);
     });
   }
 
@@ -130,11 +130,11 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  // generates events from a firestore QuerySnapshot
-  void getEventsFromData(QuerySnapshot<Map<String, dynamic>> data) {
-    _events.clear();
+  // generates activities from a firestore QuerySnapshot
+  void getActivitiesFromData(QuerySnapshot<Map<String, dynamic>> data) {
+    _activities.clear();
     for (var document in data.docs) {
-      _events.add(Event(
+      _activities.add(Activity(
           ageMin: document.data()['ageMin'],
           groupMax: document.data()['groupMax'],
           name: document.data()['name'],
@@ -194,11 +194,11 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-//Returns a list of LakeAppointments for the event you give as a parameter
-  List<LakeAppointment> lakeAppointmentsByEvent(String event) {
+//Returns a list of LakeAppointments for the activity you give as a parameter
+  List<LakeAppointment> lakeAppointmentsByActivity(String activity) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
-      if (app.subject == event) {
+      if (app.subject == activity) {
         apps.add(app);
       }
     }
@@ -206,18 +206,18 @@ class AppState extends ChangeNotifier {
   }
 
 //Returns all appointments in a way the calendar can use them
-//It also has parameters that allow for the appointments to be filtered by events or groups
+//It also has parameters that allow for the appointments to be filtered by activities or groups
   List<Appointment> allAppointments(
-      List<Group> selectedGroups, List<String> selectedEvents) {
+      List<Group> selectedGroups, List<String> selectedActivities) {
     List<Appointment> apps = [];
-    if (selectedGroups.isEmpty && selectedEvents.isEmpty) {
+    if (selectedGroups.isEmpty && selectedActivities.isEmpty) {
       if (_appointments.isNotEmpty) {
         for (LakeAppointment app in _appointments) {
           apps.add(createAppointment(
               app.startTime, app.endTime, app.color, app.subject));
         }
       }
-    } else if (selectedGroups.isNotEmpty && selectedEvents.isNotEmpty) {
+    } else if (selectedGroups.isNotEmpty && selectedActivities.isNotEmpty) {
       if (_appointments.isNotEmpty) {
         var groupNames = [];
         for (Group group in selectedGroups) {
@@ -225,7 +225,7 @@ class AppState extends ChangeNotifier {
         }
         for (LakeAppointment app in _appointments) {
           if (groupNames.contains(app.group) &&
-              selectedEvents.contains(app.subject)) {
+              selectedActivities.contains(app.subject)) {
             apps.add(createAppointment(
                 app.startTime, app.endTime, app.color, app.subject));
           }
@@ -246,7 +246,7 @@ class AppState extends ChangeNotifier {
       }
     } else {
       for (LakeAppointment app in _appointments) {
-        if (selectedEvents.contains(app.subject)) {
+        if (selectedActivities.contains(app.subject)) {
           apps.add(createAppointment(
               app.startTime, app.endTime, app.color, app.subject));
         }
@@ -257,21 +257,21 @@ class AppState extends ChangeNotifier {
   }
 
 // This function takes in appointments formatted to be put into firebase and puts them into firebase
-  Future<void> addAppointments(Map<String, Map<String, dynamic>> events,
+  Future<void> addAppointments(Map<String, Map<String, dynamic>> activities,
       FirebaseFirestore firestore) async {
     var apps = firestore.collection("appointments");
-    for (Map<String, dynamic> app in events.values) {
+    for (Map<String, dynamic> app in activities.values) {
       apps.doc().set(app);
     }
   }
 
-// Gets the amount of groups in an event at a specific time and returns that as a value that shows how many are in the event
-// out of how many can be in the event. This is used in the event dropdown so you can see when selecting how full they are.
-  String getCurrentAmount(String event, startTime) {
+// Gets the amount of groups in an activity at a specific time and returns that as a value that shows how many are in the activity
+// out of how many can be in the activity. This is used in the activity dropdown so you can see when selecting how full they are.
+  String getCurrentAmount(String activity, startTime) {
     var count = 0;
-    var total = lookupEventByName(event).groupMax;
+    var total = lookupActivityByName(activity).groupMax;
     for (LakeAppointment app in getApptsAtTime(startTime)) {
-      if (app.subject == event) {
+      if (app.subject == activity) {
         count++;
       }
     }
@@ -289,36 +289,36 @@ class AppState extends ChangeNotifier {
         startTime: startTime, endTime: endTime, color: color, subject: subject);
   }
 
-  //Checks how many groups are in an event and a specific time
+  //Checks how many groups are in an activity and a specific time
   //and then checks to see if the amount the user wanted
   //to add is more than the limit and returns true or false.
-  bool checkEvent(
-      String event, DateTime startTime, DateTime endTime, int groupCount,
+  bool checkActivity(
+      String activity, DateTime startTime, DateTime endTime, int groupCount,
       [DateTime? originalStartTime, DateTime? originalEndTime]) {
-    Event event0 = lookupEventByName(event);
+    Activity activity0 = lookupActivityByName(activity);
     for (DateTime time = startTime;
         time.isBefore(endTime);
         time = time.add(const Duration(hours: 1))) {
       int current = 0;
-      // If the event capacity is not filled up, the current app is this event and they start at the same hour
+      // If the activity capacity is not filled up, the current app is this activity and they start at the same hour
       for (LakeAppointment app in getApptsAtTime(time)) {
-        if (app.subject == event) {
+        if (app.subject == activity) {
           current += 1;
         }
       }
       if ((originalStartTime == null || originalEndTime == null) &&
-          current + groupCount > event0.groupMax) {
+          current + groupCount > activity0.groupMax) {
         return false;
       } else if (originalStartTime != null && originalEndTime != null) {
         if (((originalStartTime.isBefore(time) ||
                     originalStartTime.isAtSameMomentAs(time)) &&
                 originalEndTime.isAfter(time)) &&
-            current + groupCount - 1 > event0.groupMax) {
+            current + groupCount - 1 > activity0.groupMax) {
           return false;
         } else if ((originalStartTime.isAfter(time) ||
                 (originalEndTime.isBefore(time) ||
                     originalEndTime.isAtSameMomentAs(time))) &&
-            current + groupCount > event0.groupMax) {
+            current + groupCount > activity0.groupMax) {
           return false;
         }
       }
@@ -403,7 +403,7 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-// Gets the groups in events at certain time
+// Gets the groups in activities at certain time
   List<String> getGroupsAtTime(startTime) {
     List<String> groups = [];
     for (LakeAppointment app in getApptsAtTime(startTime)) {
@@ -414,50 +414,50 @@ class AppState extends ChangeNotifier {
     return groups;
   }
 
-  // give this function an event name and it will give you the index for event in the global list
+  // give this function an activity name and it will give you the index for activity in the global list
   //so that you can extract other information
-  Event lookupEventByName(String name) {
+  Activity lookupActivityByName(String name) {
     //int count = 0;
-    for (Event element in _events) {
+    for (Activity element in _activities) {
       if (element.name == name) {
         return element;
       }
       //count++;
     }
-    return const Event(name: "error", ageMin: 0, groupMax: 0, desc: "");
+    return const Activity(name: "error", ageMin: 0, groupMax: 0, desc: "");
   }
 
-  Future<void> createEvent(FirebaseFirestore firestore, String name, int ageMin,
-      int groupMax, String desc) async {
-    CollectionReference events = firestore.collection("events");
+  Future<void> createActivity(FirebaseFirestore firestore, String name,
+      int ageMin, int groupMax, String desc) async {
+    CollectionReference activities = firestore.collection("events");
 
-    events.doc().set(
+    activities.doc().set(
         {"name": name, "ageMin": ageMin, "groupMax": groupMax, "desc": desc});
   }
 
-  Future<void> deleteEvent(Event event) async {
+  Future<void> deleteActivity(Activity activity) async {
     QuerySnapshot<Map<String, dynamic>> query = await firestore
         .collection('events')
-        .where('ageMin', isEqualTo: event.ageMin)
-        .where('desc', isEqualTo: event.desc)
-        .where('groupMax', isEqualTo: event.groupMax)
-        .where('name', isEqualTo: event.name)
+        .where('ageMin', isEqualTo: activity.ageMin)
+        .where('desc', isEqualTo: activity.desc)
+        .where('groupMax', isEqualTo: activity.groupMax)
+        .where('name', isEqualTo: activity.name)
         .get();
 
     await firestore.runTransaction((Transaction transaction) async =>
         transaction.delete(query.docs[0].reference));
 
-    QuerySnapshot<Map<String, dynamic>> eventData =
+    QuerySnapshot<Map<String, dynamic>> activityData =
         await firestore.collection('events').get();
 
-    getEventsFromData(eventData);
+    getActivitiesFromData(activityData);
 
     notifyListeners();
   }
 
-  bool nameInEvents(String name) {
-    for (Event event in _events) {
-      if (name == event.name) {
+  bool nameInActivities(String name) {
+    for (Activity activity in _activities) {
+      if (name == activity.name) {
         return true;
       }
     }

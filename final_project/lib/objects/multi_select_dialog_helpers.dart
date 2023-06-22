@@ -1,4 +1,4 @@
-import 'package:final_project/objects/event.dart';
+import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
@@ -8,9 +8,10 @@ List<MultiSelectItem<Group>> createCheckboxGroups(List<Group> groups) {
   return items;
 }
 
-List<MultiSelectItem<String>> createCheckboxEvents(List<Event> events) {
-  var items = events
-      .map((event) => MultiSelectItem<String>(event.name, event.name))
+List<MultiSelectItem<String>> createCheckboxActivities(
+    List<Activity> activities) {
+  var items = activities
+      .map((activity) => MultiSelectItem<String>(activity.name, activity.name))
       .toList();
   return items;
 }

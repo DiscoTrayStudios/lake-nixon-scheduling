@@ -7,7 +7,7 @@ class PopUpAppointmentEditor extends StatefulWidget {
   const PopUpAppointmentEditor(
       this.newAppointment,
       this.appointment,
-      this.events,
+      this.activities,
       this.colorCollection,
       this.colorNames,
       this.selectedAppointment,
@@ -23,8 +23,8 @@ class PopUpAppointmentEditor extends StatefulWidget {
   /// List of appointments
   final List<Appointment> appointment;
 
-  /// Holds the events value
-  final CalendarDataSource events;
+  /// Holds the activities value
+  final CalendarDataSource activities;
 
   /// Holds list of colors
   final List<Color> colorCollection;
@@ -98,9 +98,9 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
     _startTime = TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
     _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
     _selectedResources =
-        _getSelectedResources(_resourceIds, widget.events.resources);
-    _unSelectedResources =
-        _getUnSelectedResources(_selectedResources, widget.events.resources);
+        _getSelectedResources(_resourceIds, widget.activities.resources);
+    _unSelectedResources = _getUnSelectedResources(
+        _selectedResources, widget.activities.resources);
   }
 
   @override
@@ -285,14 +285,15 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
               splashRadius: 20,
               onPressed: () {
                 if (widget.newAppointment != null &&
-                    widget.events.appointments!
+                    widget.activities.appointments!
                         .contains(widget.newAppointment)) {
                   /// To remove the created appointment, when the appointment editor
                   /// closed without saving the appointment.
-                  widget.events.appointments!.removeAt(widget
-                      .events.appointments!
+                  widget.activities.appointments!.removeAt(widget
+                      .activities.appointments!
                       .indexOf(widget.newAppointment));
-                  widget.events.notifyListeners(CalendarDataSourceAction.remove,
+                  widget.activities.notifyListeners(
+                      CalendarDataSourceAction.remove,
                       <Appointment>[widget.newAppointment!]);
                 }
 
@@ -420,7 +421,8 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
               ),
             ),
           )),
-      if (widget.events.resources == null || widget.events.resources!.isEmpty)
+      if (widget.activities.resources == null ||
+          widget.activities.resources!.isEmpty)
         Container()
       else
         Container(
@@ -449,9 +451,9 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                               : (_resourceIds!.sublist(0)
                                 ..add(details.resourceId!));
                           _selectedResources = _getSelectedResources(
-                              _resourceIds, widget.events.resources);
+                              _resourceIds, widget.activities.resources);
                           _unSelectedResources = _getUnSelectedResources(
-                              _selectedResources, widget.events.resources);
+                              _selectedResources, widget.activities.resources);
                         },
                       );
                     },
@@ -564,13 +566,13 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                     ),
                     fillColor: const Color(0xff4169e1),
                     onPressed: () {
-                      if (widget.events.appointments!.isNotEmpty &&
-                          widget.events.appointments!
+                      if (widget.activities.appointments!.isNotEmpty &&
+                          widget.activities.appointments!
                               .contains(widget.selectedAppointment)) {
-                        widget.events.appointments!.removeAt(widget
-                            .events.appointments!
+                        widget.activities.appointments!.removeAt(widget
+                            .activities.appointments!
                             .indexOf(widget.selectedAppointment));
-                        widget.events.notifyListeners(
+                        widget.activities.notifyListeners(
                             CalendarDataSourceAction.remove,
                             <Appointment>[widget.selectedAppointment]);
                       }
@@ -597,9 +599,10 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                         resourceIds: _resourceIds,
                       ));
 
-                      widget.events.appointments!.add(widget.appointment[0]);
+                      widget.activities.appointments!
+                          .add(widget.appointment[0]);
 
-                      widget.events.notifyListeners(
+                      widget.activities.notifyListeners(
                           CalendarDataSourceAction.add, widget.appointment);
 
                       Navigator.pop(context);
@@ -641,7 +644,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
           _selectedResources.removeAt(i);
           _resourceIds!.removeAt(i);
           _unSelectedResources = _getUnSelectedResources(
-              _selectedResources, widget.events.resources);
+              _selectedResources, widget.activities.resources);
           setState(() {});
         },
       ));
