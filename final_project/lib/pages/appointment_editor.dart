@@ -18,8 +18,8 @@ Color theme = const Color(0xffffffff);
 
 class AppointmentEditor extends StatefulWidget {
   /// Holds the value of appointment editor
-  const AppointmentEditor(this.events, this.selectedAppointment,
-      this.selectedDate, this.onAppointmentEdited,
+  const AppointmentEditor(
+      this.events, this.selectedAppointment, this.selectedDate,
       {super.key});
 
   /// Selected appointment
@@ -29,13 +29,9 @@ class AppointmentEditor extends StatefulWidget {
 
   final AppointmentDataSource events;
 
-  final AppointmentEditedCallback onAppointmentEdited;
-
   @override
   State<AppointmentEditor> createState() => _AppointmentEditorState();
 }
-
-typedef AppointmentEditedCallback = Function();
 
 class _AppointmentEditorState extends State<AppointmentEditor> {
   late DateTime _startDate;
@@ -413,7 +409,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             fontSize: 16.0);
                       }
                     }
-                    widget.onAppointmentEdited();
                     Navigator.pop(context);
                   })
             ],

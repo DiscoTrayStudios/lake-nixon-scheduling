@@ -27,13 +27,6 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
     super.initState();
   }
 
-  void appointmentUpdateCallback() {
-    setState(() {
-      _appointments = Provider.of<AppState>(context, listen: false)
-          .getApptsAtTime(widget.selectedDate);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     _appointments =
@@ -44,8 +37,8 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
         body: ListView.builder(
           itemCount: _appointments.length,
           itemBuilder: (BuildContext context, int index) {
-            return ApptSelectorItem(_appointments[index], widget.dataSource,
-                widget.selectedDate, appointmentUpdateCallback);
+            return ApptSelectorItem(
+                _appointments[index], widget.dataSource, widget.selectedDate);
           },
         ),
         floatingActionButton: FloatingActionButton(
@@ -54,10 +47,7 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => AppointmentEditor(
-                          widget.dataSource,
-                          null,
-                          widget.selectedDate,
-                          appointmentUpdateCallback)));
+                          widget.dataSource, null, widget.selectedDate)));
             },
             child: const Icon(Icons.add)));
   }
