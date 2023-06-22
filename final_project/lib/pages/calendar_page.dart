@@ -120,7 +120,11 @@ class _CalendarPageState extends State<CalendarPage> {
               builder: (BuildContext context) => AppointmentSelector(
                   AppointmentDataSource(Provider.of<AppState>(context)
                       .allAppointments(_selectedGroups, _selectedEvents)),
-                  selectedDate)),
+                  selectedDate,
+                  selectedGroups:
+                      _selectedGroups.isEmpty ? null : _selectedGroups,
+                  selectedEvents:
+                      _selectedEvents.isEmpty ? null : _selectedEvents)),
         ).then((value) {
           setState(() {});
         });
