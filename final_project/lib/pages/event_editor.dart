@@ -66,11 +66,13 @@ class _EventEditorState extends State<EventEditor> {
                   FormFieldTemplate(
                       controller: ageLimitController,
                       decoration: 'Age Limit',
-                      formkey: "MarkField"),
+                      formkey: "MarkField",
+                      keyboardType: TextInputType.number),
                   FormFieldTemplate(
                       controller: groupSizeController,
                       decoration: 'Group Size',
-                      formkey: "YearField"),
+                      formkey: "YearField",
+                      keyboardType: TextInputType.number),
                   FormFieldTemplate(
                       controller: descController,
                       decoration: 'Description',
@@ -124,30 +126,32 @@ class _EventEditorState extends State<EventEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Select Event')),
-        body: Consumer<AppState>(
-          builder: (BuildContext context, AppState appState, Widget? child) {
-            return ListView.separated(
-                itemCount: appState.events.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return EventSelectorItem(
-                      appState.events[index],
-                      _selectedIndex == index,
-                      index,
-                      onEventPressed,
-                      onEventDelete);
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return const Divider();
-                });
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
+      appBar: AppBar(title: const Text('Select Event'), actions: [
+        IconButton(
             onPressed: () {
               setState(() {
                 _eventInfoPopupForm(context);
               });
             },
-            child: const Icon(Icons.add)));
+            icon: const Icon(Icons.add))
+      ]),
+      body: Consumer<AppState>(
+        builder: (BuildContext context, AppState appState, Widget? child) {
+          return ListView.separated(
+              itemCount: appState.events.length,
+              itemBuilder: (BuildContext context, int index) {
+                return EventSelectorItem(
+                    appState.events[index],
+                    _selectedIndex == index,
+                    index,
+                    onEventPressed,
+                    onEventDelete);
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return const Divider();
+              });
+        },
+      ),
+    );
   }
 }
