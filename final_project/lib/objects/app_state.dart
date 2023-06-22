@@ -217,6 +217,20 @@ class AppState extends ChangeNotifier {
               app.startTime, app.endTime, app.color, app.subject));
         }
       }
+    } else if (selectedGroups.isNotEmpty && selectedEvents.isNotEmpty) {
+      if (_appointments.isNotEmpty) {
+        var groupNames = [];
+        for (Group group in selectedGroups) {
+          groupNames.add(group.name);
+        }
+        for (LakeAppointment app in _appointments) {
+          if (groupNames.contains(app.group) &&
+              selectedEvents.contains(app.subject)) {
+            apps.add(createAppointment(
+                app.startTime, app.endTime, app.color, app.subject));
+          }
+        }
+      }
     } else if (selectedGroups.isNotEmpty) {
       if (_appointments.isNotEmpty) {
         var groupNames = [];
