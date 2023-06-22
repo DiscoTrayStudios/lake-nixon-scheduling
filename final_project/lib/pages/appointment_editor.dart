@@ -84,6 +84,8 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
         initialDate: _startDate,
         firstDate: DateTime(1900),
         lastDate: DateTime(2100),
+        selectableDayPredicate: (DateTime val) =>
+            val.weekday != DateTime.sunday && val.weekday != DateTime.saturday,
         builder: (BuildContext context, Widget? child) {
           return Theme(
             data: Theme.of(context),
