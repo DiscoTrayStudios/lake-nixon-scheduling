@@ -304,7 +304,35 @@ class AppState extends ChangeNotifier {
         } else if ((originalStartTime.isAfter(time) ||
                 (originalEndTime.isBefore(time) ||
                     originalEndTime.isAtSameMomentAs(time))) &&
-            current + groupCount > event0.groupMax) {}
+            current + groupCount > event0.groupMax) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  bool checkGroupTime(
+      {required String group,
+      required DateTime startTime,
+      required DateTime endTime,
+      DateTime? originalStartTime,
+      DateTime? originalEndTime}) {
+    for (DateTime time = startTime;
+        time.isBefore(endTime);
+        time = time.add(const Duration(hours: 1))) {
+      for (LakeAppointment app in getApptsAtTime(time)) {
+        if ((originalStartTime == null || originalEndTime == null) &&
+            app.group == group) {
+          return false;
+        } else if (originalStartTime != null && originalEndTime != null) {
+          if ((originalStartTime.isAfter(time) ||
+                  (originalEndTime.isBefore(time) ||
+                      originalEndTime.isAtSameMomentAs(time))) &&
+              app.group == group) {
+            return false;
+          }
+        }
       }
     }
     return true;
