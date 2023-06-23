@@ -14,17 +14,26 @@ import 'package:final_project/objects/group.dart';
 
 Color theme = const Color(0xffffffff);
 
-// *** line 848 is now line 764
-
+/// A page that allows the user to create, delete, and edit appointments.
+///
+/// Allows the user to either batch create new appointments with multiple groups,
+/// or edit the an appointment if one was selected.
 class AppointmentEditor extends StatefulWidget {
-  /// Holds the value of appointment editor
+  /// Creates a page to create, edit, and delete appointments.
+  ///
+  /// If [this.selectedAppointment] is null, then the user can batch create
+  /// appointments for multiple groups. Otherwise, the user can edit or delete
+  /// the selected appointment.
+  ///
+  /// [this.selectedDate] is the date selected on the calendar.
   const AppointmentEditor(
       this.activities, this.selectedAppointment, this.selectedDate,
       {super.key});
 
-  /// Selected appointment
+  /// The appointment selected from the calendar, if present.
   final LakeAppointment? selectedAppointment;
 
+  /// The start of the timeslot selected on the calendar.
   final DateTime selectedDate;
 
   final AppointmentDataSource activities;
@@ -34,21 +43,48 @@ class AppointmentEditor extends StatefulWidget {
 }
 
 class _AppointmentEditorState extends State<AppointmentEditor> {
+  /// The selected start date and time of the appointment.
   late DateTime _startDate;
+
+  /// The selected start time of the appointment.
   late TimeOfDay _startTime;
+
+  /// The selected end date and time of the appointment.
   late DateTime _endDate;
+
+  /// The selected end time of the appointment.
   late TimeOfDay _endTime;
   bool _isAllDay = false;
 
   String? _notes;
+
+  /// The selected value for the activity dropdown.
+  ///
+  /// Defaults to "Lunch" if there is no value selected.
   String dropdownValue = "Lunch";
+
+  /// The activity selected for the appointment.
   late String _subject;
 
+  /// The orignial start date and time of the appointment.
+  ///
+  /// Only used if there was an appointment selected from the calendar.
   late DateTime _originalStartDate;
+
+  /// The original subject of the appointemnt.
+  ///
+  /// Only used if there was an appointment selected from the calendar.
   late String _originalSubject;
+
+  /// The original group of the appointment.
+  ///
+  /// Only used if there was an appointment selected from the calendar.
   late String _originalGroup;
 
+  /// The start of the range in which times can be selected.
   final TimeOfDay _timeSelectorStartTime = const TimeOfDay(hour: 7, minute: 0);
+
+  /// The end of the range in which times can be selected.
   final TimeOfDay _timeSelectorEndTime = const TimeOfDay(hour: 18, minute: 0);
 
   // RecurrenceProperties? _recurrenceProperties;
@@ -58,6 +94,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   // SelectRule? _rule = SelectRule.doesNotRepeat;
 
+  /// Sets the [dropdownValue] and [_subject] to the new value picked by the
+  /// activity selector.
+  ///
+  /// A callback function used by the [ActivitySelector] to change the editor state.
   void onActivitySelectorChanged(String? newValue) {
     setState(() {
       dropdownValue = newValue!;
@@ -65,6 +105,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     });
   }
 
+  /// Sets the [_selectedGroups] to the new values picked by the group selector.
+  ///
+  /// A callback function used by the [GroupSelector] to change the editor state.
   void onGroupSelectorConfirmed(List<Group> results) {
     setState(() {
       _selectedGroups = results;
@@ -78,6 +121,11 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     });
   }
 
+  /// Creates a datepicker, and sets the [_startDate] to the result of the picker.
+  ///
+  /// Also adjusts the [_endDate] so that they are the same.
+  ///
+  /// A callback funtion called by the [TimeSelector] to select the date.
   void onStartDatePicked() async {
     final DateTime? date = await showDatePicker(
         context: context,
@@ -103,6 +151,13 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     }
   }
 
+  /// Sets the [_startTime] to the result of the start time dropdown.
+  ///
+  /// Also adjusts the [_endTime] to maintain the interval of time between them.
+  /// Has checks to prevent the [_endTime] from being set outside of the
+  /// [_timeSelectorEndTime]
+  ///
+  /// A callback function used by the [TimeSelector] to change the editor state.
   void onStartTimePicked(TimeOfDay time) async {
     if (time != _startTime) {
       setState(() {
@@ -124,6 +179,13 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     }
   }
 
+  /// Sets the [_endTime] to the time picked by the end time dropdown.
+  ///
+  /// If the new [_endTime] is at the same time as or before the old [_startTime],
+  /// the [_startTime] is also adjusted to maintain the interval. Checks are in
+  /// place to prevent the [_startTime] from being before [_timeSelectorStartTime].
+  ///
+  /// A callback function used by the [TimeSelector] to change the editor state.
   void onEndTimePicked(TimeOfDay time) async {
     if (time != _endTime) {
       setState(() {
@@ -176,8 +238,14 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   //   _recurrenceProperties = properties as RecurrenceProperties?;
   // }
 
+  /// The groups selected by the dropdown.
   List<Group> _selectedGroups = [];
 
+  /// Initializes the editor state.
+  ///
+  /// If there is a selected appointment, it sets the default settings to the
+  /// appointment settings, otherwise defaults to no selected groups and the
+  /// time selected from the calendar.
   @override
   void initState() {
     _updateAppointmentProperties();
@@ -190,7 +258,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     super.initState();
   }
 
-  /// Updates the required editor's default field
+  /// Updates the editor fields with the selected appointment if there was one
+  /// selected.
+  ///
+  /// Only called on initialization.
   void _updateAppointmentProperties() {
     if (widget.selectedAppointment != null) {
       _startDate = widget.selectedAppointment!.startTime!;
