@@ -4,14 +4,29 @@ import 'package:final_project/objects/group.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// Could be stateless
+
+/// A dropdown to select the activity for an appointment.
+///
+/// Displays the activity name and the ratio of groups in the activty at the
+/// selected time to total allowed.
 class ActivitySelector extends StatefulWidget {
+  /// A dropdown to select the activity for an appointment.
+  ///
+  /// Displays the activity name and the ratio of groups in the activty at the
+  /// selected time to total allowed. Takes [this.selectedDate], the date and time
+  /// of the appointment, [this.onChanged], a callback for when the dropdown is
+  /// changed, and [this.dropdownValue], the default value for the dropdown.
   const ActivitySelector(this.selectedDate, this.onChanged, this.dropdownValue,
       {super.key});
 
+  /// The date and time the appointment is scheduled for.
   final DateTime selectedDate;
 
+  /// The function callback for changing the dropdown.
   final OnChangedCallBack onChanged;
 
+  /// The default value of the dropdown
   final String dropdownValue;
 
   @override
@@ -21,6 +36,8 @@ class ActivitySelector extends StatefulWidget {
 typedef OnChangedCallBack = Function(String?);
 
 class _ActivitySelectorState extends State<ActivitySelector> {
+  /// Creates the [DropdownMenuItem]s with the ratio of current groups in the
+  /// to total capacity.
   List<DropdownMenuItem<String>> createDropdown(
       List<Activity> items, DateTime startTime) {
     List<DropdownMenuItem<String>> newItems = [];
