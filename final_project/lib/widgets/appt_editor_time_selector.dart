@@ -2,7 +2,17 @@ import 'package:final_project/widgets/time_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+// Should be stateless.
+
+/// A widget to select the date and start and end time for an appointment.
 class TimeSelector extends StatefulWidget {
+  /// A widget to select the date and start and end time for an appointment.
+  ///
+  /// Takes a default [this.startDate] and [this.endDate], as well as callbacks
+  /// for when the date, and start and end times are picked.
+  ///
+  /// [this.rangeStartTime] and [this.rangeEndTime] are should be the start and
+  /// end of the interval displayed in the time selector dropdowns.
   const TimeSelector(
       // this.isAllDay,
       // this.onAllDay,
@@ -19,18 +29,25 @@ class TimeSelector extends StatefulWidget {
 
   // final OnAllDaySwitcCallback onAllDay;
 
+  /// The start date and time for the appointment.
   final DateTime startDate;
 
+  /// The end date and time for the appointment.
   final DateTime endDate;
 
+  /// A function callback called when a the date selector button is clicked.
   final OnTapCallback onStartDatePicked;
 
+  /// A function callback called when a startTime is picked.
   final OnTimePickedCallback onStartTimePicked;
 
+  /// A function callback called when a endTime is picked.
   final OnTimePickedCallback onEndTimePicked;
 
+  /// The start of the range of time options.
   final TimeOfDay rangeStartTime;
 
+  /// The end of the range of time options.
   final TimeOfDay rangeEndTime;
 
   @override
