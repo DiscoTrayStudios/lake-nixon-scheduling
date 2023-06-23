@@ -7,16 +7,29 @@ import 'package:final_project/widgets/appt_selector_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+/// A page to select appointment from a list or create new appointments.
+///
+/// Used when a user clicks on a timeslot with appointments on the calendar.
+/// Displays all the appointments in that timeslot and includes a button to
+/// create a new appointment. Follows any filters selected on the calendar page.
 class AppointmentSelector extends StatefulWidget {
+  /// A page to select appointment from a list or create new appointments.
+  ///
+  /// Used when a user clicks on a timeslot with appointments on the calendar.
+  /// Displays all the appointments in that timeslot and includes a button to
+  /// create a new appointment. Follows any filters selected on the calendar page.
   const AppointmentSelector(this.dataSource, this.selectedDate,
       {this.selectedGroups, this.selectedActivities, super.key});
 
   final AppointmentDataSource dataSource;
 
+  /// The date and time selected on the calendar.
   final DateTime selectedDate;
 
+  /// The groups that the calendar filter was set to.
   final List<Group>? selectedGroups;
 
+  /// The activities that the calendar filter was set to.
   final List<String>? selectedActivities;
 
   @override
@@ -26,6 +39,7 @@ class AppointmentSelector extends StatefulWidget {
 class _AppointmentSelectorState extends State<AppointmentSelector> {
   _AppointmentSelectorState();
 
+  ///The appointments listed on the screen.
   late List<LakeAppointment> _appointments;
 
   @override
