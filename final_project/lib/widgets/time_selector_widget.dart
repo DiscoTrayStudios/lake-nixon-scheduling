@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// A widget to select a time from a range of times.
 class TimeSelectorDropdown extends StatefulWidget {
+  /// A widget to select a time from a range of times.
+  ///
+  /// [startTime] and [endTime] are the start and end of the range. [onTimePicked]
+  /// is called when a time is selected. [initialTime] is the default time selection.
   const TimeSelectorDropdown(
       {required this.startTime,
       required this.endTime,
@@ -9,12 +14,16 @@ class TimeSelectorDropdown extends StatefulWidget {
       required this.initialTime,
       super.key});
 
+  /// The start of the range of options.
   final TimeOfDay startTime;
 
+  /// The end of the range of options.
   final TimeOfDay endTime;
 
+  /// The default setting for the dropdown.
   final TimeOfDay initialTime;
 
+  /// Called when a time is picked.
   final OnTimePickedCallback onTimePicked;
 
   @override

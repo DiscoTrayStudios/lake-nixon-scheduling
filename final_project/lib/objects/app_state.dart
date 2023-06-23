@@ -2,42 +2,69 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/objects/group.dart';
 
-/// to do:
-/// move colors from globals
-/// move groups from globals
-/// once groups in firebase -> make getGroups
-/// basically move everything from globals -> here, make everything consumer
-
+/// The state of the app, containing globally used variables and functions.
+///
+/// This manages listeners to the Firebase Firestore collections for
+/// 'appointments', 'events', and 'groups', and updates corresponding lists of
+/// [LakeAppointment], [Activity], and [Group] objects. These lists, and the
+/// related methods, are provided to the rest of the app through a
+/// [ChangeNotifierProvider].
 class AppState extends ChangeNotifier {
   final List<Activity> _activities = [];
+
+  /// The activities currently in the Firestore database.
   List<Activity> get activities => _activities;
 
   final List<LakeAppointment> _appointments = [];
+
+  /// The appointments currently in the Firestore database.
   List<LakeAppointment> get appointments => _appointments;
 
   final List<Group> _groups = [];
+
+  /// The groups currently in the Firestore database.
   List<Group> get groups => _groups;
 
+  /// The current instance of Firestore.
   FirebaseFirestore firestore;
 
+  /// The current instance of Firebase Auth.
   FirebaseAuth auth;
 
+  /// The state of the app, containing globally used variables and functions.
+  ///
+  /// This initializes listeners to the Firebase Firestore collections for
+  /// 'appointments', 'events', and 'groups', and updates corresponding lists of
+  /// [LakeAppointment], [Activity], and [Group] objects. These lists, and the
+  /// related methods, are provided to the rest of the app through a
+  /// [ChangeNotifierProvider].
+  ///
+  /// The listeners are only initialized if the user is signed in to the app.
+  ///
+  /// The instances of [FirebaseFirestore] and [FirebaseAuth] used by the [AppState]
+  /// are exposed as parameters so that they may be mocked for testing purposes.
   AppState(this.firestore, this.auth) {
     init(auth, firestore);
   }
 
   bool firstSnapshot = true;
+
+  /// A subscription to listen to the Firestore 'events' collection.
   StreamSubscription<QuerySnapshot>? activitySubscription;
+
+  /// A subscription to listen the the Firestore 'appointments' collection.
   StreamSubscription<QuerySnapshot>? appointmentSubscription;
+
+  /// A subscription to listen to the Firestore 'groups' collection.
   StreamSubscription<QuerySnapshot>? groupSubscription;
 
+  /// Used for reccurence, an unimplemented feature.
   List<String> weekDay = <String>[
     'Monday',
     'Tuesday',
@@ -47,6 +74,8 @@ class AppState extends ChangeNotifier {
     'Saturday',
     'Sunday'
   ];
+
+  /// Used for reccurence, an unimplemented feature.
   List<String> weekDayPosition = <String>[
     'first',
     'second',
@@ -54,8 +83,17 @@ class AppState extends ChangeNotifier {
     'fourth',
     'last'
   ];
+
+  /// Used for reccurence, an unimplemented feature.
   List<String> mobileRecurrence = <String>['day', 'week', 'month', 'year'];
 
+  /// Initailizes this class with FireStore listensers and authentication.
+  ///
+  /// A listener to Firebase Auth is created so that the listeners to the
+  /// Firestore database can be created or destroyed when users sign in and out.
+  ///
+  /// Additionally, if the user is logged in, the local state is updated to match
+  /// Firestore on initialization.
   Future<void> init(FirebaseAuth auth, FirebaseFirestore firestore) async {
     if (auth.currentUser != null) {
       QuerySnapshot<Map<String, dynamic>> activityData =
@@ -105,8 +143,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-// Takes the appointments from firebase and turns them into a class called
-// LakeAppointment and puts them in a list we can use throughout the program
+  /// Creates a listener to the 'appointments' collection in Firestore.
+  ///
+  /// This listener updates the local list of [LakeAppointment]s to match the
+  /// collection.
   Future<void> startAppointmentsListener(FirebaseFirestore firestore) async {
     appointmentSubscription =
         firestore.collection('appointments').snapshots().listen((snapshot) {
@@ -114,7 +154,10 @@ class AppState extends ChangeNotifier {
     });
   }
 
-// get all of the activities from firebase
+  /// Creates a listener to the 'events' collection in Firestore.
+  ///
+  /// This listener updates the local list of [Activity]s to match the
+  /// collection.
   Future<void> startActivitiesListener(FirebaseFirestore firestore) async {
     activitySubscription =
         firestore.collection('events').snapshots().listen((snapshot) {
@@ -122,7 +165,10 @@ class AppState extends ChangeNotifier {
     });
   }
 
-//gets all of the groups from firebase
+  /// Creates a listener to the 'groups' collection in Firestore.
+  ///
+  /// This listener updates the local list of [Group]s to match the
+  /// collection.
   Future<void> startGroupsListener(FirebaseFirestore firestore) async {
     groupSubscription =
         firestore.collection('groups').snapshots().listen((snapshot) {
@@ -130,7 +176,10 @@ class AppState extends ChangeNotifier {
     });
   }
 
-  // generates activities from a firestore QuerySnapshot
+  /// Updates the list of [Activity]s to match Firestore.
+  ///
+  /// Takes the documents from the given [QuerySnapshot] of the 'events' collection, and updates
+  /// the local list to match.
   void getActivitiesFromData(QuerySnapshot<Map<String, dynamic>> data) {
     _activities.clear();
     for (var document in data.docs) {
@@ -143,7 +192,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // generates appointments from a firestore QuerySnapshot
+  /// Updates the list of [LakeAppointment]s to match Firestore.
+  ///
+  /// Takes the documents from the given [QuerySnapshot] of the 'appointments' collection, and updates
+  /// the local list to match.
   void getAppointmentsFromData(QuerySnapshot<Map<String, dynamic>> data) {
     _appointments.clear();
     for (var document in data.docs) {
@@ -166,7 +218,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  // generates groups from a firestore QuerySnapshot
+  /// Updates the list of [Group]s to match Firestore.
+  ///
+  /// Takes the documents from the given [QuerySnapshot] of the 'groups' collection, and updates
+  /// the local list to match.
   void getGroupsFromData(QuerySnapshot<Map<String, dynamic>> data) {
     _groups.clear();
     for (var document in data.docs) {
@@ -182,7 +237,11 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-//Returns a list of appointments for the group you give as a parameter
+  /// Returns all of the [Appointment]s that the given group is assigned to.
+  ///
+  /// The group name is taken as a [String]. Note that the returned appointments
+  /// are of the [Appointment] type used by the calendar, not the [LakeAppointment]
+  /// used elsewhere.
   List<Appointment> appointmentsByGroup(String group) {
     List<Appointment> apps = [];
     for (LakeAppointment app in _appointments) {
@@ -194,7 +253,7 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-//Returns a list of LakeAppointments for the activity you give as a parameter
+  /// Returns the [LakeAppointment]s of the given activity type.
   List<LakeAppointment> lakeAppointmentsByActivity(String activity) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
@@ -205,8 +264,10 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-//Returns all appointments in a way the calendar can use them
-//It also has parameters that allow for the appointments to be filtered by activities or groups
+  /// Filters [Appointment] by the given [Group]s and [Activity]s.
+  ///
+  /// If either of the lists of [Activity]s or [Group]s are empty, that filter is
+  /// not applied.
   List<Appointment> allAppointments(
       List<Group> selectedGroups, List<String> selectedActivities) {
     List<Appointment> apps = [];
@@ -256,7 +317,9 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-// This function takes in appointments formatted to be put into firebase and puts them into firebase
+  /// Places appointments into the Firestore database.
+  ///
+  /// The [LakeAppointment]s need to be converted to a map first.
   Future<void> addAppointments(Map<String, Map<String, dynamic>> activities,
       FirebaseFirestore firestore) async {
     var apps = firestore.collection("appointments");
@@ -265,8 +328,11 @@ class AppState extends ChangeNotifier {
     }
   }
 
-// Gets the amount of groups in an activity at a specific time and returns that as a value that shows how many are in the activity
-// out of how many can be in the activity. This is used in the activity dropdown so you can see when selecting how full they are.
+  /// Calculates the ratio of [Group]s in an [Activity] at a time to the total number
+  /// allowed.
+  ///
+  /// The ratio is returned as a string to be displayed on the appointment editor
+  /// activity dropdown.
   String getCurrentAmount(String activity, startTime) {
     var count = 0;
     var total = lookupActivityByName(activity).groupMax;
@@ -278,7 +344,10 @@ class AppState extends ChangeNotifier {
     return "$count/$total";
   }
 
-  //Takes a firebase appointment and turns it into a calendar appointment
+  /// Creates an [Appointment] from the relevant data.
+  ///
+  /// Effectively the same as the [Appointment] constructor, but with additional
+  /// logic to convert the color field from a string if necessary.
   Appointment createAppointment(startTime, endTime, color, subject) {
     if (color.runtimeType == String) {
       String valueString = color.split("(0x")[1].split(")")[0];
@@ -289,9 +358,19 @@ class AppState extends ChangeNotifier {
         startTime: startTime, endTime: endTime, color: color, subject: subject);
   }
 
-  //Checks how many groups are in an activity and a specific time
-  //and then checks to see if the amount the user wanted
-  //to add is more than the limit and returns true or false.
+  /// Checks if adding [Group]s to an [Activity] would exceed its capacity.
+  ///
+  /// Checks if the given [activity] would exceed its capacity in all of the
+  /// timeslots between [startTime] and [endTime] if [groupCount] groups were added
+  /// to it.
+  ///
+  /// [originalStartTime] and [originalEndTime] are only used if an [Appointment] is
+  /// being moved instead of added. In that case, it is necessary to account for the
+  /// appointment already existing in the timeslots between [originalStartTime]
+  /// and [originalEndTime]. In those time slots, 1 is subtracted from the current
+  /// number of groups for the appointment being moved.
+  ///
+  /// Returns true if no limits are exceeded.
   bool checkActivity(
       String activity, DateTime startTime, DateTime endTime, int groupCount,
       [DateTime? originalStartTime, DateTime? originalEndTime]) {
@@ -326,6 +405,15 @@ class AppState extends ChangeNotifier {
     return true;
   }
 
+  /// Checks if a group is already in an appointment.
+  ///
+  /// Checks if the [group] is not in any appointments between [startTime] and
+  /// [endTime].
+  ///
+  /// [originalStartTime] and [originalEndTime] are only used if an appointment
+  /// is being moved instead of added. In that case, it is necessary to ignore
+  /// the original appointment that was scheduled between [originalStartTime] and
+  /// [originalEndTime]
   bool checkGroupTime(
       {required String group,
       required DateTime startTime,
@@ -352,6 +440,11 @@ class AppState extends ChangeNotifier {
     return true;
   }
 
+  /// Deletes an appointment from firebase and updates to local database.
+  ///
+  /// Finds the appointment that matches the [startTime], [subject], and [group]
+  /// and deletes it. Due to the app design, there should never be more than one
+  /// appointment that matches these criteria.
   Future<void> deleteAppt(
       {required DateTime startTime,
       required String subject,
@@ -374,6 +467,10 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Updates an appointment in firebase.
+  ///
+  /// Finds the appointment using the old [startTime], [subject], and [group],
+  /// and updates it with the new [data].
   Future<void> editAppt(
       {required DateTime startTime,
       required String subject,
@@ -390,7 +487,7 @@ class AppState extends ChangeNotifier {
         transaction.update(query.docs[0].reference, data));
   }
 
-//Returns the appointments happening at a certain time
+  /// Finds all appointments that are happening at [startTime].
   List<LakeAppointment> getApptsAtTime(DateTime startTime) {
     List<LakeAppointment> apps = [];
     for (LakeAppointment app in _appointments) {
@@ -403,7 +500,7 @@ class AppState extends ChangeNotifier {
     return apps;
   }
 
-// Gets the groups in activities at certain time
+  /// Finds all groups that are in an appointment at [startTime]
   List<String> getGroupsAtTime(startTime) {
     List<String> groups = [];
     for (LakeAppointment app in getApptsAtTime(startTime)) {
@@ -414,8 +511,11 @@ class AppState extends ChangeNotifier {
     return groups;
   }
 
-  // give this function an activity name and it will give you the index for activity in the global list
-  //so that you can extract other information
+  /// Looks up and activity with the given [name].
+  ///
+  /// Returns an activity with the name "error" if there is no activity called
+  /// [name]. Avoid using this in a context where it may be passed the name of
+  /// a non-existant activity.
   Activity lookupActivityByName(String name) {
     //int count = 0;
     for (Activity element in _activities) {
@@ -427,6 +527,7 @@ class AppState extends ChangeNotifier {
     return const Activity(name: "error", ageMin: 0, groupMax: 0, desc: "");
   }
 
+  /// Adds an activity to Firestore with the given parameters.
   Future<void> createActivity(FirebaseFirestore firestore, String name,
       int ageMin, int groupMax, String desc) async {
     CollectionReference activities = firestore.collection("events");
@@ -435,6 +536,8 @@ class AppState extends ChangeNotifier {
         {"name": name, "ageMin": ageMin, "groupMax": groupMax, "desc": desc});
   }
 
+  /// Deletes the activity matching [activity] from firebase and updates the local
+  /// database.
   Future<void> deleteActivity(Activity activity) async {
     QuerySnapshot<Map<String, dynamic>> query = await firestore
         .collection('events')
@@ -455,6 +558,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Checks if there is an activity named [name].
   bool nameInActivities(String name) {
     for (Activity activity in _activities) {
       if (name == activity.name) {
@@ -464,6 +568,7 @@ class AppState extends ChangeNotifier {
     return false;
   }
 
+  /// Filters out all groups younger than [age] from [groups].
   List<Group> filterGroupsByAge(int age, List<Group> groups) {
     List<Group> outGroups = [];
 
@@ -476,6 +581,10 @@ class AppState extends ChangeNotifier {
     return outGroups;
   }
 
+  /// Filters out groups currently in an appointment.
+  ///
+  /// Removes all groups in an appointment between [startTime] and [endTime] from
+  /// [groups].
   List<Group> filterGroupsByTime(
       DateTime startTime, DateTime endTime, List<Group> groups) {
     List<String> excludedGroups = [];

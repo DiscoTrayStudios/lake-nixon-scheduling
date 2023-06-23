@@ -6,12 +6,25 @@ import 'package:provider/provider.dart';
 typedef OnPressedCallback = Function(int);
 typedef OnDeleteCallback = Function(Activity, AppState);
 
+/// An item used in the activity editor to display individual activities.
+///
+/// Handles taps on the icon as well as on the delete button. Displays the name,
+/// minimum age, and maximum number of groups at all times, and only displays the
+/// description when selected.
 class ActivitySelectorItem extends StatelessWidget {
+  /// An item used in the activity editor to display individual activities.
+  ///
+  /// Handles taps on the icon as well as on the delete button. Displays the name,
+  /// minimum age, and maximum number of groups at all times, and only displays the
+  /// description when [this.selected] is true. Takes data from [this.activity].
+  ///
+  /// [this.onPressed] and [this.onDelete] are the callbacks for tapping the activity
+  /// and deleting it.
   const ActivitySelectorItem(
-      this.event, this.selected, this.index, this.onPressed, this.onDelete,
+      this.activity, this.selected, this.index, this.onPressed, this.onDelete,
       {super.key});
 
-  final Activity event;
+  final Activity activity;
 
   final bool selected;
 
@@ -24,26 +37,26 @@ class ActivitySelectorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(event.name),
+      title: Text(activity.name),
       subtitle: Column(
         children: [
           Row(children: [
-            Text('Minimum age: ${event.ageMin}'),
+            Text('Minimum age: ${activity.ageMin}'),
             const Spacer(),
-            Text('Maximum # of groups: ${event.groupMax}'),
+            Text('Maximum # of groups: ${activity.groupMax}'),
             const Spacer(flex: 2)
           ]),
           if (selected)
             Row(
               children: [
-                Text(event.desc),
+                Text(activity.desc),
                 const Spacer(),
                 Consumer<AppState>(
                     builder: ((BuildContext context, AppState appState, _) {
                   return IconButton(
                       icon: Icon(Icons.delete_forever,
                           color: Theme.of(context).colorScheme.error),
-                      onPressed: () => onDelete(event, appState));
+                      onPressed: () => onDelete(activity, appState));
                 }))
               ],
             )

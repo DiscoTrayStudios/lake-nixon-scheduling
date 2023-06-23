@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
+/// A template for the formfields used in the add event dialog.
 class FormFieldTemplate extends StatelessWidget {
+  /// A template for the formfields used in the add event dialog.
+  ///
+  /// The text editing controller, decoration, and formkey are required, but
+  /// keyboardType is only necessary if you don't want a typical text keyboard.
   const FormFieldTemplate(
       {super.key,
       required this.controller,
@@ -8,10 +13,16 @@ class FormFieldTemplate extends StatelessWidget {
       required this.formkey,
       this.keyboardType});
 
-  // key for field, controller, and string decoration
+  /// The key for the field.
   final String formkey;
+
+  /// The controller for the textfield.
   final TextEditingController controller;
+
+  /// The hint text for the formfield.
   final String decoration;
+
+  /// The type of keyboard to display.
   final TextInputType? keyboardType;
 
   @override
