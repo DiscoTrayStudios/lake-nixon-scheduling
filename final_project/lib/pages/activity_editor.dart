@@ -7,7 +7,12 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
+/// A page to view, add, and delete activities.
+///
+/// Show the user a list of the activities in Firebase, and allows them to add
+/// and delete activities.
 class ActivityEditor extends StatefulWidget {
+  /// A page to view, add, and delete activities.
   const ActivityEditor({super.key});
 
   @override
@@ -15,6 +20,7 @@ class ActivityEditor extends StatefulWidget {
 }
 
 class _ActivityEditorState extends State<ActivityEditor> {
+  /// The index of the selected activity in the [ListView].
   int _selectedIndex = 0;
 
   var activityController = TextEditingController();
@@ -22,12 +28,20 @@ class _ActivityEditorState extends State<ActivityEditor> {
   var groupSizeController = TextEditingController();
   var descController = TextEditingController();
 
+  /// Updates the [_selectedIndex] when an activity is tapped on.
+  ///
+  /// A callback function called when the user taps on an [ActivitySelectorItem].
   void onActivityPressed(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
 
+  /// Deletes an activity when the user presses its delete button.
+  ///
+  /// A callback function called when the user presses the delete button on an
+  /// [ActivitySelectorItem]. Deletes both the activity in question, and all
+  /// appointments associated with the activity.
   void onActivityDelete(Activity activity, AppState appState) async {
     List<LakeAppointment> apps =
         appState.lakeAppointmentsByActivity(activity.name);
@@ -41,6 +55,10 @@ class _ActivityEditorState extends State<ActivityEditor> {
     _selectedIndex = 0;
   }
 
+  /// Creates a pop-up dialog for creating activities.
+  ///
+  /// Creates a pop-up dialog takes user input for the activity properties, and
+  /// adds the new activity to firebase.
   Future<void> _activityInfoPopupForm(BuildContext context) async {
     final provider = Provider.of<AppState>(context, listen: false);
 
