@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-/// An object to set the appointment collection data source to calendar, which
-/// used to map the custom appointment data to the calendar appointment, and
-/// allows to add, remove or reset the appointment collection.
+/// An object to manage the [Appointment]s for the calendar.
+///
+/// Tracks a listenable collection of [Appointment]s allowing the calendar to
+/// be updated when this is updated.
 class AppointmentDataSource extends CalendarDataSource {
-  /// Creates a meeting data source, which used to set the appointment
-  /// collection to the calendar
+  /// Creates a meeting data source, which is used to set the appointment
+  /// collection for the calendar.
   AppointmentDataSource(List<Appointment> source) {
     appointments = source;
   }
