@@ -11,13 +11,20 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:final_project/pages/appointment_editor.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/lake_nixon_activity.dart';
-
-List<LakeNixonActivity> appointments = <LakeNixonActivity>[];
 
 //late bool isUser;
 
+/// A page to display a calendar with appointments, colorcoded by group.
+///
+/// Can display a single group, or all of the groups, with filters for events and
+/// groups.
 class CalendarPage extends StatefulWidget {
+  /// A page to display a calendar with appointments, colorcoded by group.
+  ///
+  /// Can display a single group, or all of the groups based off of the value of
+  /// this.master], with filters for events and groups. [this.isUser] determines
+  /// whether the user should have write access to the calendar. In the case of a
+  /// single group calendar, [this.group] indicates the group.
   const CalendarPage(
       {super.key,
       required this.title,
@@ -26,13 +33,23 @@ class CalendarPage extends StatefulWidget {
       required this.master});
 
   final String title;
+
+  /// The group to be displayed on a single group calendar.
   final Group group;
+
+  /// Whether the user is a user or admin.
   final bool isUser;
+
+  /// Whether the calendar is the master calendar.
   final bool master;
   @override
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
+/// The views that the calendar can be set to.
+///
+/// Includes day and workWeek, in either a standard calendar
+/// or timeline view.
 final List<CalendarView> _allowedViews = <CalendarView>[
   CalendarView.workWeek,
   //CalendarView.week,
@@ -48,25 +65,45 @@ class _CalendarPageState extends State<CalendarPage> {
   _CalendarPageState();
 
   //AppointmentDataSource _activities = AppointmentDataSource(<Appointment>[]);
+
+  /// The current view that the calendar is set to.
+  ///
+  /// e.g. workWeek
   late CalendarView _currentView;
 
   //bool isUser = true;
   //var isUser;
 
   /// Global key used to maintain the state, when we change the parent of the
-  /// widget
+  /// widget.
   final GlobalKey _globalKey = GlobalKey();
   final ScrollController _controller = ScrollController();
+
+  /// The controller for the calendar.
   final CalendarController _calendarController = CalendarController();
+
+  // unused group
   //LakeNixonActivity? _selectedAppointment;
   Appointment? _selectedAppointment;
   List<DropdownMenuItem<String>> firebaseActivities = [];
   List<Appointment> savedActivities = [];
+
+  /// The groups selected by the filter.
+  ///
+  /// If empty, then the groups should not be filtered.
   List<Group> _selectedGroups = [];
+
+  /// The activities selected by the filter.
+  ///
+  /// If empty, then the activities should not be filtered.
   List<String> _selectedActivities = [];
 
   //bool get user => widget.isUser;
   //bool user = widget.isUser;
+
+  /// Initializes the state for the calendar page.
+  ///
+  /// Sets the default [_currentView].
   @override
   void initState() {
     _currentView = CalendarView.workWeek;
@@ -80,7 +117,9 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
   }
 
-//This is what handles changing the calendar view
+  /// Updates page state when calendar view is changed.
+  ///
+  /// A callback used by the calendar.
   void _onViewChanged(ViewChangedDetails viewChangedDetails) {
     if (_currentView != CalendarView.month &&
         _calendarController.view != CalendarView.month) {
@@ -96,7 +135,12 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
-// Handles when you click calendar activities
+  /// Handles clicking on the calendar.
+  ///
+  /// When an empty timeslot is clicked, the user is navigated to the
+  /// [AppointmentEditor]. If a timeslot that is not empty is clicked, the user
+  /// is navigated to the [AppointmentSelector]. Also handles taps on other parts
+  /// of the calendar such as the header.
   void _onCalendarTapped(CalendarTapDetails calendarTapDetails) {
     /// Condition added to open the editor, when the calendar elements tapped
     /// other than the header.
@@ -146,7 +190,9 @@ class _CalendarPageState extends State<CalendarPage> {
     }
   }
 
-// This determines if we send the user to the master calendar or user calendar
+  /// Determines whether to send user to single group or master calendar.
+  ///
+  /// Creates a calendar widget depending on the value of [widget.master].
   Widget _getCalendar(BuildContext context, String group) {
     if (widget.master) {
       return Consumer<AppState>(builder: (context, appState, child) {
@@ -227,6 +273,7 @@ class _CalendarPageState extends State<CalendarPage> {
   }
 }
 
+// should not be used.
 dynamic tapped(bool user, dynamic tap) {
   if (user == true) {
     return null;
@@ -235,6 +282,10 @@ dynamic tapped(bool user, dynamic tap) {
   }
 }
 
+/// Creates a single group calendar using default parameters.
+///
+/// Simplifies calendar api to only expose the controller, the data source, and
+/// the viewchanged and tap callbacks.
 SfCalendar _getLakeNixonCalender(
     [CalendarController? calendarController,
     CalendarDataSource? calendarDataSource,
@@ -258,6 +309,10 @@ SfCalendar _getLakeNixonCalender(
   );
 }
 
+/// Creates a master calendar using default parameters.
+///
+/// Simplifies calendar api to only expose the controller, the data source, and
+/// the viewchanged and tap callbacks.
 SfCalendar _getMasterCalender(
     [CalendarController? calendarController,
     CalendarDataSource? calendarDataSource,
