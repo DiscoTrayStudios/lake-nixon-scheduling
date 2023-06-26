@@ -16,15 +16,6 @@ class _SignupScreenState extends State<SignupScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  void goBack() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -150,7 +141,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 backgroundColor: MaterialStatePropertyAll<
                                         Color>(
                                     Theme.of(context).colorScheme.tertiary)),
-                            onPressed: goBack,
+                            onPressed: () => Navigator.pop(context),
                             child: const Text(
                               'Back',
                             ))))

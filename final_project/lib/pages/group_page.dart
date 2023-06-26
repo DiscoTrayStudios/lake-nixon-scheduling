@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/objects/app_state.dart';
+import 'package:final_project/objects/screen_arguments.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:final_project/pages/user_calendar_page.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/calendar_page.dart';
 import 'package:provider/provider.dart';
@@ -25,15 +25,9 @@ class _GroupPageState extends State<GroupPage> {
   var descriptionController = TextEditingController();
 
   Future<void> userPush(Group group) async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => UserCalendarPage(
-                title: group.name,
-                group: group,
-                isUser: true,
-                master: false,
-              )),
-    );
+    await Navigator.pushNamed(context, '/calendarPage',
+        arguments: CalendarArguments(
+            title: group.name, group: group, isUser: true, master: false));
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);
@@ -44,16 +38,9 @@ class _GroupPageState extends State<GroupPage> {
     // MaterialPageRoute(builder: (context) => const SplashScreen()),
     //);
 
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => CalendarPage(
-          title: group.name,
-          group: group,
-          isUser: false,
-          master: false,
-        ),
-      ),
-    );
+    await Navigator.pushNamed(context, '/calendarPage',
+        arguments: CalendarArguments(
+            title: group.name, group: group, isUser: false, master: false));
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);
@@ -111,108 +98,6 @@ class _GroupPageState extends State<GroupPage> {
       //     onPressed: () async {
       //       //_ActivityInfoPopupForm(context);
       //     })
-    );
-  }
-
-  Future<void> _activityInfoPopupForm(BuildContext context) async {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Add Activity'),
-          content: SingleChildScrollView(
-            child: SizedBox(
-              height: 200,
-              width: 200,
-              child: Column(
-                children: [
-                  // call FormFieldTemplate for each
-                  // will allow for easier universal use for future code iterations
-                  FormFieldTemplate(
-                      controller: activityController,
-                      decoration: 'Activity',
-                      formkey: "ActivityField"),
-                  FormFieldTemplate(
-                      controller: ageLimitController,
-                      decoration: 'Age Limit',
-                      formkey: "MarkField"),
-                  FormFieldTemplate(
-                      controller: groupSizeController,
-                      decoration: 'Group Size',
-                      formkey: "YearField"),
-                  FormFieldTemplate(
-                      controller: descriptionController,
-                      decoration: 'Description',
-                      formkey: "MeetField"),
-                ],
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              key: const Key("OKButton"),
-              onPressed: () async {
-                // This is how you get the database from Firebase
-                CollectionReference activities =
-                    FirebaseFirestore.instance.collection("events");
-                final snapshot = await activities.get();
-
-                // Example of reading in a collection and getting each doc
-
-                // if (snapshot.size > 0) {
-                //   List<QueryDocumentSnapshot<Object?>> data = snapshot.docs;
-                //   data.forEach((element) {
-                //     debugPrint(element.data());
-                //   });
-                // } else {
-                //   debugPrint('No data available.');
-                // }
-
-                //This is where we write database, specfically to the activity collection. You can change collection just up a couple lines
-                int count = snapshot.size;
-                activities.doc("$count").set({
-                  "name": activityController.text,
-                  "ageMin": int.parse(ageLimitController.text),
-                  "groupMax": int.parse(groupSizeController.text)
-                });
-                activityController.clear();
-                ageLimitController.clear();
-                groupSizeController.clear();
-                descriptionController.clear();
-                Navigator.pop(context);
-              },
-              child: const Text('Send'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-}
-
-// standard template for FormFields when adding activities
-class FormFieldTemplate extends StatelessWidget {
-  const FormFieldTemplate(
-      {super.key,
-      required this.controller,
-      required this.decoration,
-      required this.formkey});
-
-  // key for field, controller, and string decoration
-  final String formkey;
-  final TextEditingController controller;
-  final String decoration;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      key: Key(formkey),
-      controller: controller,
-      decoration: InputDecoration(hintText: decoration),
     );
   }
 }

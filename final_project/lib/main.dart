@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/objects/screen_arguments.dart';
+import 'package:final_project/pages/activity_editor.dart';
 import 'package:final_project/pages/appointment_editor.dart';
 import 'package:final_project/pages/appointment_selector.dart';
 import 'package:final_project/pages/calendar_page.dart';
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
           '/authSplashPage': (context) => const UserSplashScreen(),
           '/userSplashPage': (context) => const SplashScreen(),
           '/signupPage': (context) => const SignupScreen(),
+          '/activityEditorPage': (context) => ActivityEditor(),
         });
   }
 }

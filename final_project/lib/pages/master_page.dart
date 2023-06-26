@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/activity_editor.dart';
 import 'package:flutter/material.dart';
 import "package:syncfusion_flutter_calendar/calendar.dart";
@@ -23,16 +24,14 @@ final List<CalendarView> _allowedViews = <CalendarView>[
 
 class _MasterPageState extends State<MasterPage> {
   Future<void> masterPush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-          builder: (context) => const CalendarPage(
-                group:
-                    Group(name: "Admin", color: Color(0xFFFFFFFF), age: 99999),
-                title: "Master",
-                isUser: true,
-                master: true,
-              )),
-    );
+    await Navigator.pushNamed(context, '/calendarPage',
+        arguments: CalendarArguments(
+          group:
+              const Group(name: "Admin", color: Color(0xFFFFFFFF), age: 99999),
+          title: "Master",
+          isUser: true,
+          master: true,
+        ));
   }
 
   @override
@@ -79,11 +78,7 @@ class _MasterPageState extends State<MasterPage> {
                               .fontSize),
                     ),
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => const ActivityEditor()),
-                      );
-                      ;
+                      Navigator.pushNamed(context, '/activityEditorPage');
                     },
                   ),
                 ),

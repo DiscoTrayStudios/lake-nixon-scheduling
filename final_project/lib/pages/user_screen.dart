@@ -22,18 +22,14 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
   }
 
   Future<void> userPagePush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const SplashScreen()),
-    );
+    await Navigator.pushNamed(context, '/userSplashPage');
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);
   }
 
   Future<void> startPagePush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const StartPage()),
-    );
+    await Navigator.pushNamed(context, '/startPage');
   }
 
   void _checkAuth() async {

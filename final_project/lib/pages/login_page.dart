@@ -28,14 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> forgotPassword() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const ForgotPassword()),
+    await Navigator.pushNamed(
+      context,
+      '/forgotPasswordPage',
     );
   }
 
   Future<void> startPagePush() async {
-    await Navigator.of(context).push(
-        MaterialPageRoute(builder: (context) => const UserSplashScreen()));
+    await Navigator.pushNamed(context, '/userSplashScreen');
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);
@@ -192,9 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .fontSize),
                       ),
                       onPressed: () async {
-                        await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
-                        ));
+                        await Navigator.pushNamed(context, '/signupPage');
                       },
                     )
                   ],

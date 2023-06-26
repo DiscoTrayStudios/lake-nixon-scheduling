@@ -64,11 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
   // }
 
   Future<void> groupPagePush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const GroupPage(title: "List of groups"),
-      ),
-    );
+    await Navigator.pushNamed(context, '/groupPage');
   }
 
   Future<void> logout() async {
@@ -76,11 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> logoutScreenPush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
+    await Navigator.pushReplacementNamed(context, '/loginScreen');
   }
 
   @override

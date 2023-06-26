@@ -1,5 +1,6 @@
 import 'package:final_project/objects/appointment_data_source.dart';
 import 'package:final_project/objects/multi_select_dialog_helpers.dart';
+import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/appointment_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -158,32 +159,22 @@ class _CalendarPageState extends State<CalendarPage> {
 
       //This is what takes you to the appointment editor
       if (calendarTapDetails.appointments != null) {
-        Navigator.push<Widget>(
-          context,
-          MaterialPageRoute<Widget>(
-              builder: (BuildContext context) => AppointmentSelector(
-                  AppointmentDataSource(Provider.of<AppState>(context)
-                      .allAppointments(_selectedGroups, _selectedActivities)),
-                  selectedDate,
-                  selectedGroups:
-                      _selectedGroups.isEmpty ? null : _selectedGroups,
-                  selectedActivities: _selectedActivities.isEmpty
-                      ? null
-                      : _selectedActivities)),
-        ).then((value) {
+        Navigator.pushNamed(context, '/appointmentSelectorPage',
+                arguments: AppointmentSelectorArguments(
+                    selectedDate: selectedDate,
+                    selectedGroups:
+                        _selectedGroups.isEmpty ? null : _selectedGroups,
+                    selectedActivities: _selectedActivities.isEmpty
+                        ? null
+                        : _selectedActivities))
+            .then((value) {
           setState(() {});
         });
       } else {
-        Navigator.push<Widget>(
-          context,
-          MaterialPageRoute<Widget>(
-              builder: (BuildContext context) => AppointmentEditor(
-                    AppointmentDataSource(Provider.of<AppState>(context)
-                        .allAppointments(_selectedGroups, _selectedActivities)),
-                    null,
-                    selectedDate,
-                  )),
-        ).then((value) {
+        Navigator.pushNamed(context, '/appointmentEditorPage',
+                arguments:
+                    AppointmentEditorArguments(selectedDate: selectedDate))
+            .then((value) {
           setState(() {});
         });
       }
