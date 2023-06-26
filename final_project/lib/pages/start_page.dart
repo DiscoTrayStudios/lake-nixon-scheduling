@@ -119,7 +119,7 @@ class _StartPageState extends State<StartPage> {
                                 .displayMedium!
                                 .fontSize)),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/masterCalendarPage');
+                      Navigator.of(context).pushNamed('/masterPage');
                     },
                   ),
                 ),

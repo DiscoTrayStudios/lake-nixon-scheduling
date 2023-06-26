@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> startPagePush() async {
-    await Navigator.pushNamed(context, '/userSplashScreen');
+    await Navigator.pushNamed(context, '/authSplashPage');
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);

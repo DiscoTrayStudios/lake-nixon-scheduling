@@ -64,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
   // }
 
   Future<void> groupPagePush() async {
-    await Navigator.pushNamed(context, '/groupPage');
+    await Navigator.pushNamed(context, '/groupsPage');
   }
 
   Future<void> logout() async {
