@@ -26,8 +26,7 @@ class AppointmentEditor extends StatefulWidget {
   /// the selected appointment.
   ///
   /// [this.selectedDate] is the date selected on the calendar.
-  const AppointmentEditor(
-      this.activities, this.selectedAppointment, this.selectedDate,
+  const AppointmentEditor(this.selectedAppointment, this.selectedDate,
       {super.key});
 
   /// The appointment selected from the calendar, if present.
@@ -35,8 +34,6 @@ class AppointmentEditor extends StatefulWidget {
 
   /// The start of the timeslot selected on the calendar.
   final DateTime selectedDate;
-
-  final AppointmentDataSource activities;
 
   @override
   State<AppointmentEditor> createState() => _AppointmentEditorState();
@@ -457,14 +454,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                         //If it doesnt we come in here and we add the appoinments to the app state
                         appState.addAppointments(
                             groupToApp, appState.firestore);
-                        //This for loop adds all of the appointments to the calendar backend which separate from ours.
-                        for (Map<String, dynamic> app in groupToApp.values) {
-                          widget.activities
-                              .notifyListeners(CalendarDataSourceAction.add, [
-                            appState.createAppointment(app["start_time"],
-                                app["end_time"], app["color"], app["subject"])
-                          ]);
-                        }
+
                         Navigator.pop(context);
                       } else {
                         Fluttertoast.showToast(
@@ -553,15 +543,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                         startTime: _originalStartDate,
                         subject: _originalSubject,
                         group: _originalGroup);
-
-                    widget.activities
-                        .notifyListeners(CalendarDataSourceAction.remove, [
-                      appState.createAppointment(
-                          widget.selectedAppointment!.startTime!,
-                          widget.selectedAppointment!.endTime!,
-                          widget.selectedAppointment!.color,
-                          widget.selectedAppointment!.subject!)
-                    ]);
 
                     Navigator.pop(context);
                   }));

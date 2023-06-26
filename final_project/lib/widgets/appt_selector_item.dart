@@ -1,5 +1,6 @@
 import 'package:final_project/objects/appointment_data_source.dart';
 import 'package:final_project/objects/lake_appointment.dart';
+import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/appointment_editor.dart';
 import 'package:flutter/material.dart';
 
@@ -9,13 +10,10 @@ class ApptSelectorItem extends StatelessWidget {
   ///
   /// Tapping on this will send the user to the appointment editor to edit
   /// [this.appointment]
-  const ApptSelectorItem(this.appointment, this.dataSource, this.selectedDate,
-      {super.key});
+  const ApptSelectorItem(this.appointment, this.selectedDate, {super.key});
 
   /// The appointment that the widget displays.
   final LakeAppointment appointment;
-
-  final AppointmentDataSource dataSource;
 
   /// The day that the user selected on the calendar.
   final DateTime selectedDate;
@@ -27,11 +25,9 @@ class ApptSelectorItem extends StatelessWidget {
       subtitle: Text(appointment.group!),
       tileColor: appointment.color!,
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    AppointmentEditor(dataSource, appointment, selectedDate)));
+        Navigator.pushNamed(context, '/appointmentEditorPage',
+            arguments: AppointmentEditorArguments(
+                appointment: appointment, selectedDate: selectedDate));
       },
     );
   }
