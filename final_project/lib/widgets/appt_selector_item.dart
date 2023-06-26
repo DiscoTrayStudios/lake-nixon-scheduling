@@ -9,13 +9,10 @@ class ApptSelectorItem extends StatelessWidget {
   ///
   /// Tapping on this will send the user to the appointment editor to edit
   /// [this.appointment]
-  const ApptSelectorItem(this.appointment, this.dataSource, this.selectedDate,
-      {super.key});
+  const ApptSelectorItem(this.appointment, this.selectedDate, {super.key});
 
   /// The appointment that the widget displays.
   final LakeAppointment appointment;
-
-  final AppointmentDataSource dataSource;
 
   /// The day that the user selected on the calendar.
   final DateTime selectedDate;
@@ -31,7 +28,7 @@ class ApptSelectorItem extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    AppointmentEditor(dataSource, appointment, selectedDate)));
+                    AppointmentEditor(appointment, selectedDate)));
       },
     );
   }

@@ -18,10 +18,8 @@ class AppointmentSelector extends StatefulWidget {
   /// Used when a user clicks on a timeslot with appointments on the calendar.
   /// Displays all the appointments in that timeslot and includes a button to
   /// create a new appointment. Follows any filters selected on the calendar page.
-  const AppointmentSelector(this.dataSource, this.selectedDate,
+  const AppointmentSelector(this.selectedDate,
       {this.selectedGroups, this.selectedActivities, super.key});
-
-  final AppointmentDataSource dataSource;
 
   /// The date and time selected on the calendar.
   final DateTime selectedDate;
@@ -90,8 +88,7 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
         body: ListView.builder(
           itemCount: _appointments.length,
           itemBuilder: (BuildContext context, int index) {
-            return ApptSelectorItem(
-                _appointments[index], widget.dataSource, widget.selectedDate);
+            return ApptSelectorItem(_appointments[index], widget.selectedDate);
           },
         ),
         floatingActionButton: FloatingActionButton(
@@ -99,8 +96,8 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => AppointmentEditor(
-                          widget.dataSource, null, widget.selectedDate)));
+                      builder: (context) =>
+                          AppointmentEditor(null, widget.selectedDate)));
             },
             child: const Icon(Icons.add)));
   }
