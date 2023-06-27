@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:final_project/pages/start_page.dart';
 import 'package:final_project/pages/user_splash_screen.dart';
 
-class UserSplashScreen extends StatefulWidget {
-  const UserSplashScreen({super.key});
+class AuthSplashScreen extends StatefulWidget {
+  const AuthSplashScreen({super.key});
 
   @override
-  State<UserSplashScreen> createState() => _UserSplashScreenState();
+  State<AuthSplashScreen> createState() => _AuthSplashScreenState();
 }
 
-class _UserSplashScreenState extends State<UserSplashScreen> {
+class _AuthSplashScreenState extends State<AuthSplashScreen> {
   bool admin = false;
 
   @override
