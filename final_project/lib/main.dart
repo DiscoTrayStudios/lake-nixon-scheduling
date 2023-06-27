@@ -8,14 +8,14 @@ import 'package:final_project/pages/forgot_password_page.dart';
 import 'package:final_project/pages/master_page.dart';
 import 'package:final_project/pages/signup_page.dart';
 import 'package:final_project/pages/auth_splash_screen.dart';
-import 'package:final_project/pages/user_splash_screen.dart';
+import 'package:final_project/pages/user_home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/pages/start_page.dart';
+import 'package:final_project/pages/admin_home_page.dart';
 import 'package:final_project/firebase_options.dart';
 import 'package:final_project/pages/login_page.dart';
 import 'package:final_project/objects/theme.dart';
@@ -75,10 +75,10 @@ class MyApp extends StatelessWidget {
           },
           '/forgotPasswordPage': (context) => const ForgotPassword(),
           '/authSplashPage': (context) => const AuthSplashScreen(),
-          '/userSplashPage': (context) => const SplashScreen(),
+          '/userSplashPage': (context) => const UserHomePage(),
           '/signupPage': (context) => const SignupScreen(),
           '/activityEditorPage': (context) => const ActivityEditor(),
-          '/startPage': (context) => const StartPage()
+          '/startPage': (context) => const AdminHomePage()
         });
   }
 }

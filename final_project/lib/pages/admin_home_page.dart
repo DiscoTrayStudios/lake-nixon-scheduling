@@ -3,14 +3,14 @@ import 'package:provider/provider.dart';
 
 import 'package:final_project/objects/app_state.dart';
 
-class StartPage extends StatefulWidget {
-  const StartPage({Key? key}) : super(key: key);
+class AdminHomePage extends StatefulWidget {
+  const AdminHomePage({Key? key}) : super(key: key);
 
   @override
-  State<StartPage> createState() => _StartPageState();
+  State<AdminHomePage> createState() => _AdminHomePageState();
 }
 
-class _StartPageState extends State<StartPage> {
+class _AdminHomePageState extends State<AdminHomePage> {
   @override
   void initState() {
     // for (Group g in groups) {
