@@ -2,6 +2,7 @@ import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/appointment_data_source.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/objects/lake_appointment.dart';
+import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/appointment_editor.dart';
 import 'package:final_project/widgets/appt_selector_item.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +19,8 @@ class AppointmentSelector extends StatefulWidget {
   /// Used when a user clicks on a timeslot with appointments on the calendar.
   /// Displays all the appointments in that timeslot and includes a button to
   /// create a new appointment. Follows any filters selected on the calendar page.
-  const AppointmentSelector(this.dataSource, this.selectedDate,
+  const AppointmentSelector(this.selectedDate,
       {this.selectedGroups, this.selectedActivities, super.key});
-
-  final AppointmentDataSource dataSource;
 
   /// The date and time selected on the calendar.
   final DateTime selectedDate;
@@ -90,17 +89,15 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
         body: ListView.builder(
           itemCount: _appointments.length,
           itemBuilder: (BuildContext context, int index) {
-            return ApptSelectorItem(
-                _appointments[index], widget.dataSource, widget.selectedDate);
+            return ApptSelectorItem(_appointments[index], widget.selectedDate);
           },
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => AppointmentEditor(
-                          widget.dataSource, null, widget.selectedDate)));
+              final args =
+                  AppointmentEditorArguments(selectedDate: widget.selectedDate);
+              Navigator.pushNamed(context, '/appointmentEditorPage',
+                  arguments: args);
             },
             child: const Icon(Icons.add)));
   }

@@ -1,13 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/group.dart';
-import 'package:final_project/pages/group_page.dart';
-import 'package:final_project/pages/login_page.dart';
-import 'package:final_project/pages/master_page.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({Key? key}) : super(key: key);
@@ -24,14 +18,6 @@ class _StartPageState extends State<StartPage> {
     // }
     // getSavedActivities(appState.firestore);
     super.initState();
-  }
-
-  Future<void> logoutScreenPush() async {
-    await Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
   }
 
   // Future<void> getSavedActivities(FirebaseFirestore firebase) async {
@@ -133,7 +119,7 @@ class _StartPageState extends State<StartPage> {
                                 .displayMedium!
                                 .fontSize)),
                     onPressed: () {
-                      Navigator.of(context).pushNamed('/masterCalendarPage');
+                      Navigator.of(context).pushNamed('/masterPage');
                     },
                   ),
                 ),
@@ -157,7 +143,6 @@ class _StartPageState extends State<StartPage> {
                           .auth
                           .signOut();
                       Navigator.of(context).pushReplacementNamed('/loginPage');
-                      ;
                     },
                   ),
                 ),

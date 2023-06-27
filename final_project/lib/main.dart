@@ -1,5 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/screen_arguments.dart';
+import 'package:final_project/pages/activity_editor.dart';
+import 'package:final_project/pages/appointment_editor.dart';
+import 'package:final_project/pages/appointment_selector.dart';
+import 'package:final_project/pages/calendar_page.dart';
+import 'package:final_project/pages/forgot_password_page.dart';
 import 'package:final_project/pages/master_page.dart';
+import 'package:final_project/pages/signup_page.dart';
+import 'package:final_project/pages/user_screen.dart';
+import 'package:final_project/pages/user_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,8 +50,34 @@ class MyApp extends StatelessWidget {
         home: checkLogin(FirebaseAuth.instance),
         routes: {
           '/groupsPage': (context) => const GroupPage(title: 'List of Groups'),
-          '/masterCalendarPage': (context) => const MasterPage(),
+          '/masterPage': (context) => const MasterPage(),
           '/loginPage': (context) => const LoginScreen(),
+          '/appointmentEditorPage': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments
+                as AppointmentEditorArguments;
+            return AppointmentEditor(args.appointment, args.selectedDate);
+          },
+          '/appointmentSelectorPage': (context) {
+            final args = ModalRoute.of(context)!.settings.arguments
+                as AppointmentSelectorArguments;
+            return AppointmentSelector(args.selectedDate,
+                selectedGroups: args.selectedGroups,
+                selectedActivities: args.selectedActivities);
+          },
+          '/calendarPage': (context) {
+            final args =
+                ModalRoute.of(context)!.settings.arguments as CalendarArguments;
+            return CalendarPage(
+                title: args.title,
+                group: args.group,
+                isUser: args.isUser,
+                master: args.master);
+          },
+          '/forgotPasswordPage': (context) => const ForgotPassword(),
+          '/authSplashPage': (context) => const UserSplashScreen(),
+          '/userSplashPage': (context) => const SplashScreen(),
+          '/signupPage': (context) => const SignupScreen(),
+          '/activityEditorPage': (context) => ActivityEditor(),
         });
   }
 }
