@@ -78,6 +78,7 @@ class MyApp extends StatelessWidget {
           '/userSplashPage': (context) => const SplashScreen(),
           '/signupPage': (context) => const SignupScreen(),
           '/activityEditorPage': (context) => const ActivityEditor(),
+          '/startPage': (context) => const StartPage()
         });
   }
 }
