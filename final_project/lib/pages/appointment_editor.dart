@@ -3,6 +3,7 @@ import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/widgets/appt_editor_activity_selector.dart';
 import 'package:final_project/widgets/appt_editor_group_selector.dart';
 import 'package:final_project/widgets/appt_editor_time_selector.dart';
+import 'package:final_project/widgets/confirm_popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -353,7 +354,27 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                 color: Theme.of(context).colorScheme.onPrimary,
               ),
               onPressed: () {
-                Navigator.pop(context);
+                if (widget.selectedAppointment != null) {
+                  if (_subject != widget.selectedAppointment!.subject ||
+                      _startDate != widget.selectedAppointment!.startTime ||
+                      _endDate != widget.selectedAppointment!.endTime) {
+                    confirmNavPopup(
+                        context, 'Close editor?', 'All changes will be lost.',
+                        (context) async {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    });
+                  } else {
+                    Navigator.pop(context);
+                  }
+                } else {
+                  confirmNavPopup(
+                      context, 'Close editor?', 'All changes will be lost.',
+                      (context) async {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  });
+                }
               },
             ),
             actions: <Widget>[
@@ -541,13 +562,17 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               : FloatingActionButton(
                   child: const Icon(Icons.delete_forever),
                   onPressed: () {
-                    appState.deleteAppt(
-                        startTime: _originalStartDate,
-                        subject: _originalSubject,
-                        group: _originalGroup);
+                    confirmNavPopup(context, 'Delete Appointment?',
+                        "Deleted appointments can't be recovered.",
+                        (context) async {
+                      appState.deleteAppt(
+                          startTime: _originalStartDate,
+                          subject: _originalSubject,
+                          group: _originalGroup);
 
-                    Navigator.popUntil(
-                        context, ModalRoute.withName('/calendarPage'));
+                      Navigator.popUntil(
+                          context, ModalRoute.withName('/calendarPage'));
+                    });
                   }));
     });
   }

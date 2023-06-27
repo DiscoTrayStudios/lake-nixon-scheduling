@@ -2,6 +2,7 @@ import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/widgets/activity_selector_item.dart';
+import 'package:final_project/widgets/confirm_popup_dialog.dart';
 import 'package:final_project/widgets/form_field_template.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -42,17 +43,23 @@ class _ActivityEditorState extends State<ActivityEditor> {
   /// A callback function called when the user presses the delete button on an
   /// [ActivitySelectorItem]. Deletes both the activity in question, and all
   /// appointments associated with the activity.
-  void onActivityDelete(Activity activity, AppState appState) async {
-    List<LakeAppointment> apps =
-        appState.lakeAppointmentsByActivity(activity.name);
+  void onActivityDelete(
+      BuildContext context, Activity activity, AppState appState) async {
+    confirmNavPopup(context, 'Close editor?', 'All changes will be lost.',
+        (context) async {
+      List<LakeAppointment> apps =
+          appState.lakeAppointmentsByActivity(activity.name);
 
-    for (LakeAppointment app in apps) {
-      appState.deleteAppt(
-          startTime: app.startTime!, subject: app.subject!, group: app.group!);
-    }
+      for (LakeAppointment app in apps) {
+        appState.deleteAppt(
+            startTime: app.startTime!,
+            subject: app.subject!,
+            group: app.group!);
+      }
 
-    await appState.deleteActivity(activity);
-    _selectedIndex = 0;
+      await appState.deleteActivity(activity);
+      _selectedIndex = 0;
+    });
   }
 
   /// Creates a pop-up dialog for creating activities.
