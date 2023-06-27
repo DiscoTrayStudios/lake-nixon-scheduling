@@ -4,7 +4,6 @@ import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/appointment_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -53,13 +52,9 @@ class CalendarPage extends StatefulWidget {
 /// or timeline view.
 final List<CalendarView> _allowedViews = <CalendarView>[
   CalendarView.workWeek,
-  //CalendarView.week,
   CalendarView.day,
-  //CalendarView.month,
   CalendarView.timelineDay,
-  //CalendarView.timelineWeek,
   CalendarView.timelineWorkWeek,
-  //CalendarView.timelineMonth,
 ];
 
 class _CalendarPageState extends State<CalendarPage> {
@@ -72,22 +67,12 @@ class _CalendarPageState extends State<CalendarPage> {
   /// e.g. workWeek
   late CalendarView _currentView;
 
-  //bool isUser = true;
-  //var isUser;
-
   /// Global key used to maintain the state, when we change the parent of the
   /// widget.
   final GlobalKey _globalKey = GlobalKey();
-  final ScrollController _controller = ScrollController();
 
   /// The controller for the calendar.
   final CalendarController _calendarController = CalendarController();
-
-  // unused group
-  //LakeNixonActivity? _selectedAppointment;
-  Appointment? _selectedAppointment;
-  List<DropdownMenuItem<String>> firebaseActivities = [];
-  List<Appointment> savedActivities = [];
 
   /// The groups selected by the filter.
   ///
@@ -99,9 +84,6 @@ class _CalendarPageState extends State<CalendarPage> {
   /// If empty, then the activities should not be filtered.
   List<String> _selectedActivities = [];
 
-  //bool get user => widget.isUser;
-  //bool user = widget.isUser;
-
   /// Initializes the state for the calendar page.
   ///
   /// Sets the default [_currentView].
@@ -109,11 +91,6 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     _currentView = CalendarView.workWeek;
     _calendarController.view = _currentView;
-    bool user = widget.isUser;
-    //_checkAuth();
-    // getActivities();
-    //getSavedActivities();
-    // _activities = AppointmentDataSource(_getDataSource(widget.group));
 
     super.initState();
   }

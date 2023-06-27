@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import 'package:final_project/pages/forgot_password_page.dart';
-import 'package:final_project/pages/signup_page.dart';
-import 'package:final_project/pages/auth_splash_screen.dart';
 import 'package:final_project/objects/app_state.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -36,18 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> startPagePush() async {
     await Navigator.pushReplacementNamed(context, '/authSplashPage');
-    //await Navigator.of(context).push(
-    //MaterialPageRoute(builder: (context) => const StartPage()),
-    //);
   }
-
-  // Future<void> groupPagePush() async {
-  //   await Navigator.of(context).push(
-  //     MaterialPageRoute(
-  //       builder: (context) => GroupPage(title: "List of groups"),
-  //     ),
-  //   );
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -60,17 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                     child: const Image(
-                        image: AssetImage('images/lakenixonlogo.png'))
-
-                    // const Text(
-                    //   'Lake Nixon',
-                    //   style: TextStyle(
-                    //       color: Colors.blue,
-                    //       fontWeight: FontWeight.w500,
-                    //       fontSize: 30),
-                    // )
-
-                    ),
+                        image: AssetImage('images/lakenixonlogo.png'))),
                 Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
@@ -81,7 +57,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               .textTheme
                               .headlineLarge!
                               .fontSize,
-                          //nixongreen
                           color: Theme.of(context).colorScheme.secondary),
                     )),
                 Container(
@@ -131,15 +106,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: () async {
                         try {
-                          final credential = await FirebaseAuth.instance
+                          await FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: emailController.text,
                                   password: passwordController.text);
-                          //await Navigator.of(context).push(MaterialPageRoute(
-                          //builder: (context) =>
-                          //  GroupPage(title: "List of groups"),
-                          //));
-                          // startPagePush();
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
                             Fluttertoast.showToast(

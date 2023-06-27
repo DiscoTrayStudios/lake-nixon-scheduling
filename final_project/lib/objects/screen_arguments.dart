@@ -1,4 +1,3 @@
-import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/objects/lake_appointment.dart';
 
