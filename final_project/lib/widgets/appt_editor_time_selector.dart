@@ -63,26 +63,6 @@ class _TimeSelectorState extends State<TimeSelector> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        // ListTile(
-        //     contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-        //     leading: Icon(Icons.access_time,
-        //         color: Theme.of(context).colorScheme.tertiary),
-        //     title: Row(children: <Widget>[
-        //       Expanded(
-        //         child: Text('All-day',
-        //             style: TextStyle(
-        //                 fontSize:
-        //                     Theme.of(context).textTheme.titleLarge!.fontSize,
-        //                 color: Theme.of(context).colorScheme.tertiary)),
-        //       ),
-        //       Expanded(
-        //           child: Align(
-        //               alignment: Alignment.centerRight,
-        //               child: Switch(
-        //                 value: widget.isAllDay,
-        //                 onChanged: (bool value) => widget.onAllDay(value),
-        //               ))),
-        //     ])),
         ListTile(
             contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
             leading: const Text(''),
@@ -108,19 +88,7 @@ class _TimeSelectorState extends State<TimeSelector> {
                           hour: widget.rangeEndTime.hour - 1, minute: 0),
                       initialTime:
                           TimeOfDay(hour: widget.startDate.hour, minute: 0),
-                      onTimePicked: widget.onStartTimePicked)
-                  // GestureDetector(
-                  //   onTap: () async => widget.onStartTimePicked(),
-                  //   child: Text(DateFormat('hh:mm a').format(widget.startDate),
-                  //       textAlign: TextAlign.right,
-                  //       style: TextStyle(
-                  //           fontSize: Theme.of(context)
-                  //               .textTheme
-                  //               .titleLarge!
-                  //               .fontSize,
-                  //           color: Theme.of(context).colorScheme.tertiary)),
-                  // )
-                  ),
+                      onTimePicked: widget.onStartTimePicked)),
             ])),
         ListTile(
             contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
@@ -135,41 +103,8 @@ class _TimeSelectorState extends State<TimeSelector> {
                       endTime: widget.rangeEndTime,
                       initialTime:
                           TimeOfDay(hour: widget.endDate.hour, minute: 0),
-                      onTimePicked: widget.onEndTimePicked)
-                  // GestureDetector(
-                  //   onTap: () async => widget.onEndTimePicked(),
-                  //   child: Text(DateFormat('hh:mm a').format(widget.endDate),
-                  //       textAlign: TextAlign.right,
-                  //       style: TextStyle(
-                  //           fontSize: Theme.of(context)
-                  //               .textTheme
-                  //               .titleLarge!
-                  //               .fontSize,
-                  //           color: Theme.of(context).colorScheme.tertiary)),
-                  // )
-                  ),
+                      onTimePicked: widget.onEndTimePicked)),
             ])),
-        // ListTile(
-        //   contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-        //   leading: Icon(Icons.refresh,
-        //       color: Theme.of(context).colorScheme.tertiary),
-        //   title: Text(
-        //       widget.rule == SelectRule.doesNotRepeat
-        //           ? 'Does not repeat'
-        //           : widget.rule == SelectRule.everyDay
-        //               ? 'Every day'
-        //               : widget.rule == SelectRule.everyWeek
-        //                   ? 'Every week'
-        //                   : widget.rule == SelectRule.everyMonth
-        //                       ? 'Every month'
-        //                       : widget.rule == SelectRule.everyYear
-        //                           ? 'Every year'
-        //                           : 'Custom',
-        //       style: TextStyle(
-        //           fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
-        //           color: Theme.of(context).colorScheme.tertiary)),
-        //   onTap: () async => widget.onSelectRuleTapped(),
-        // ),
       ],
     );
   }

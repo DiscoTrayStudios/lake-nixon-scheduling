@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project/objects/group.dart';
-import 'package:final_project/pages/calendar_page.dart';
 import 'package:provider/provider.dart';
 
 class GroupPage extends StatefulWidget {
@@ -28,22 +27,12 @@ class _GroupPageState extends State<GroupPage> {
     await Navigator.pushNamed(context, '/calendarPage',
         arguments: CalendarArguments(
             title: group.name, group: group, isUser: true, master: false));
-    //await Navigator.of(context).push(
-    //MaterialPageRoute(builder: (context) => const StartPage()),
-    //);
   }
 
   Future<void> adminPush(Group group) async {
-    //await Navigator.of(context).push(
-    // MaterialPageRoute(builder: (context) => const SplashScreen()),
-    //);
-
     await Navigator.pushNamed(context, '/calendarPage',
         arguments: CalendarArguments(
             title: group.name, group: group, isUser: false, master: false));
-    //await Navigator.of(context).push(
-    //MaterialPageRoute(builder: (context) => const StartPage()),
-    //);
   }
 
   void _checkAuth(Group group) async {
@@ -69,11 +58,6 @@ class _GroupPageState extends State<GroupPage> {
     debugPrint("Chat");
 
     _checkAuth(group);
-    //await Navigator.of(context).push(
-    //MaterialPageRoute(
-    //builder: (context) => CalendarPage(title: group.name, group: group),
-    //),
-    //);
   }
 
   @override
@@ -93,11 +77,6 @@ class _GroupPageState extends State<GroupPage> {
               );
             }).toList(),
           )),
-      // floatingActionButton: FloatingActionButton(
-      //     child: const Icon(Icons.add),
-      //     onPressed: () async {
-      //       //_ActivityInfoPopupForm(context);
-      //     })
     );
   }
 }

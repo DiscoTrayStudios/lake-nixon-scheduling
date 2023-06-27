@@ -21,7 +21,6 @@ import 'package:final_project/pages/login_page.dart';
 import 'package:final_project/objects/theme.dart';
 import 'package:final_project/pages/group_page.dart';
 
-// Initialize firebase and run the app
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -32,21 +31,13 @@ Future<void> main() async {
   ));
 }
 
-// Main app class
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // check if user is logged in. If so, send to start page
-  // else, send to login screen
-
-  // builds the app, calling check login to determine what page to use
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: lakeNixonTheme(),
-        //home: CalendarPage(title: 'Calendar Page'),
-        //home: GroupPage(title: "List of groups"),
         home: checkLogin(Provider.of<AppState>(context).auth),
         routes: {
           '/groupsPage': (context) => const GroupPage(title: 'List of Groups'),
