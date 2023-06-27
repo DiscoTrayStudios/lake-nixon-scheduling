@@ -2,17 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:final_project/pages/start_page.dart';
-import 'package:final_project/pages/user_splash_screen.dart';
+import 'package:final_project/pages/admin_home_page.dart';
+import 'package:final_project/pages/user_home_page.dart';
 
-class UserSplashScreen extends StatefulWidget {
-  const UserSplashScreen({super.key});
+class AuthSplashScreen extends StatefulWidget {
+  const AuthSplashScreen({super.key});
 
   @override
-  State<UserSplashScreen> createState() => _UserSplashScreenState();
+  State<AuthSplashScreen> createState() => _AuthSplashScreenState();
 }
 
-class _UserSplashScreenState extends State<UserSplashScreen> {
+class _AuthSplashScreenState extends State<AuthSplashScreen> {
   bool admin = false;
 
   @override
@@ -22,14 +22,14 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
   }
 
   Future<void> userPagePush() async {
-    await Navigator.pushNamed(context, '/userSplashPage');
+    await Navigator.pushReplacementNamed(context, '/userSplashPage');
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);
   }
 
   Future<void> startPagePush() async {
-    await Navigator.pushNamed(context, '/startPage');
+    await Navigator.pushReplacementNamed(context, '/startPage');
   }
 
   void _checkAuth() async {
@@ -40,9 +40,7 @@ class _UserSplashScreenState extends State<UserSplashScreen> {
         .doc(user?.uid)
         .get();
 
-    setState(() {
-      admin = snap['admin'];
-    });
+    admin = snap['admin'];
 
     if (admin) {
       startPagePush();

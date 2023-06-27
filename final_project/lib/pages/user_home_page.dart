@@ -7,14 +7,14 @@ import 'package:final_project/objects/group.dart';
 import 'package:final_project/pages/group_page.dart';
 import 'package:final_project/pages/login_page.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class UserHomePage extends StatefulWidget {
+  const UserHomePage({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<UserHomePage> createState() => _UserHomePageState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _UserHomePageState extends State<UserHomePage> {
   @override
   void initState() {
     // for (Group g in groups) {

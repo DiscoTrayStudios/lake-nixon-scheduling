@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:final_project/pages/forgot_password_page.dart';
 import 'package:final_project/pages/signup_page.dart';
-import 'package:final_project/pages/user_screen.dart';
+import 'package:final_project/pages/auth_splash_screen.dart';
 import 'package:final_project/objects/app_state.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> startPagePush() async {
-    await Navigator.pushNamed(context, '/authSplashPage');
+    await Navigator.pushReplacementNamed(context, '/authSplashPage');
     //await Navigator.of(context).push(
     //MaterialPageRoute(builder: (context) => const StartPage()),
     //);

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 
-import 'package:final_project/pages/start_page.dart';
+import 'package:final_project/pages/admin_home_page.dart';
 import 'package:final_project/objects/app_state.dart';
 
 @GenerateNiceMocks([MockSpec<NavigatorObserver>()])
@@ -14,7 +14,7 @@ import 'start_page_test.mocks.dart';
 
 void main() {
   testWidgets('StartPage has appBar and page title', (tester) async {
-    await tester.pumpWidget(const MaterialApp(home: StartPage()));
+    await tester.pumpWidget(const MaterialApp(home: AdminHomePage()));
 
     final appBarTitleFinder = find.text('Action Page');
     final pageTitleFinder = find.text('Lake Nixon Admin');
@@ -30,7 +30,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: ChangeNotifierProvider(
             create: ((context) => AppState(firestore, auth)),
-            child: const StartPage()),
+            child: const AdminHomePage()),
         navigatorObservers: [
           mockObserver
         ],
@@ -56,7 +56,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: ChangeNotifierProvider(
             create: ((context) => AppState(firestore, auth)),
-            child: const StartPage()),
+            child: const AdminHomePage()),
         navigatorObservers: [
           mockObserver
         ],
@@ -83,7 +83,7 @@ void main() {
     await tester.pumpWidget(MaterialApp(
         home: ChangeNotifierProvider(
             create: ((context) => AppState(firestore, auth)),
-            child: const StartPage()),
+            child: const AdminHomePage()),
         navigatorObservers: [
           mockObserver
         ],
@@ -103,6 +103,6 @@ void main() {
     ));
     expect(auth.currentUser, null);
     expect(find.text('Login Page'), findsOneWidget);
-    expect(find.byType(StartPage), findsNothing);
+    expect(find.byType(AdminHomePage), findsNothing);
   });
 }
