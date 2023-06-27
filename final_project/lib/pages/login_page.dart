@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'package:final_project/pages/forgot_password_page.dart';
 import 'package:final_project/pages/signup_page.dart';
-import 'package:final_project/pages/user_screen.dart';
+import 'package:final_project/pages/auth_splash_screen.dart';
 import 'package:final_project/objects/app_state.dart';
 
 class LoginScreen extends StatefulWidget {

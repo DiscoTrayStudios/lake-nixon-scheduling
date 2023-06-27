@@ -7,7 +7,7 @@ import 'package:final_project/pages/calendar_page.dart';
 import 'package:final_project/pages/forgot_password_page.dart';
 import 'package:final_project/pages/master_page.dart';
 import 'package:final_project/pages/signup_page.dart';
-import 'package:final_project/pages/user_screen.dart';
+import 'package:final_project/pages/auth_splash_screen.dart';
 import 'package:final_project/pages/user_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
         theme: lakeNixonTheme(),
         //home: CalendarPage(title: 'Calendar Page'),
         //home: GroupPage(title: "List of groups"),
-        home: checkLogin(FirebaseAuth.instance),
+        home: checkLogin(Provider.of<AppState>(context).auth),
         routes: {
           '/groupsPage': (context) => const GroupPage(title: 'List of Groups'),
           '/masterPage': (context) => const MasterPage(),
@@ -74,18 +74,18 @@ class MyApp extends StatelessWidget {
                 master: args.master);
           },
           '/forgotPasswordPage': (context) => const ForgotPassword(),
-          '/authSplashPage': (context) => const UserSplashScreen(),
+          '/authSplashPage': (context) => const AuthSplashScreen(),
           '/userSplashPage': (context) => const SplashScreen(),
           '/signupPage': (context) => const SignupScreen(),
-          '/activityEditorPage': (context) => ActivityEditor(),
+          '/activityEditorPage': (context) => const ActivityEditor(),
+          '/startPage': (context) => const StartPage()
         });
   }
 }
 
-Widget checkLogin(auth) {
+Widget checkLogin(FirebaseAuth auth) {
   if (auth.currentUser != null) {
-    return const StartPage();
-    //return GroupPage(title: "List of groups");
+    return const AuthSplashScreen();
   } else {
     return const LoginScreen();
   }
