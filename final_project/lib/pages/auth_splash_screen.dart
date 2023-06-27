@@ -40,9 +40,7 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
         .doc(user?.uid)
         .get();
 
-    setState(() {
-      admin = snap['admin'];
-    });
+    admin = snap['admin'];
 
     if (admin) {
       startPagePush();
