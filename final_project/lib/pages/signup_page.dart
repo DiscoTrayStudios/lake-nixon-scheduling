@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'package:final_project/pages/login_page.dart';
-
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
 
@@ -76,18 +74,17 @@ class _SignupScreenState extends State<SignupScreen> {
                                 .headlineLarge!
                                 .fontSize),
                       ),
-                      onPressed: () async {
+                      onPressed: () {
                         bool success = false;
                         try {
-                          final credential = await FirebaseAuth.instance
-                              .createUserWithEmailAndPassword(
+                          FirebaseAuth.instance.createUserWithEmailAndPassword(
                             email: emailController.text,
                             password: passwordController.text,
                           );
                           success = true;
                           User? user = FirebaseAuth.instance.currentUser;
 
-                          await FirebaseFirestore.instance
+                          FirebaseFirestore.instance
                               .collection("users")
                               .doc(user?.uid)
                               .set({'admin': false});

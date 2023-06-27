@@ -1,6 +1,5 @@
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/activity.dart';
-import 'package:final_project/objects/group.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -58,9 +57,6 @@ class _ActivitySelectorState extends State<ActivitySelector> {
           style: TextStyle(
               fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
               color: Theme.of(context).colorScheme.secondary)),
-      //This is the groups dropdown button
-      //A current issue is that for the group filtering to work we have to click within this box to
-      //get the filtering to work.
       title: Align(
         alignment: Alignment.centerRight,
         child: DropdownButton(

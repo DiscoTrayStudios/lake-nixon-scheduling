@@ -1,14 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/objects/screen_arguments.dart';
-import 'package:final_project/pages/activity_editor.dart';
 import 'package:flutter/material.dart';
-import "package:syncfusion_flutter_calendar/calendar.dart";
-import 'package:provider/provider.dart';
 
 import 'package:final_project/objects/group.dart';
-import 'package:final_project/pages/calendar_page.dart';
-
-import 'package:final_project/objects/app_state.dart';
 
 class MasterPage extends StatefulWidget {
   const MasterPage({Key? key}) : super(key: key);
@@ -16,11 +9,6 @@ class MasterPage extends StatefulWidget {
   @override
   State<MasterPage> createState() => _MasterPageState();
 }
-
-final List<CalendarView> _allowedViews = <CalendarView>[
-  CalendarView.workWeek,
-  CalendarView.day
-];
 
 class _MasterPageState extends State<MasterPage> {
   Future<void> masterPush() async {

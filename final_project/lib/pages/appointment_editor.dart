@@ -1,4 +1,3 @@
-import 'package:final_project/objects/appointment_data_source.dart';
 import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/widgets/appt_editor_activity_selector.dart';
 import 'package:final_project/widgets/appt_editor_group_selector.dart';
@@ -7,7 +6,6 @@ import 'package:final_project/widgets/confirm_popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:final_project/objects/app_state.dart';
@@ -84,13 +82,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   /// The end of the range in which times can be selected.
   final TimeOfDay _timeSelectorEndTime = const TimeOfDay(hour: 18, minute: 0);
-
-  // RecurrenceProperties? _recurrenceProperties;
-  // late RecurrenceType _recurrenceType;
-  // RecurrenceRange? _recurrenceRange;
-  // late int _interval;
-
-  // SelectRule? _rule = SelectRule.doesNotRepeat;
 
   /// Sets the [dropdownValue] and [_subject] to the new value picked by the
   /// activity selector.
@@ -207,35 +198,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     }
   }
 
-  // void onSelectRuleTapped() async {
-  //   final dynamic properties = await showDialog<dynamic>(
-  //       context: context,
-  //       builder: (BuildContext context) {
-  //         return WillPopScope(
-  //             onWillPop: () async {
-  //               return true;
-  //             },
-  //             child: SelectRuleDialog(
-  //               _recurrenceProperties,
-  //               widget.colorCollection[_selectedColorIndex],
-  //               widget.activities,
-  //               selectedAppointment: widget.selectedAppointment ??
-  //                   Appointment(
-  //                     startTime: _startDate,
-  //                     endTime: _endDate,
-  //                     isAllDay: _isAllDay,
-  //                     subject: _subject == '' ? '(No title)' : _subject,
-  //                   ),
-  //               onChanged: (PickerChangedDetails details) {
-  //                 setState(() {
-  //                   _rule = details.selectedRule;
-  //                 });
-  //               },
-  //             ));
-  //       });
-  //   _recurrenceProperties = properties as RecurrenceProperties?;
-  // }
-
   /// The groups selected by the dropdown.
   List<Group> _selectedGroups = [];
 
@@ -265,79 +227,24 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       _startDate = widget.selectedAppointment!.startTime!;
       _endDate = widget.selectedAppointment!.endTime!;
 
-      // _isAllDay = widget.selectedAppointment!.isAllDay;
-
-      //_selectedGroups = widget.selectedAppointment!.;
-
       _subject = widget.selectedAppointment!.subject!;
       _notes = widget.selectedAppointment!.notes;
-
-      //_location = widget.selectedAppointment!.location;
-      // _recurrenceProperties =
-      //     widget.selectedAppointment!.recurrenceRule != null &&
-      //             widget.selectedAppointment!.recurrenceRule!.isNotEmpty
-      //         ? SfCalendar.parseRRule(
-      //             widget.selectedAppointment!.recurrenceRule!, _startDate)
-      //         : null;
-      // if (_recurrenceProperties == null) {
-      //   _rule = SelectRule.doesNotRepeat;
-      // } else {
-      //   _updateMobileRecurrenceProperties();
-      // }
 
       _originalStartDate = widget.selectedAppointment!.startTime!;
       _originalSubject = widget.selectedAppointment!.subject!;
       _originalGroup = widget.selectedAppointment!.group!;
     } else {
-      // _isAllDay = widget.targetElement == CalendarElement.allDayPanel;
-
       _subject = '';
       _notes = '';
-      //_location = '';
 
       final DateTime date = widget.selectedDate;
       _startDate = date;
       _endDate = date.add(const Duration(hours: 1));
-      // _rule = SelectRule.doesNotRepeat;
-      // _recurrenceProperties = null;
+
+      _startTime = TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
+      _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
     }
-
-    _startTime = TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
-    _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
   }
-
-  // void _updateMobileRecurrenceProperties() {
-  //   _recurrenceType = _recurrenceProperties!.recurrenceType;
-  //   _recurrenceRange = _recurrenceProperties!.recurrenceRange;
-  //   _interval = _recurrenceProperties!.interval;
-  //   if (_interval == 1 && _recurrenceRange == RecurrenceRange.noEndDate) {
-  //     switch (_recurrenceType) {
-  //       case RecurrenceType.daily:
-  //         _rule = SelectRule.everyDay;
-  //         break;
-  //       case RecurrenceType.weekly:
-  //         if (_recurrenceProperties!.weekDays.length == 1) {
-  //           _rule = SelectRule.everyWeek;
-  //         } else {
-  //           _rule = SelectRule.custom;
-  //         }
-  //         break;
-  //       case RecurrenceType.monthly:
-  //         _rule = SelectRule.everyMonth;
-  //         break;
-  //       case RecurrenceType.yearly:
-  //         _rule = SelectRule.everyYear;
-  //         break;
-  //     }
-  //   } else {
-  //     _rule = SelectRule.custom;
-  //   }
-  // }
-
-  // Widget _getAppointmentEditor(
-  //     BuildContext context, Color backgroundColor, Color defaultColor) {
-  //   return
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -528,8 +435,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       color: Color.lerp(Theme.of(context).colorScheme.tertiary,
                           Colors.white, 0.5)),
                   TimeSelector(
-                      // _isAllDay,
-                      // onAllDaySwitchFlipped,
                       _startDate,
                       _endDate,
                       onStartDatePicked,

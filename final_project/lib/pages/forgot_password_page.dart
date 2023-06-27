@@ -14,8 +14,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _nameController = TextEditingController();
-  //final _authService = await FirebaseAuth.instance.sendPasswordResetEmail(email: email)
-  //disposing all text controllers
   @override
   void dispose() {
     _emailController.dispose();
@@ -23,15 +21,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     _nameController.dispose();
     super.dispose();
   }
-  //
-  //Future<void> confirmResetPassword() async {
-  //await Navigator.of(context).push(
-  //MaterialPageRoute(builder: (context) => const UserSplashScreen()),
-  //);
-  //await Navigator.of(context).push(
-  //MaterialPageRoute(builder: (context) => const StartPage()),
-  //);
-  //}
 
   @override
   Widget build(BuildContext context) {
@@ -136,22 +125,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               email: _emailController.text);
 
                           debugPrint("Test");
-                          /*
-                          Fluttertoast.showToast(
-                              msg: "Email sent to reset password",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.CENTER,
-                              timeInSecForIosWeb: 3,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0);
-                              */
-                          //Navigator.pop(context);
-                          //await Navigator.of(context).push(MaterialPageRoute(
-                          //builder: (context) =>
-                          //  GroupPage(title: "List of groups"),
-                          //));
-                          //startPagePush();
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
                             Fluttertoast.showToast(

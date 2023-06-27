@@ -1,7 +1,5 @@
-import 'package:final_project/objects/appointment_data_source.dart';
 import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/objects/screen_arguments.dart';
-import 'package:final_project/pages/appointment_editor.dart';
 import 'package:flutter/material.dart';
 
 /// A widget used to display an appointment in the appointment selector screen.
