@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 typedef OnPressedCallback = Function(int);
-typedef OnDeleteCallback = Function(Activity, AppState);
+typedef OnDeleteCallback = Function(BuildContext, Activity, AppState);
 
 /// An item used in the activity editor to display individual activities.
 ///
@@ -56,7 +56,7 @@ class ActivitySelectorItem extends StatelessWidget {
                   return IconButton(
                       icon: Icon(Icons.delete_forever,
                           color: Theme.of(context).colorScheme.error),
-                      onPressed: () => onDelete(activity, appState));
+                      onPressed: () => onDelete(context, activity, appState));
                 }))
               ],
             )
