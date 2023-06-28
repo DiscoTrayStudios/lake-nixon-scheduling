@@ -70,7 +70,8 @@ class DefaultFirebaseOptions {
     projectId: 'testmanager-86d06',
     databaseURL: 'https://testmanager-86d06-default-rtdb.firebaseio.com',
     storageBucket: 'testmanager-86d06.appspot.com',
-    iosClientId: '497761986925-qde7rjbbhii4nja75r05iupdnlou36ch.apps.googleusercontent.com',
+    iosClientId:
+        '497761986925-qde7rjbbhii4nja75r05iupdnlou36ch.apps.googleusercontent.com',
     iosBundleId: 'com.example.finalProject',
   );
 
@@ -81,7 +82,8 @@ class DefaultFirebaseOptions {
     projectId: 'testmanager-86d06',
     databaseURL: 'https://testmanager-86d06-default-rtdb.firebaseio.com',
     storageBucket: 'testmanager-86d06.appspot.com',
-    iosClientId: '497761986925-qde7rjbbhii4nja75r05iupdnlou36ch.apps.googleusercontent.com',
+    iosClientId:
+        '497761986925-qde7rjbbhii4nja75r05iupdnlou36ch.apps.googleusercontent.com',
     iosBundleId: 'com.example.finalProject',
   );
 }
