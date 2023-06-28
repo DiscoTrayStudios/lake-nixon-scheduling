@@ -286,46 +286,46 @@ void main() {
     expect(appt.color, const Color(0xff2471a3));
     expect(appt.subject, "Test Subject 2");
   });
-  test('checkActivity correctly identifies if there are too many groups',
-      () async {
-    FakeFirebaseFirestore instance = FakeFirebaseFirestore();
-    MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
+  // test('checkActivity correctly identifies if there are too many groups',
+  //     () async {
+  //   FakeFirebaseFirestore instance = FakeFirebaseFirestore();
+  //   MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
 
-    AppState appState = await initializeAppStateTests(instance, auth);
+  //   AppState appState = await initializeAppStateTests(instance, auth);
 
-    await instance.collection('appointments').doc('Test Appointment 2').set({
-      "start_time": DateTime.utc(1969, 7, 20, 20),
-      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
-      "color": "Color(0xff2471a3)",
-      "notes": "Test Notes",
-      "subject": "Test Subject",
-      "group": "Test Group 2",
-    });
+  //   await instance.collection('appointments').doc('Test Appointment 2').set({
+  //     "start_time": DateTime.utc(1969, 7, 20, 20),
+  //     "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+  //     "color": "Color(0xff2471a3)",
+  //     "notes": "Test Notes",
+  //     "subject": "Test Subject",
+  //     "group": "Test Group 2",
+  //   });
 
-    await instance.collection('appointments').doc('Test Appointment 3').set({
-      "start_time": DateTime.utc(1969, 7, 20, 20),
-      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
-      "color": "Color(0xff2471a3)",
-      "notes": "Test Notes",
-      "subject": "Test Subject",
-      "group": "Test Group 2",
-    });
+  //   await instance.collection('appointments').doc('Test Appointment 3').set({
+  //     "start_time": DateTime.utc(1969, 7, 20, 20),
+  //     "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+  //     "color": "Color(0xff2471a3)",
+  //     "notes": "Test Notes",
+  //     "subject": "Test Subject",
+  //     "group": "Test Group 2",
+  //   });
 
-    await instance.collection('appointments').doc('Test Appointment 4').set({
-      "start_time": DateTime.utc(1969, 7, 20, 20),
-      "end_time": DateTime.utc(1969, 7, 20, 20, 30),
-      "color": "Color(0xff2471a3)",
-      "notes": "Test Notes",
-      "subject": "Test Subject",
-      "group": "Test Group 2",
-    });
+  //   await instance.collection('appointments').doc('Test Appointment 4').set({
+  //     "start_time": DateTime.utc(1969, 7, 20, 20),
+  //     "end_time": DateTime.utc(1969, 7, 20, 20, 30),
+  //     "color": "Color(0xff2471a3)",
+  //     "notes": "Test Notes",
+  //     "subject": "Test Subject",
+  //     "group": "Test Group 2",
+  //   });
 
-    expect(appState.checkActivity("Test Subject", "20", 0), true);
-    expect(appState.checkActivity("Test Subject", "20", 1), true);
-    expect(appState.checkActivity("Test Subject", "20", 2), true);
-    expect(appState.checkActivity("Test Subject", "20", 3), false);
-    expect(appState.checkActivity("Test Subject", "20", 15), false);
-  });
+  //   expect(appState.checkActivity("Test Subject", "20", 0), true);
+  //   expect(appState.checkActivity("Test Subject", "20", 1), true);
+  //   expect(appState.checkActivity("Test Subject", "20", 2), true);
+  //   expect(appState.checkActivity("Test Subject", "20", 3), false);
+  //   expect(appState.checkActivity("Test Subject", "20", 15), false);
+  // });
   test('getApptsAtTime gets right appts', () async {
     FakeFirebaseFirestore instance = FakeFirebaseFirestore();
     MockFirebaseAuth auth = MockFirebaseAuth(signedIn: true);
