@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -31,17 +32,13 @@ class _SignupScreenState extends State<SignupScreen> {
                     padding: const EdgeInsets.all(10),
                     child: Text(
                       'Sign up',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .fontSize),
+                      style: Theme.of(context).textTheme.displaySmall,
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextField(
                     controller: emailController,
+                    style: Theme.of(context).textTheme.headlineSmall,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'E-mail',
@@ -53,6 +50,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   child: TextField(
                     obscureText: true,
                     controller: passwordController,
+                    style: Theme.of(context).textTheme.headlineSmall,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
@@ -65,14 +63,10 @@ class _SignupScreenState extends State<SignupScreen> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll<Color>(
-                              Theme.of(context).colorScheme.secondary)),
+                              Theme.of(context).colorScheme.nixonGreen)),
                       child: Text(
                         'Create',
-                        style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .fontSize),
+                        style: Theme.of(context).textTheme.largeButton,
                       ),
                       onPressed: () {
                         bool success = false;
@@ -137,11 +131,11 @@ class _SignupScreenState extends State<SignupScreen> {
                             style: ButtonStyle(
                                 backgroundColor: MaterialStatePropertyAll<
                                         Color>(
-                                    Theme.of(context).colorScheme.tertiary)),
+                                    Theme.of(context).colorScheme.nixonBrown)),
                             onPressed: () => Navigator.pop(context),
-                            child: const Text(
-                              'Back',
-                            ))))
+                            child: Text('Back',
+                                style:
+                                    Theme.of(context).textTheme.smallButton))))
               ],
             )));
   }
