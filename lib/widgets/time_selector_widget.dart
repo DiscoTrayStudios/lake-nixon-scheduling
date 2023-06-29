@@ -1,3 +1,4 @@
+import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -37,24 +38,27 @@ class _TimeSelectorDropdownState extends State<TimeSelectorDropdown> {
 
   @override
   initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     for (TimeOfDay time = widget.startTime;
         time.hour <= widget.endTime.hour;
         time = time.replacing(hour: time.hour + 1)) {
       _dropdownItems.add(DropdownMenuItem(
           value: time,
           child: Text(
-              DateFormat('hh:mm a').format(DateTime(1, 1, 1, time.hour)))));
+              DateFormat('hh:mm a').format(DateTime(1, 1, 1, time.hour)),
+              style: Theme.of(context).textTheme.bodyMedium)));
     }
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton(
+        style: Theme.of(context).textTheme.bodyMedium,
         value: widget.initialTime,
         items: _dropdownItems,
-        icon: const Icon(Icons.access_time),
+        icon: Icon(Icons.access_time,
+            color: Theme.of(context).colorScheme.nixonBrown),
         onChanged: (value) {
           widget.onTimePicked(value!);
         },

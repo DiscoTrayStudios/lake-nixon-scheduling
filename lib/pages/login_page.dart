@@ -1,3 +1,4 @@
+import 'package:final_project/objects/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -52,17 +53,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     padding: const EdgeInsets.all(10),
                     child: Text(
                       'Sign in',
-                      style: TextStyle(
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .fontSize,
-                          color: Theme.of(context).colorScheme.secondary),
+                      style: Theme.of(context).textTheme.displaySmall,
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
                   child: TextField(
                     controller: emailController,
+                    style: Theme.of(context).textTheme.headlineSmall,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'E-mail',
@@ -74,6 +71,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: TextField(
                     obscureText: true,
                     controller: passwordController,
+                    style: Theme.of(context).textTheme.headlineSmall,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'Password',
@@ -84,9 +82,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () {
                     forgotPassword();
                   },
-                  child: const Text(
-                    'Forgot Password',
-                  ),
+                  child: Text('Forgot Password',
+                      style: Theme.of(context).textTheme.mediumButton),
                 ),
                 Container(
                     height: 50,
@@ -94,15 +91,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       style: ButtonStyle(
                           backgroundColor: MaterialStatePropertyAll<Color>(
-                              Theme.of(context).colorScheme.secondary)),
+                              Theme.of(context).colorScheme.primary)),
                       child: Text(
                         'Login',
-                        style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .fontSize,
-                            color: Theme.of(context).colorScheme.onSecondary),
+                        style: Theme.of(context).textTheme.largeButton,
                       ),
                       onPressed: () async {
                         try {
@@ -127,6 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     .fontSize);
                             debugPrint('No user found for that email.');
                           } else if (e.code == 'wrong-password') {
+                            // probably should not say something like this for security
                             Fluttertoast.showToast(
                                 msg: "Incorrect password for that email",
                                 toastLength: Toast.LENGTH_LONG,
@@ -151,15 +144,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    const Text('Do not have account?'),
+                    Text(
+                      'Don\'t have account?',
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
                     TextButton(
                       child: Text(
                         'Sign up',
-                        style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .titleLarge!
-                                .fontSize),
+                        style: Theme.of(context).textTheme.mediumButton,
                       ),
                       onPressed: () async {
                         await Navigator.pushNamed(context, '/signupPage');

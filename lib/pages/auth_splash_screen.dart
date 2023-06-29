@@ -53,12 +53,7 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
             padding: const EdgeInsets.fromLTRB(10, 50, 10, 0),
             child: Text(
               'Authenticating',
-              style: TextStyle(
-                  //nixongreen
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontWeight: FontWeight.w500,
-                  fontSize:
-                      Theme.of(context).textTheme.headlineLarge!.fontSize),
+              style: Theme.of(context).textTheme.displaySmall,
             )),
       ])),
     );

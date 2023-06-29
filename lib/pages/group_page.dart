@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/screen_arguments.dart';
+import 'package:final_project/objects/theme.dart';
+import 'package:final_project/widgets/group_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -64,7 +66,8 @@ class _GroupPageState extends State<GroupPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("List of Groups"),
+        title: Text("List of Groups",
+            style: Theme.of(context).textTheme.appBarTitle),
       ),
       body: Container(
           padding: const EdgeInsets.fromLTRB(10, 20, 40, 0),

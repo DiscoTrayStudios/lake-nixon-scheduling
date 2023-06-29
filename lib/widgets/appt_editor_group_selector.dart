@@ -40,19 +40,15 @@ class _GroupSelectorState extends State<GroupSelector> {
       contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
       //This is where the group select field is
       title: MultiSelectDialogField(
-        title: Text("Assign Groups",
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
-                color: Theme.of(context).colorScheme.secondary)),
-        buttonText: Text("Assign Groups",
-            style: TextStyle(
-                fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
-                color: Theme.of(context).colorScheme.secondary)),
+        title:
+            Text("Assign Groups", style: Theme.of(context).textTheme.bodyLarge),
+        buttonText:
+            Text("Assign Groups", style: Theme.of(context).textTheme.bodyLarge),
         colorator: (group) => group.color,
         chipDisplay: MultiSelectChipDisplay<Group>(
             textStyle: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyLarge!.fontSize,
-                color: Theme.of(context).colorScheme.onTertiary)),
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                color: Theme.of(context).colorScheme.onPrimary)),
         items: createCheckboxGroups(widget.availableGroups),
         initialValue: widget.selectedGroups,
         onConfirm: (results) => widget.onConfirm(results),

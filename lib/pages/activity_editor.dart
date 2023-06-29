@@ -75,7 +75,7 @@ class _ActivityEditorState extends State<ActivityEditor> {
         return AlertDialog(
           title: Text(
             'Add Activity',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: Theme.of(context).textTheme.bodyLarge,
           ),
           content: SingleChildScrollView(
             child: SizedBox(

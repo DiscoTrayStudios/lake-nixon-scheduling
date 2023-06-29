@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:final_project/objects/app_state.dart';
+import 'package:final_project/objects/theme.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({Key? key}) : super(key: key);
@@ -20,10 +21,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "Action Page",
-          ),
-        ),
+            title: Text("Lake Nixon Admin",
+                style: Theme.of(context).textTheme.appBarTitle),
+            backgroundColor: Theme.of(context).colorScheme.nixonGreen),
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: ListView(
@@ -31,15 +31,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
-                    child: Text(
-                      'Lake Nixon Admin',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onBackground,
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineMedium!
-                              .fontSize),
-                    )),
+                    child: Text('Admin Options',
+                        style: Theme.of(context).textTheme.pageHeader)),
                 Container(
                     padding: const EdgeInsets.all(10),
                     child: SizedBox(
@@ -48,15 +41,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         key: const Key('groupsNavButton'),
                         style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll<Color>(
-                                Theme.of(context).colorScheme.secondary)),
+                                Theme.of(context).colorScheme.nixonGreen)),
                         child: Text("Groups",
-                            style: TextStyle(
-                                color:
-                                    Theme.of(context).colorScheme.onSecondary,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .displayMedium!
-                                    .fontSize)),
+                            style: Theme.of(context).textTheme.largeButton),
                         onPressed: () {
                           Navigator.of(context).pushNamed('/groupsPage');
                         },
@@ -69,14 +56,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     key: const Key('masterCalendarNavButton'),
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.secondary)),
+                            Theme.of(context).colorScheme.nixonGreen)),
                     child: Text("Master Calendar",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .displayMedium!
-                                .fontSize)),
+                        style: Theme.of(context).textTheme.largeButton),
                     onPressed: () {
                       Navigator.of(context).pushNamed('/masterPage');
                     },
@@ -89,14 +71,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     key: const Key('logOutNavButton'),
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.tertiary)),
+                            Theme.of(context).colorScheme.nixonBrown)),
                     child: Text("Log Out",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onTertiary,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .displaySmall!
-                                .fontSize)),
+                        style: Theme.of(context).textTheme.smallButton),
                     onPressed: () {
                       Provider.of<AppState>(context, listen: false)
                           .auth

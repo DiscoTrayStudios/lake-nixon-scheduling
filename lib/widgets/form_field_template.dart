@@ -30,7 +30,9 @@ class FormFieldTemplate extends StatelessWidget {
     return TextFormField(
         key: Key(formkey),
         controller: controller,
-        decoration: InputDecoration(hintText: decoration),
+        decoration: InputDecoration(
+            hintText: decoration,
+            hintStyle: Theme.of(context).textTheme.bodyMedium),
         keyboardType: keyboardType);
   }
 }
