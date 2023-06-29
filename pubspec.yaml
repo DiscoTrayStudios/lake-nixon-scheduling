@@ -90,9 +90,27 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Fruit
+    - family: Nunito
       fonts:
-        - asset: fonts/FruitDays.ttf
+        - asset: fonts/Nunito-VariableFont_wght.ttf
+    - family: Itim
+      fonts:
+        - asset: fonts/Itim-Regular.ttf
+    - family: Comic Neue
+      fonts:
+        - asset: fonts/ComicNeue-Regular.ttf
+        - asset: fonts/ComicNeue-Bold.ttf
+          weight: 700
+        - asset: fonts/ComicNeue-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: fonts/ComicNeue-Italic.ttf
+          style: italic
+        - asset: fonts/ComicNeue-Light.ttf
+          weight: 300
+        - asset: fonts/ComicNeue-LightItalic.ttf
+          weight: 300
+          style: italic
 
   #   - family: Schyler
   #     fonts:
