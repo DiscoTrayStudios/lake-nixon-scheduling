@@ -47,6 +47,10 @@ TextTheme lakeNixonTextTheme() {
         fontWeight: FontWeight.w300,
         wordSpacing: 0.4,
         color: Colors.white),
+    displaySmall: TextStyle(
+        fontSize: 42,
+        fontWeight: FontWeight.w400,
+        color: Color.fromRGBO(81, 146, 78, 1)),
   );
 }
 
@@ -63,6 +67,10 @@ extension LakeNixonTextTheme on TextTheme {
       fontSize: 18, fontWeight: FontWeight.w300, color: Colors.white);
   TextStyle get smallButton => const TextStyle(
       fontSize: 32, fontWeight: FontWeight.w300, color: Colors.white);
+  TextStyle get mediumButton => const TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w400,
+      color: Color.fromRGBO(81, 146, 78, 1));
   TextStyle get largeButton => const TextStyle(
       fontSize: 42, fontWeight: FontWeight.w400, color: Colors.white);
   TextStyle get pageHeader => const TextStyle(
