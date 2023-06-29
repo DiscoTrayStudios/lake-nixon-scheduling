@@ -1,5 +1,6 @@
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/activity.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -53,18 +54,12 @@ class _ActivitySelectorState extends State<ActivitySelector> {
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
-      leading: Text("Activities",
-          style: TextStyle(
-              fontSize: Theme.of(context).textTheme.headlineSmall!.fontSize,
-              color: Theme.of(context).colorScheme.secondary)),
+      leading: Text("Activities", style: Theme.of(context).textTheme.bodyLarge),
       title: Align(
         alignment: Alignment.centerRight,
         child: DropdownButton(
-          iconEnabledColor: Theme.of(context).colorScheme.tertiary,
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.tertiary,
-              fontStyle: Theme.of(context).textTheme.titleMedium!.fontStyle,
-              fontFamily: "Fruit"),
+          iconEnabledColor: Theme.of(context).colorScheme.nixonBrown,
+          style: Theme.of(context).textTheme.bodyMedium,
           value: widget.dropdownValue,
           items: createDropdown(
               Provider.of<AppState>(context).activities, widget.selectedDate),

@@ -19,8 +19,10 @@ class ApptSelectorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(appointment.subject!),
-      subtitle: Text(appointment.group!),
+      title: Text(appointment.subject!,
+          style: Theme.of(context).textTheme.titleLarge),
+      subtitle: Text(appointment.group!,
+          style: Theme.of(context).textTheme.titleMedium),
       tileColor: appointment.color!,
       onTap: () {
         Navigator.pushNamed(context, '/appointmentEditorPage',

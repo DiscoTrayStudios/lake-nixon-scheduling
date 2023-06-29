@@ -1,5 +1,6 @@
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/activity.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,7 +38,7 @@ class ActivitySelectorItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(activity.name),
+      title: Text(activity.name, style: Theme.of(context).textTheme.bodyLarge),
       subtitle: Column(
         children: [
           Row(children: [
@@ -47,19 +48,25 @@ class ActivitySelectorItem extends StatelessWidget {
             const Spacer(flex: 2)
           ]),
           if (selected)
-            Row(
-              children: [
-                Text(activity.desc),
-                const Spacer(),
-                Consumer<AppState>(
-                    builder: ((BuildContext context, AppState appState, _) {
-                  return IconButton(
-                      icon: Icon(Icons.delete_forever,
-                          color: Theme.of(context).colorScheme.error),
-                      onPressed: () => onDelete(context, activity, appState));
-                }))
-              ],
-            )
+            Column(children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text(activity.desc),
+              const SizedBox(
+                height: 10,
+              ),
+              Consumer<AppState>(
+                  builder: ((BuildContext context, AppState appState, _) {
+                return ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.error)),
+                    child: Text('Delete',
+                        style: Theme.of(context).textTheme.titleLarge),
+                    onPressed: () => onDelete(context, activity, appState));
+              }))
+            ])
         ],
       ),
       onTap: () => onPressed(index),

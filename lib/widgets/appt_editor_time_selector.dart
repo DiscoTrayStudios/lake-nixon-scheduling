@@ -74,10 +74,7 @@ class _TimeSelectorState extends State<TimeSelector> {
                   child: Text(
                       DateFormat('EEE, MMM dd yyyy').format(widget.startDate),
                       textAlign: TextAlign.left,
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleLarge!.fontSize,
-                          color: Theme.of(context).colorScheme.tertiary)),
+                      style: Theme.of(context).textTheme.bodyMedium),
                 ),
               ),
               Expanded(

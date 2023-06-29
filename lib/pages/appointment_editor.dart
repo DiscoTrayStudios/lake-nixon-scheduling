@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
+import 'package:final_project/objects/theme.dart';
 
 Color theme = const Color(0xffffffff);
 
@@ -254,7 +255,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
           appState.filterGroupsByTime(_startDate, _endDate, _selectedGroups));
       return Scaffold(
           appBar: AppBar(
-            backgroundColor: Theme.of(context).colorScheme.primary,
+            backgroundColor: Theme.of(context).colorScheme.nixonGreen,
             leading: IconButton(
               icon: Icon(
                 Icons.close,
@@ -421,19 +422,16 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       child: Center(
                           child: Text(
                         widget.selectedAppointment!.group!,
-                        style: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .headlineSmall!
-                                .fontSize,
-                            color: widget.selectedAppointment!.color!),
+                        style: Theme.of(context).textTheme.bodyLarge,
                       )),
                     ),
                   Divider(
                       height: 1.0,
                       thickness: 3,
-                      color: Color.lerp(Theme.of(context).colorScheme.tertiary,
-                          Colors.white, 0.5)),
+                      color: Color.lerp(
+                          Theme.of(context).colorScheme.nixonBrown,
+                          Colors.white,
+                          0.5)),
                   TimeSelector(
                       _startDate,
                       _endDate,
@@ -445,8 +443,10 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   Divider(
                       height: 1.0,
                       thickness: 3,
-                      color: Color.lerp(Theme.of(context).colorScheme.tertiary,
-                          Colors.white, 0.5)),
+                      color: Color.lerp(
+                          Theme.of(context).colorScheme.nixonBrown,
+                          Colors.white,
+                          0.5)),
                   ListTile(
                     contentPadding: const EdgeInsets.all(5),
                     leading: const Icon(
@@ -454,10 +454,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                     ),
                     title: Text(
                       appState.lookupActivityByName(_subject).desc,
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleLarge!.fontSize,
-                          color: Theme.of(context).colorScheme.tertiary),
+                      style: Theme.of(context).textTheme.bodyMedium,
                     ),
                   ),
                 ],
