@@ -6,7 +6,7 @@ ThemeData lakeNixonTheme() {
       colorScheme: lakeNixonColorScheme(),
 
       // Define the default font family.
-      fontFamily: 'Fruit',
+      fontFamily: 'Itim',
 
       // Define the default `TextTheme`. Use this to specify the default
       // text styling for headlines, titles, bodies of text, and more.
@@ -14,54 +14,67 @@ ThemeData lakeNixonTheme() {
 }
 
 ColorScheme lakeNixonColorScheme() {
-  Color nixonBlue = const Color.fromRGBO(165, 223, 249, 1);
-  Color nixonYellow = const Color.fromRGBO(255, 248, 153, 1);
-  Color nixonBrown = const Color.fromRGBO(137, 116, 73, 1);
-  Color nixonGreen = const Color.fromRGBO(81, 146, 78, 1);
-
-  return ColorScheme(
-      brightness: Brightness.light,
-      primary: nixonBlue,
-      onPrimary: nixonBrown,
-      secondary: nixonGreen,
-      onSecondary: const Color(0xffffffff),
-      tertiary: nixonBrown,
-      onTertiary: const Color(0xffffffff),
-      error: const Color(0xffe47373),
-      onError: const Color(0xffffffff),
-      background: const Color(0xffffffff),
-      onBackground: nixonBrown,
-      surface: const Color(0xffffffff),
-      onSurface: nixonBrown,
-      surfaceVariant: nixonYellow,
-      onSurfaceVariant: nixonBrown,
-      outline: nixonBrown);
+  return const ColorScheme.light(
+      primary: Color.fromRGBO(81, 146, 78, 1),
+      secondary: Color.fromRGBO(137, 116, 73, 1),
+      tertiary: Color.fromRGBO(165, 223, 249, 1));
 }
 
 TextTheme lakeNixonTextTheme() {
   return const TextTheme(
-    displayLarge: TextStyle(fontSize: 57, fontWeight: FontWeight.w400),
-    displayMedium: TextStyle(fontSize: 45, fontWeight: FontWeight.w400),
-    displaySmall: TextStyle(fontSize: 36, fontWeight: FontWeight.w400),
-    headlineLarge: TextStyle(fontSize: 32, fontWeight: FontWeight.w400),
-    headlineMedium: TextStyle(fontSize: 28, fontWeight: FontWeight.w400),
-    headlineSmall: TextStyle(fontSize: 24, fontWeight: FontWeight.w400),
-    titleLarge: TextStyle(fontSize: 22, fontWeight: FontWeight.w300),
-    titleMedium:
-        TextStyle(fontSize: 16, fontWeight: FontWeight.w300, wordSpacing: 0.15),
-    titleSmall:
-        TextStyle(fontSize: 14, fontWeight: FontWeight.w300, wordSpacing: 0.1),
-    bodyLarge:
-        TextStyle(fontSize: 16, fontWeight: FontWeight.w400, wordSpacing: 0.15),
-    bodyMedium:
-        TextStyle(fontSize: 14, fontWeight: FontWeight.w400, wordSpacing: 0.25),
-    bodySmall:
-        TextStyle(fontSize: 12, fontWeight: FontWeight.w400, wordSpacing: 0.4),
-    labelLarge:
-        TextStyle(fontSize: 14, fontWeight: FontWeight.w300, wordSpacing: 0.1),
-    labelMedium:
-        TextStyle(fontSize: 12, fontWeight: FontWeight.w300, wordSpacing: 0.5),
-    labelSmall:
-        TextStyle(fontSize: 11, fontWeight: FontWeight.w300, wordSpacing: 0.5),
+    bodyLarge: TextStyle(
+        fontSize: 26,
+        fontWeight: FontWeight.w900,
+        wordSpacing: 0.15,
+        color: Color.fromRGBO(81, 146, 78, 1)),
+    bodyMedium: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w900,
+        wordSpacing: 0.25,
+        color: Color.fromRGBO(137, 116, 73, 1)),
+    bodySmall: TextStyle(
+        fontSize: 12,
+        fontWeight: FontWeight.w900,
+        wordSpacing: 0.4,
+        color: Color.fromRGBO(137, 116, 73, 1)),
+    titleLarge: TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w900,
+        wordSpacing: 0.4,
+        color: Colors.white),
+    titleMedium: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w900,
+        wordSpacing: 0.4,
+        color: Colors.white),
+    displaySmall: TextStyle(
+        fontSize: 42,
+        fontWeight: FontWeight.w900,
+        color: Color.fromRGBO(81, 146, 78, 1)),
   );
+}
+
+extension LakeNixonColorScheme on ColorScheme {
+  Color get nixonBlue => const Color.fromRGBO(165, 223, 249, 1);
+  Color get nixonBrown => const Color.fromRGBO(137, 116, 73, 1);
+  Color get nixonGreen => const Color.fromRGBO(81, 146, 78, 1);
+}
+
+extension LakeNixonTextTheme on TextTheme {
+  TextStyle get appBarTitle => const TextStyle(
+      fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white);
+  TextStyle get appBarFilter => const TextStyle(
+      fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white);
+  TextStyle get smallButton => const TextStyle(
+      fontSize: 32, fontWeight: FontWeight.w900, color: Colors.white);
+  TextStyle get mediumButton => const TextStyle(
+      fontSize: 20,
+      fontWeight: FontWeight.w900,
+      color: Color.fromRGBO(81, 146, 78, 1));
+  TextStyle get largeButton => const TextStyle(
+      fontSize: 42, fontWeight: FontWeight.w900, color: Colors.white);
+  TextStyle get pageHeader => const TextStyle(
+      fontSize: 32,
+      fontWeight: FontWeight.w900,
+      color: Color.fromRGBO(137, 116, 73, 1));
 }

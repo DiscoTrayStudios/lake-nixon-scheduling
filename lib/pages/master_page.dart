@@ -1,4 +1,5 @@
 import 'package:final_project/objects/screen_arguments.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:final_project/objects/group.dart';
@@ -28,8 +29,8 @@ class _MasterPageState extends State<MasterPage> {
         appBar: AppBar(
           //automaticallyImplyLeading: false,
           title: Text("Master Calendar",
-              style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
-          backgroundColor: Theme.of(context).colorScheme.primary,
+              style: Theme.of(context).textTheme.appBarTitle),
+          backgroundColor: Theme.of(context).colorScheme.nixonGreen,
         ),
         body: Padding(
             padding: const EdgeInsets.all(10),
@@ -38,32 +39,20 @@ class _MasterPageState extends State<MasterPage> {
                 Container(
                     alignment: Alignment.center,
                     padding: const EdgeInsets.all(10),
-                    height: 80,
                     child: Text(
-                      'Lake Nixon',
-                      style: TextStyle(
-                          //nixonblue
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .fontSize),
+                      'Calendar Options',
+                      style: Theme.of(context).textTheme.pageHeader,
                     )),
                 Container(
                   padding: const EdgeInsets.all(10),
-                  height: 80,
+                  height: 100,
                   child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.secondary)),
+                            Theme.of(context).colorScheme.nixonGreen)),
                     child: Text(
                       "View Activities",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.onSecondary,
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .fontSize),
+                      style: Theme.of(context).textTheme.largeButton,
                     ),
                     onPressed: () {
                       Navigator.pushNamed(context, '/activityEditorPage');
@@ -72,18 +61,13 @@ class _MasterPageState extends State<MasterPage> {
                 ),
                 Container(
                   padding: const EdgeInsets.all(10),
-                  height: 80,
+                  height: 100,
                   child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.secondary)),
-                    child: Text("View Master Calendar",
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSecondary,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .headlineLarge!
-                                .fontSize)),
+                            Theme.of(context).colorScheme.nixonGreen)),
+                    child: Text("View Calendar",
+                        style: Theme.of(context).textTheme.largeButton),
                     onPressed: () {
                       masterPush();
                     },

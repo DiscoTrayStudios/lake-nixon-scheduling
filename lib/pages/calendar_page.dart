@@ -11,6 +11,7 @@ import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:final_project/pages/appointment_editor.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
+import 'package:final_project/objects/theme.dart';
 
 //late bool isUser;
 
@@ -198,8 +199,8 @@ class _CalendarPageState extends State<CalendarPage> {
         appBar: AppBar(
           flexibleSpace: const FlexibleSpaceBar(),
           title: Text("${widget.group.name} calendar",
-              style: TextStyle(color: Theme.of(context).colorScheme.tertiary)),
-          backgroundColor: Theme.of(context).colorScheme.primary,
+              style: Theme.of(context).textTheme.appBarTitle),
+          backgroundColor: Theme.of(context).colorScheme.nixonGreen,
           actions: [
             MultiSelectDialogField(
               title: const Text("Filter Groups"),
@@ -207,7 +208,8 @@ class _CalendarPageState extends State<CalendarPage> {
               initialValue: _selectedGroups,
               chipDisplay: MultiSelectChipDisplay<Group>.none(),
               buttonIcon: const Icon(Icons.filter_list),
-              buttonText: const Text('Groups'),
+              buttonText: Text('Groups',
+                  style: Theme.of(context).textTheme.appBarFilter),
               onConfirm: (results) {
                 setState(() {
                   _selectedGroups = results;
@@ -221,7 +223,8 @@ class _CalendarPageState extends State<CalendarPage> {
               initialValue: _selectedActivities,
               chipDisplay: MultiSelectChipDisplay<String>.none(),
               buttonIcon: const Icon(Icons.filter_list),
-              buttonText: const Text('Activities'),
+              buttonText: Text('Activities',
+                  style: Theme.of(context).textTheme.appBarFilter),
               onConfirm: (results) {
                 setState(() {
                   _selectedActivities = results;

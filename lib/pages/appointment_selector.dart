@@ -2,6 +2,7 @@ import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/objects/screen_arguments.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:final_project/widgets/appt_selector_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -83,7 +84,9 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
     }
 
     return Scaffold(
-        appBar: AppBar(title: const Text('Select Appointment')),
+        appBar: AppBar(
+            title: Text('Select Appointment',
+                style: Theme.of(context).textTheme.appBarTitle)),
         body: ListView.builder(
           itemCount: _appointments.length,
           itemBuilder: (BuildContext context, int index) {
@@ -97,6 +100,8 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
               Navigator.pushNamed(context, '/appointmentEditorPage',
                   arguments: args);
             },
-            child: const Icon(Icons.add)));
+            backgroundColor: Theme.of(context).colorScheme.nixonGreen,
+            child: Icon(Icons.add,
+                color: Theme.of(context).colorScheme.onPrimary)));
   }
 }

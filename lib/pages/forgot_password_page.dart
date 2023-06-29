@@ -1,3 +1,4 @@
+import 'package:final_project/objects/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -44,44 +45,23 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     onTap: () => Navigator.pop(context),
                     child: const Icon(Icons.close),
                   ),
-                  const Image(
-                    image: AssetImage('images/lakenixonlogo.png'),
-                    alignment: Alignment.centerRight,
-                    height: 200,
-                  ),
-                  const SizedBox(height: 70),
-                  Text(
-                    'Forgot Password?',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.displayMedium!.fontSize,
-                      //nixonbrown
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
-                  ),
+                  Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(0),
+                      child: const Image(
+                          image: AssetImage('images/lakenixonlogo.png'))),
+                  Text('Forgot Password?',
+                      textAlign: TextAlign.right,
+                      style: Theme.of(context).textTheme.displaySmall),
                   const SizedBox(height: 10),
                   Text(
-                    'Enter your email below to be sent a link to reset password.',
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.titleMedium!.fontSize,
-                      color: Colors.black,
-                    ),
+                    'Enter your email below to be sent a link to reset your password.',
+                    style: Theme.of(context).textTheme.bodyMedium,
                   ),
-                  const SizedBox(height: 20),
-                  Text(
-                    'E-mail',
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.titleLarge!.fontSize,
-                      fontFamily: 'Fruit',
-                      color: Colors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 30),
                   TextField(
                     controller: _emailController,
+                    style: Theme.of(context).textTheme.headlineSmall,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: 'E-mail',
@@ -91,7 +71,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.secondary)),
+                            Theme.of(context).colorScheme.nixonGreen)),
                     onPressed: () async {
                       if (_emailController.text.isEmpty) {
                         Fluttertoast.showToast(
@@ -188,20 +168,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     },
                     child: Text(
                       "Submit",
-                      style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleLarge!.fontSize,
-                          color: Theme.of(context).colorScheme.onSecondary),
+                      style: Theme.of(context).textTheme.smallButton,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Text(
                     '(Note: Also check junk mailbox for link).',
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
+                    style: Theme.of(context).textTheme.bodyMedium,
                   )
                 ],
               ),
