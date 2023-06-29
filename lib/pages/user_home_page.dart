@@ -1,3 +1,4 @@
+import 'package:final_project/objects/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -33,9 +34,7 @@ class _UserHomePageState extends State<UserHomePage> {
             automaticallyImplyLeading: false,
             title: Text(
               "Welcome to Lake Nixon!",
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: Theme.of(context).textTheme.displaySmall!.fontSize),
+              style: Theme.of(context).textTheme.appBarTitle,
             )),
         body: Padding(
             padding: const EdgeInsets.all(10),
@@ -51,15 +50,10 @@ class _UserHomePageState extends State<UserHomePage> {
                       child: ElevatedButton(
                         style: ButtonStyle(
                             backgroundColor: MaterialStatePropertyAll<Color>(
-                                Theme.of(context).colorScheme.secondary)),
+                                Theme.of(context).colorScheme.nixonGreen)),
                         child: Text(
                           'Select Group',
-                          style: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .displayLarge!
-                                  .fontSize,
-                              color: Theme.of(context).colorScheme.onSecondary),
+                          style: Theme.of(context).textTheme.largeButton,
                         ),
                         onPressed: () {
                           groupPagePush();
@@ -72,15 +66,10 @@ class _UserHomePageState extends State<UserHomePage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                         backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.tertiary)),
+                            Theme.of(context).colorScheme.nixonBrown)),
                     child: Text(
                       "Logout",
-                      style: TextStyle(
-                          fontSize: Theme.of(context)
-                              .textTheme
-                              .headlineLarge!
-                              .fontSize,
-                          color: Theme.of(context).colorScheme.onTertiary),
+                      style: Theme.of(context).textTheme.smallButton,
                     ),
                     onPressed: () {
                       logout();
