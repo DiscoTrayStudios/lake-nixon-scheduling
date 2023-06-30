@@ -40,6 +40,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       child: ElevatedButton(
                         key: const Key('groupsNavButton'),
                         style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0),
+                            )),
                             backgroundColor: MaterialStatePropertyAll<Color>(
                                 Theme.of(context).colorScheme.nixonGreen)),
                         child: Text("Groups",
@@ -55,6 +59,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   child: ElevatedButton(
                     key: const Key('masterCalendarNavButton'),
                     style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                        )),
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.nixonGreen)),
                     child: Text("Master Calendar",
@@ -70,10 +79,18 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   child: ElevatedButton(
                     key: const Key('logOutNavButton'),
                     style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                        )),
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.nixonBrown)),
-                    child: Text("Log Out",
-                        style: Theme.of(context).textTheme.smallButton),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 6, 10, 10),
+                      child: Text("Log Out",
+                          style: Theme.of(context).textTheme.smallButton),
+                    ),
                     onPressed: () {
                       Provider.of<AppState>(context, listen: false)
                           .auth
