@@ -78,7 +78,7 @@ class _TimeSelectorState extends State<TimeSelector> {
                 ),
               ),
               Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: TimeSelectorDropdown(
                       startTime: widget.rangeStartTime,
                       endTime: TimeOfDay(
@@ -93,7 +93,7 @@ class _TimeSelectorState extends State<TimeSelector> {
             title: Row(children: <Widget>[
               const Spacer(flex: 7),
               Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: TimeSelectorDropdown(
                       startTime: TimeOfDay(
                           hour: widget.rangeStartTime.hour + 1, minute: 0),
