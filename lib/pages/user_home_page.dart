@@ -24,7 +24,7 @@ class _UserHomePageState extends State<UserHomePage> {
   }
 
   Future<void> logoutScreenPush() async {
-    await Navigator.pushReplacementNamed(context, '/loginScreen');
+    await Navigator.pushReplacementNamed(context, '/loginPage');
   }
 
   @override

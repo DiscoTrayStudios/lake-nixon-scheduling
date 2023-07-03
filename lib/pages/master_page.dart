@@ -48,6 +48,11 @@ class _MasterPageState extends State<MasterPage> {
                   height: 100,
                   child: ElevatedButton(
                     style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                        )),
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.nixonGreen)),
                     child: Text(
@@ -64,6 +69,11 @@ class _MasterPageState extends State<MasterPage> {
                   height: 100,
                   child: ElevatedButton(
                     style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                        )),
                         backgroundColor: MaterialStatePropertyAll<Color>(
                             Theme.of(context).colorScheme.nixonGreen)),
                     child: Text("View Calendar",
