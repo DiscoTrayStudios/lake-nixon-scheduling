@@ -40,6 +40,7 @@ class _GroupSelectorState extends State<GroupSelector> {
       contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
       //This is where the group select field is
       title: MultiSelectDialogField(
+        decoration: const BoxDecoration(),
         title:
             Text("Assign Groups", style: Theme.of(context).textTheme.bodyLarge),
         buttonText:
@@ -50,7 +51,12 @@ class _GroupSelectorState extends State<GroupSelector> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Theme.of(context).colorScheme.onPrimary)),
         items: createCheckboxGroups(widget.availableGroups),
+        itemsTextStyle: Theme.of(context).textTheme.bodyMedium,
+        selectedItemsTextStyle: Theme.of(context).textTheme.bodyMedium,
         initialValue: widget.selectedGroups,
+        confirmText: Text('Ok', style: Theme.of(context).textTheme.bodyLarge),
+        cancelText:
+            Text('Cancel', style: Theme.of(context).textTheme.bodyLarge),
         onConfirm: (results) => widget.onConfirm(results),
       ),
     );
