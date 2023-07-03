@@ -198,45 +198,100 @@ class _CalendarPageState extends State<CalendarPage> {
       return Scaffold(
         appBar: AppBar(
           flexibleSpace: const FlexibleSpaceBar(),
-          title: Text("${widget.group.name} calendar",
+          title: Text(widget.group.name,
               style: Theme.of(context).textTheme.appBarTitle),
           backgroundColor: Theme.of(context).colorScheme.nixonGreen,
-          actions: [
-            MultiSelectDialogField(
-              title: const Text("Filter Groups"),
-              items: createCheckboxGroups(appState.groups),
-              initialValue: _selectedGroups,
-              chipDisplay: MultiSelectChipDisplay<Group>.none(),
-              buttonIcon: const Icon(Icons.filter_list),
-              buttonText: Text('Groups',
-                  style: Theme.of(context).textTheme.appBarFilter),
-              onConfirm: (results) {
-                setState(() {
-                  _selectedGroups = results;
-                  //assignments[widget.group] = _selectedGroups;
-                });
-              },
-            ),
-            MultiSelectDialogField(
-              title: const Text("Filter Activities"),
-              items: createCheckboxActivities(appState.activities),
-              initialValue: _selectedActivities,
-              chipDisplay: MultiSelectChipDisplay<String>.none(),
-              buttonIcon: const Icon(Icons.filter_list),
-              buttonText: Text('Activities',
-                  style: Theme.of(context).textTheme.appBarFilter),
-              onConfirm: (results) {
-                setState(() {
-                  _selectedActivities = results;
-                  //assignments[widget.group] = _selectedGroups;
-                });
-              },
-            ),
-          ],
         ),
         body: Row(children: <Widget>[
           Expanded(
-            child: Container(color: theme, child: calendar),
+            child: Container(
+                color: theme,
+                child: Stack(children: [
+                  calendar,
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.nixonGreen,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                            padding: const EdgeInsets.fromLTRB(15, 8, 15, 5),
+                            constraints: const BoxConstraints(
+                                maxHeight: 60, maxWidth: 150),
+                            child: MultiSelectDialogField(
+                              decoration: const BoxDecoration(),
+                              colorator: (Group group) => group.color,
+                              title: Text("Filter Groups",
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              items: createCheckboxGroups(appState.groups),
+                              itemsTextStyle:
+                                  Theme.of(context).textTheme.bodyMedium,
+                              selectedItemsTextStyle:
+                                  Theme.of(context).textTheme.bodyMedium,
+                              initialValue: _selectedGroups,
+                              chipDisplay: MultiSelectChipDisplay<Group>.none(),
+                              buttonIcon: const Icon(Icons.filter_list,
+                                  color: Colors.white),
+                              buttonText: Text('Groups',
+                                  style:
+                                      Theme.of(context).textTheme.appBarFilter),
+                              onConfirm: (results) {
+                                setState(() {
+                                  _selectedGroups = results;
+                                  //assignments[widget.group] = _selectedGroups;
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).colorScheme.nixonGreen,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(30),
+                              ),
+                            ),
+                            padding: const EdgeInsets.fromLTRB(15, 8, 15, 5),
+                            constraints: const BoxConstraints(
+                                maxHeight: 60, maxWidth: 150),
+                            child: MultiSelectDialogField(
+                              decoration: const BoxDecoration(),
+                              title: Text("Filter Activities",
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              items:
+                                  createCheckboxActivities(appState.activities),
+                              itemsTextStyle:
+                                  Theme.of(context).textTheme.bodyMedium,
+                              selectedItemsTextStyle:
+                                  Theme.of(context).textTheme.bodyMedium,
+                              initialValue: _selectedActivities,
+                              chipDisplay:
+                                  MultiSelectChipDisplay<String>.none(),
+                              buttonIcon: const Icon(Icons.filter_list,
+                                  color: Colors.white),
+                              buttonText: Text('Activities',
+                                  style:
+                                      Theme.of(context).textTheme.appBarFilter),
+                              onConfirm: (results) {
+                                setState(() {
+                                  _selectedActivities = results;
+                                  //assignments[widget.group] = _selectedGroups;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ])),
           ),
         ]),
       );

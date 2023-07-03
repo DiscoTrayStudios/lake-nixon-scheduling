@@ -96,6 +96,9 @@ flutter:
     - family: Itim
       fonts:
         - asset: fonts/Itim-Regular.ttf
+    - family: Work Sans
+      fonts:
+        - asset: fonts/WorkSans-VariableFont_wght.ttf
     - family: Comic Neue
       fonts:
         - asset: fonts/ComicNeue-Regular.ttf

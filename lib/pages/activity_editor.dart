@@ -1,6 +1,7 @@
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/lake_appointment.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:final_project/widgets/activity_selector_item.dart';
 import 'package:final_project/widgets/confirm_popup_dialog.dart';
 import 'package:final_project/widgets/form_field_template.dart';
@@ -45,7 +46,8 @@ class _ActivityEditorState extends State<ActivityEditor> {
   /// appointments associated with the activity.
   void onActivityDelete(
       BuildContext context, Activity activity, AppState appState) async {
-    confirmNavPopup(context, 'Close editor?', 'All changes will be lost.',
+    confirmNavPopup(
+        context, 'Delete Activity?', 'Deleted activities cannot be recovered.',
         (context) async {
       List<LakeAppointment> apps =
           appState.lakeAppointmentsByActivity(activity.name);
@@ -141,7 +143,7 @@ class _ActivityEditorState extends State<ActivityEditor> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Send'),
+              child: const Text('Add'),
             ),
           ],
         );
@@ -152,31 +154,34 @@ class _ActivityEditorState extends State<ActivityEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Activity'), actions: [
-        IconButton(
-            onPressed: () {
-              setState(() {
-                _activityInfoPopupForm(context);
-              });
-            },
-            icon: const Icon(Icons.add))
-      ]),
-      body: Consumer<AppState>(
-        builder: (BuildContext context, AppState appState, Widget? child) {
-          return ListView.separated(
-              itemCount: appState.activities.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ActivitySelectorItem(
-                    appState.activities[index],
-                    _selectedIndex == index,
-                    index,
-                    onActivityPressed,
-                    onActivityDelete);
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider();
-              });
-        },
+      appBar: AppBar(
+          title: Text('Select Activity',
+              style: Theme.of(context).textTheme.appBarTitle),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    _activityInfoPopupForm(context);
+                  });
+                },
+                icon: const Icon(Icons.add))
+          ]),
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Consumer<AppState>(
+          builder: (BuildContext context, AppState appState, Widget? child) {
+            return ListView.builder(
+                itemCount: appState.activities.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ActivitySelectorItem(
+                      appState.activities[index],
+                      _selectedIndex == index,
+                      index,
+                      onActivityPressed,
+                      onActivityDelete);
+                });
+          },
+        ),
       ),
     );
   }
