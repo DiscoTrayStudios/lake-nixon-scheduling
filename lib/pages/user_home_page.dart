@@ -29,6 +29,8 @@ class _UserHomePageState extends State<UserHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size? size = MediaQuery.of(context).size;
+    bool isHandset = size.width < 600;
     return Scaffold(
         appBar: AppBar(
             automaticallyImplyLeading: false,
@@ -38,15 +40,29 @@ class _UserHomePageState extends State<UserHomePage> {
             )),
         body: Padding(
             padding: const EdgeInsets.all(10),
-            child: Column(
-              children: <Widget>[
-                const Image(
-                  image: AssetImage('images/lakenixonlogo.png'),
-                ),
+            child: Flex(
+              direction: isHandset ? Axis.vertical : Axis.horizontal,
+              children: [
                 Container(
-                    width: MediaQuery.of(context).size.width,
-                    padding: const EdgeInsets.all(10),
-                    child: SizedBox(
+                  constraints: BoxConstraints(
+                    maxHeight:
+                        isHandset ? (size.height / 2) - 20 : size.height - 20,
+                    maxWidth:
+                        isHandset ? size.width - 20 : (size.width / 2) - 20,
+                  ),
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                  child: const Image(
+                    image: AssetImage('images/lakenixonlogo.png'),
+                  ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      width:
+                          isHandset ? size.width - 20 : (size.width / 2) - 20,
+                      padding: const EdgeInsets.all(10),
                       height: 80,
                       child: ElevatedButton(
                         style: ButtonStyle(
@@ -64,31 +80,33 @@ class _UserHomePageState extends State<UserHomePage> {
                           groupPagePush();
                         },
                       ),
-                    )),
-                Container(
-                  alignment: Alignment.bottomCenter,
-                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-                  child: SizedBox(
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
-                          )),
-                          backgroundColor: MaterialStatePropertyAll<Color>(
-                              Theme.of(context).colorScheme.nixonBrown)),
-                      child: Text(
-                        "Logout",
-                        style: Theme.of(context).textTheme.smallButton,
-                      ),
-                      onPressed: () {
-                        logout();
-                        logoutScreenPush();
-                      },
                     ),
-                  ),
+                    Container(
+                      alignment: Alignment.bottomCenter,
+                      padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                      child: SizedBox(
+                        height: 50,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
+                              )),
+                              backgroundColor: MaterialStatePropertyAll<Color>(
+                                  Theme.of(context).colorScheme.nixonBrown)),
+                          child: Text(
+                            "Logout",
+                            style: Theme.of(context).textTheme.smallButton,
+                          ),
+                          onPressed: () {
+                            logout();
+                            logoutScreenPush();
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             )));
