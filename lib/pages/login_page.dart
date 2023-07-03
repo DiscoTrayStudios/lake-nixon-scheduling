@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project/objects/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (FirebaseAuth.instance.currentUser != null) {
       //groupPagePush();
       Provider.of<AppState>(context, listen: false);
-      startPagePush();
+      Navigator.pushReplacementNamed(context, '/authSplashPage');
     }
   }
 
@@ -30,10 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
       context,
       '/forgotPasswordPage',
     );
-  }
-
-  Future<void> startPagePush() async {
-    await Navigator.pushReplacementNamed(context, '/authSplashPage');
   }
 
   @override
