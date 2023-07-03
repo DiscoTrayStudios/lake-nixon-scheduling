@@ -45,13 +45,14 @@ class _GroupPageState extends State<GroupPage> {
         .doc(user?.uid)
         .get();
 
-    setState(() {
+    try {
       admin = snap['admin'];
-    });
-
-    if (admin) {
-      adminPush(group);
-    } else {
+      if (admin) {
+        adminPush(group);
+      } else {
+        userPush(group);
+      }
+    } on StateError catch (_) {
       userPush(group);
     }
   }
@@ -70,7 +71,7 @@ class _GroupPageState extends State<GroupPage> {
             style: Theme.of(context).textTheme.appBarTitle),
       ),
       body: Container(
-          padding: const EdgeInsets.fromLTRB(10, 20, 40, 0),
+          padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
           child: ListView(
             // padding: const EdgeInsets.symmetric(vertical: 8.0),
             children: Provider.of<AppState>(context).groups.map((group) {

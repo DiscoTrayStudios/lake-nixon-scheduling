@@ -234,6 +234,9 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       _originalStartDate = widget.selectedAppointment!.startTime!;
       _originalSubject = widget.selectedAppointment!.subject!;
       _originalGroup = widget.selectedAppointment!.group!;
+
+      _startTime = TimeOfDay(hour: _startDate.hour, minute: _startDate.minute);
+      _endTime = TimeOfDay(hour: _endDate.hour, minute: _endDate.minute);
     } else {
       _subject = '';
       _notes = '';
@@ -462,7 +465,8 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
           floatingActionButton: widget.selectedAppointment == null
               ? null
               : FloatingActionButton(
-                  child: const Icon(Icons.delete_forever),
+                  backgroundColor: Theme.of(context).colorScheme.error,
+                  child: const Icon(Icons.delete_forever, color: Colors.white),
                   onPressed: () {
                     confirmNavPopup(context, 'Delete Appointment?',
                         "Deleted appointments can't be recovered.",

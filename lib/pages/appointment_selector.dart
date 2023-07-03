@@ -87,11 +87,15 @@ class _AppointmentSelectorState extends State<AppointmentSelector> {
         appBar: AppBar(
             title: Text('Select Appointment',
                 style: Theme.of(context).textTheme.appBarTitle)),
-        body: ListView.builder(
-          itemCount: _appointments.length,
-          itemBuilder: (BuildContext context, int index) {
-            return ApptSelectorItem(_appointments[index], widget.selectedDate);
-          },
+        body: Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListView.builder(
+            itemCount: _appointments.length,
+            itemBuilder: (BuildContext context, int index) {
+              return ApptSelectorItem(
+                  _appointments[index], widget.selectedDate);
+            },
+          ),
         ),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
