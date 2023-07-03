@@ -46,7 +46,8 @@ class _ActivityEditorState extends State<ActivityEditor> {
   /// appointments associated with the activity.
   void onActivityDelete(
       BuildContext context, Activity activity, AppState appState) async {
-    confirmNavPopup(context, 'Close editor?', 'All changes will be lost.',
+    confirmNavPopup(
+        context, 'Delete Activity?', 'Deleted activities cannot be recovered.',
         (context) async {
       List<LakeAppointment> apps =
           appState.lakeAppointmentsByActivity(activity.name);
@@ -165,22 +166,22 @@ class _ActivityEditorState extends State<ActivityEditor> {
                 },
                 icon: const Icon(Icons.add))
           ]),
-      body: Consumer<AppState>(
-        builder: (BuildContext context, AppState appState, Widget? child) {
-          return ListView.separated(
-              itemCount: appState.activities.length,
-              itemBuilder: (BuildContext context, int index) {
-                return ActivitySelectorItem(
-                    appState.activities[index],
-                    _selectedIndex == index,
-                    index,
-                    onActivityPressed,
-                    onActivityDelete);
-              },
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider();
-              });
-        },
+      body: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Consumer<AppState>(
+          builder: (BuildContext context, AppState appState, Widget? child) {
+            return ListView.builder(
+                itemCount: appState.activities.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ActivitySelectorItem(
+                      appState.activities[index],
+                      _selectedIndex == index,
+                      index,
+                      onActivityPressed,
+                      onActivityDelete);
+                });
+          },
+        ),
       ),
     );
   }

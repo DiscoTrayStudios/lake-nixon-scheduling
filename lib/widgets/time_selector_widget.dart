@@ -43,6 +43,7 @@ class _TimeSelectorDropdownState extends State<TimeSelectorDropdown> {
 
   @override
   Widget build(BuildContext context) {
+    _dropdownItems.clear();
     for (TimeOfDay time = widget.startTime;
         time.hour <= widget.endTime.hour;
         time = time.replacing(hour: time.hour + 1)) {

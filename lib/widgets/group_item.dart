@@ -1,5 +1,4 @@
 import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 
 typedef TileTappedCallback = Function(Group group);

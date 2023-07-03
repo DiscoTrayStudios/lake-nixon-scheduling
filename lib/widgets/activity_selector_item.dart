@@ -1,5 +1,6 @@
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/activity.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,48 +37,61 @@ class ActivitySelectorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Text(activity.name, style: Theme.of(context).textTheme.bodyLarge),
-      subtitle: Column(
-        children: [
-          if (selected)
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text('- Age ${activity.ageMin}+'),
-                    Text('- No more than ${activity.groupMax} groups'),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(activity.desc),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ]),
+    return Card(
+        elevation: 10.0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+              color: Color.lerp(
+                  Theme.of(context).colorScheme.nixonBrown, Colors.white, 0.3)!,
+              width: 3),
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: ListTile(
+            title: Text(activity.name,
+                style: Theme.of(context).textTheme.bodyLarge),
+            subtitle: Column(
+              children: [
+                if (selected)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text('- Age ${activity.ageMin}+'),
+                          Text('- No more than ${activity.groupMax} groups'),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(activity.desc),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                        ]),
+                  ),
+                if (selected)
+                  Consumer<AppState>(
+                      builder: ((BuildContext context, AppState appState, _) {
+                    return ElevatedButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.0),
+                            )),
+                            backgroundColor: MaterialStatePropertyAll<Color>(
+                                Theme.of(context).colorScheme.error)),
+                        child: Text('Delete',
+                            style: Theme.of(context).textTheme.titleLarge),
+                        onPressed: () => onDelete(context, activity, appState));
+                  }))
+              ],
             ),
-          if (selected)
-            Consumer<AppState>(
-                builder: ((BuildContext context, AppState appState, _) {
-              return ElevatedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.0),
-                      )),
-                      backgroundColor: MaterialStatePropertyAll<Color>(
-                          Theme.of(context).colorScheme.error)),
-                  child: Text('Delete',
-                      style: Theme.of(context).textTheme.titleLarge),
-                  onPressed: () => onDelete(context, activity, appState));
-            }))
-        ],
-      ),
-      onTap: () => onPressed(index),
-    );
+            onTap: () => onPressed(index),
+          ),
+        ));
   }
 }
