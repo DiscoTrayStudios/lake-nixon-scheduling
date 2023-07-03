@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/app_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:provider/provider.dart';
 
 class AuthSplashScreen extends StatefulWidget {
   const AuthSplashScreen({super.key});
@@ -15,28 +18,31 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
   @override
   void initState() {
     super.initState();
-    _checkAuth();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _checkAuth(context);
+    });
   }
 
   Future<void> userPagePush() async {
-    await Navigator.pushReplacementNamed(context, '/userSplashPage');
+    Navigator.pushReplacementNamed(context, '/userSplashPage');
   }
 
   Future<void> startPagePush() async {
     await Navigator.pushReplacementNamed(context, '/startPage');
   }
 
-  void _checkAuth() async {
-    User? user = FirebaseAuth.instance.currentUser;
+  void _checkAuth(BuildContext context) async {
+    User? user = Provider.of<AppState>(context, listen: false).auth.currentUser;
 
-    final DocumentSnapshot snap = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(user?.uid)
-        .get();
+    final DocumentSnapshot snap =
+        await Provider.of<AppState>(context, listen: false)
+            .firestore
+            .collection("users")
+            .doc(user?.uid)
+            .get();
 
     try {
-      admin = snap['admin'];
-      if (admin) {
+      if (snap['admin']) {
         startPagePush();
       } else {
         userPagePush();
