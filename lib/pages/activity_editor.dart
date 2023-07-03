@@ -1,6 +1,7 @@
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/lake_appointment.dart';
+import 'package:final_project/objects/theme.dart';
 import 'package:final_project/widgets/activity_selector_item.dart';
 import 'package:final_project/widgets/confirm_popup_dialog.dart';
 import 'package:final_project/widgets/form_field_template.dart';
@@ -141,7 +142,7 @@ class _ActivityEditorState extends State<ActivityEditor> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Send'),
+              child: const Text('Add'),
             ),
           ],
         );
@@ -152,15 +153,18 @@ class _ActivityEditorState extends State<ActivityEditor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Select Activity'), actions: [
-        IconButton(
-            onPressed: () {
-              setState(() {
-                _activityInfoPopupForm(context);
-              });
-            },
-            icon: const Icon(Icons.add))
-      ]),
+      appBar: AppBar(
+          title: Text('Select Activity',
+              style: Theme.of(context).textTheme.appBarTitle),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    _activityInfoPopupForm(context);
+                  });
+                },
+                icon: const Icon(Icons.add))
+          ]),
       body: Consumer<AppState>(
         builder: (BuildContext context, AppState appState, Widget? child) {
           return ListView.separated(

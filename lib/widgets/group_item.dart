@@ -21,23 +21,21 @@ class GroupItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 10.0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+            color: Color.lerp(group.color, Colors.black, 0.3)!, width: 3),
+        borderRadius: BorderRadius.circular(30),
+      ),
       child: ListTile(
         //group.color
         tileColor: group.color,
         iconColor: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(
-          side: BorderSide(
-              color: Theme.of(context).colorScheme.outline, width: 1),
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(30),
         ),
         onTap: () {
           onTap(group);
         },
-        leading: CircleAvatar(
-          backgroundColor: Colors.white,
-          child: Text(group.abbrev(),
-              style: Theme.of(context).textTheme.pageHeader),
-        ),
         title: Text(
           group.name,
           style: TextStyle(

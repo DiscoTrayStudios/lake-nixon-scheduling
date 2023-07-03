@@ -24,7 +24,7 @@ class _UserHomePageState extends State<UserHomePage> {
   }
 
   Future<void> logoutScreenPush() async {
-    await Navigator.pushReplacementNamed(context, '/loginScreen');
+    await Navigator.pushReplacementNamed(context, '/loginPage');
   }
 
   @override
@@ -38,17 +38,22 @@ class _UserHomePageState extends State<UserHomePage> {
             )),
         body: Padding(
             padding: const EdgeInsets.all(10),
-            child: ListView(
+            child: Column(
               children: <Widget>[
                 const Image(
                   image: AssetImage('images/lakenixonlogo.png'),
                 ),
                 Container(
+                    width: MediaQuery.of(context).size.width,
                     padding: const EdgeInsets.all(10),
                     child: SizedBox(
                       height: 80,
                       child: ElevatedButton(
                         style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(40.0),
+                            )),
                             backgroundColor: MaterialStatePropertyAll<Color>(
                                 Theme.of(context).colorScheme.nixonGreen)),
                         child: Text(
@@ -62,19 +67,27 @@ class _UserHomePageState extends State<UserHomePage> {
                     )),
                 Container(
                   alignment: Alignment.bottomCenter,
-                  padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStatePropertyAll<Color>(
-                            Theme.of(context).colorScheme.nixonBrown)),
-                    child: Text(
-                      "Logout",
-                      style: Theme.of(context).textTheme.smallButton,
+                  padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                  child: SizedBox(
+                    height: 50,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25.0),
+                          )),
+                          backgroundColor: MaterialStatePropertyAll<Color>(
+                              Theme.of(context).colorScheme.nixonBrown)),
+                      child: Text(
+                        "Logout",
+                        style: Theme.of(context).textTheme.smallButton,
+                      ),
+                      onPressed: () {
+                        logout();
+                        logoutScreenPush();
+                      },
                     ),
-                    onPressed: () {
-                      logout();
-                      logoutScreenPush();
-                    },
                   ),
                 ),
               ],
