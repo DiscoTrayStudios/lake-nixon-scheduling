@@ -44,6 +44,7 @@ dependencies:
   fluttertoast: ^8.1.1
   provider: ^6.0.5
   intl: ^0.18.1
+  calendar_view: ^1.0.3
 
 dev_dependencies:
   flutter_test:
