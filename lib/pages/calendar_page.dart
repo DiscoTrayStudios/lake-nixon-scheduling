@@ -242,6 +242,10 @@ class _CalendarPageState extends State<CalendarPage> {
                               buttonText: Text('Groups',
                                   style:
                                       Theme.of(context).textTheme.appBarFilter),
+                              confirmText: Text('Ok',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              cancelText: Text('Cancel',
+                                  style: Theme.of(context).textTheme.bodyLarge),
                               onConfirm: (results) {
                                 setState(() {
                                   _selectedGroups = results;
@@ -263,6 +267,8 @@ class _CalendarPageState extends State<CalendarPage> {
                                 maxHeight: 60, maxWidth: 150),
                             child: MultiSelectDialogField(
                               decoration: const BoxDecoration(),
+                              colorator: (_) =>
+                                  Theme.of(context).colorScheme.nixonGreen,
                               title: Text("Filter Activities",
                                   style: Theme.of(context).textTheme.bodyLarge),
                               items:
@@ -279,6 +285,10 @@ class _CalendarPageState extends State<CalendarPage> {
                               buttonText: Text('Activities',
                                   style:
                                       Theme.of(context).textTheme.appBarFilter),
+                              confirmText: Text('Ok',
+                                  style: Theme.of(context).textTheme.bodyLarge),
+                              cancelText: Text('Cancel',
+                                  style: Theme.of(context).textTheme.bodyLarge),
                               onConfirm: (results) {
                                 setState(() {
                                   _selectedActivities = results;
