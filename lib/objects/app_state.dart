@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import 'package:final_project/objects/activity.dart';
 import 'package:final_project/objects/lake_appointment.dart';
@@ -242,16 +241,16 @@ class AppState extends ChangeNotifier {
   /// The group name is taken as a [String]. Note that the returned appointments
   /// are of the [Appointment] type used by the calendar, not the [LakeAppointment]
   /// used elsewhere.
-  List<Appointment> appointmentsByGroup(String group) {
-    List<Appointment> apps = [];
-    for (LakeAppointment app in _appointments) {
-      if (app.group == group) {
-        apps.add(createAppointment(
-            app.startTime, app.endTime, app.color, app.subject));
-      }
-    }
-    return apps;
-  }
+  // List<Appointment> appointmentsByGroup(String group) {
+  //   List<Appointment> apps = [];
+  //   for (LakeAppointment app in _appointments) {
+  //     if (app.group == group) {
+  //       apps.add(createAppointment(
+  //           app.startTime, app.endTime, app.color, app.subject));
+  //     }
+  //   }
+  //   return apps;
+  // }
 
   /// Returns the [LakeAppointment]s of the given activity type.
   List<LakeAppointment> lakeAppointmentsByActivity(String activity) {
@@ -268,54 +267,54 @@ class AppState extends ChangeNotifier {
   ///
   /// If either of the lists of [Activity]s or [Group]s are empty, that filter is
   /// not applied.
-  List<Appointment> allAppointments(
-      List<Group> selectedGroups, List<String> selectedActivities) {
-    List<Appointment> apps = [];
-    if (selectedGroups.isEmpty && selectedActivities.isEmpty) {
-      if (_appointments.isNotEmpty) {
-        for (LakeAppointment app in _appointments) {
-          apps.add(createAppointment(
-              app.startTime, app.endTime, app.color, app.subject));
-        }
-      }
-    } else if (selectedGroups.isNotEmpty && selectedActivities.isNotEmpty) {
-      if (_appointments.isNotEmpty) {
-        var groupNames = [];
-        for (Group group in selectedGroups) {
-          groupNames.add(group.name);
-        }
-        for (LakeAppointment app in _appointments) {
-          if (groupNames.contains(app.group) &&
-              selectedActivities.contains(app.subject)) {
-            apps.add(createAppointment(
-                app.startTime, app.endTime, app.color, app.subject));
-          }
-        }
-      }
-    } else if (selectedGroups.isNotEmpty) {
-      if (_appointments.isNotEmpty) {
-        var groupNames = [];
-        for (Group group in selectedGroups) {
-          groupNames.add(group.name);
-        }
-        for (LakeAppointment app in _appointments) {
-          if (groupNames.contains(app.group)) {
-            apps.add(createAppointment(
-                app.startTime, app.endTime, app.color, app.subject));
-          }
-        }
-      }
-    } else {
-      for (LakeAppointment app in _appointments) {
-        if (selectedActivities.contains(app.subject)) {
-          apps.add(createAppointment(
-              app.startTime, app.endTime, app.color, app.subject));
-        }
-      }
-    }
+  // List<Appointment> allAppointments(
+  //     List<Group> selectedGroups, List<String> selectedActivities) {
+  //   List<Appointment> apps = [];
+  //   if (selectedGroups.isEmpty && selectedActivities.isEmpty) {
+  //     if (_appointments.isNotEmpty) {
+  //       for (LakeAppointment app in _appointments) {
+  //         apps.add(createAppointment(
+  //             app.startTime, app.endTime, app.color, app.subject));
+  //       }
+  //     }
+  //   } else if (selectedGroups.isNotEmpty && selectedActivities.isNotEmpty) {
+  //     if (_appointments.isNotEmpty) {
+  //       var groupNames = [];
+  //       for (Group group in selectedGroups) {
+  //         groupNames.add(group.name);
+  //       }
+  //       for (LakeAppointment app in _appointments) {
+  //         if (groupNames.contains(app.group) &&
+  //             selectedActivities.contains(app.subject)) {
+  //           apps.add(createAppointment(
+  //               app.startTime, app.endTime, app.color, app.subject));
+  //         }
+  //       }
+  //     }
+  //   } else if (selectedGroups.isNotEmpty) {
+  //     if (_appointments.isNotEmpty) {
+  //       var groupNames = [];
+  //       for (Group group in selectedGroups) {
+  //         groupNames.add(group.name);
+  //       }
+  //       for (LakeAppointment app in _appointments) {
+  //         if (groupNames.contains(app.group)) {
+  //           apps.add(createAppointment(
+  //               app.startTime, app.endTime, app.color, app.subject));
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     for (LakeAppointment app in _appointments) {
+  //       if (selectedActivities.contains(app.subject)) {
+  //         apps.add(createAppointment(
+  //             app.startTime, app.endTime, app.color, app.subject));
+  //       }
+  //     }
+  //   }
 
-    return apps;
-  }
+  //   return apps;
+  // }
 
   /// Places appointments into the Firestore database.
   ///
@@ -348,15 +347,15 @@ class AppState extends ChangeNotifier {
   ///
   /// Effectively the same as the [Appointment] constructor, but with additional
   /// logic to convert the color field from a string if necessary.
-  Appointment createAppointment(startTime, endTime, color, subject) {
-    if (color.runtimeType == String) {
-      String valueString = color.split("(0x")[1].split(")")[0];
-      int value = int.parse(valueString, radix: 16);
-      color = Color(value);
-    }
-    return Appointment(
-        startTime: startTime, endTime: endTime, color: color, subject: subject);
-  }
+  // Appointment createAppointment(startTime, endTime, color, subject) {
+  //   if (color.runtimeType == String) {
+  //     String valueString = color.split("(0x")[1].split(")")[0];
+  //     int value = int.parse(valueString, radix: 16);
+  //     color = Color(value);
+  //   }
+  //   return Appointment(
+  //       startTime: startTime, endTime: endTime, color: color, subject: subject);
+  // }
 
   /// Checks if adding [Group]s to an [Activity] would exceed its capacity.
   ///

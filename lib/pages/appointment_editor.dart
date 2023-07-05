@@ -5,7 +5,6 @@ import 'package:final_project/widgets/appt_editor_time_selector.dart';
 import 'package:final_project/widgets/confirm_popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:final_project/objects/app_state.dart';
@@ -51,7 +50,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
   /// The selected end time of the appointment.
   late TimeOfDay _endTime;
-  bool _isAllDay = false;
 
   String? _notes;
 
@@ -341,33 +339,21 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                             fontSize: 16.0);
                       }
                     } else {
-                      final List<Appointment> appointments = <Appointment>[];
-
                       bool groupsOccupied = true;
 
                       Map<String, Map<String, dynamic>> groupToApp = {};
                       for (Group g in _selectedGroups) {
-                        Appointment tmpApp = Appointment(
-                          startTime: _startDate,
-                          endTime: _endDate,
-                          color: g.color,
-                          notes: _notes,
-                          isAllDay: _isAllDay,
-                          subject: _subject,
-                        );
                         //Turning the already created appointment into something we can put into firebase
                         Map<String, dynamic> appMap = {
-                          "start_time": tmpApp.startTime,
-                          "end_time": tmpApp.endTime,
-                          "color": tmpApp.color.toString(),
-                          "notes": tmpApp.notes,
-                          "subject": tmpApp.subject,
+                          "start_time": _startDate,
+                          "end_time": _endDate,
+                          "color": g.color.toString(),
+                          "notes": _notes,
+                          "subject": _subject,
                           "group": g.name,
                         };
                         //associating a group with a specific appointment
                         groupToApp[g.name] = appMap;
-                        //adding here it what actually puts in on the calendar
-                        appointments.add(tmpApp);
 
                         if (!appState.checkGroupTime(
                             group: g.name,
