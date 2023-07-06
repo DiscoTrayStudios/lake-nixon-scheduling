@@ -1,6 +1,4 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/activity_editor.dart';
 import 'package:final_project/pages/appointment_editor.dart';

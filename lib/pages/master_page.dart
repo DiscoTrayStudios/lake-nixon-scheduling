@@ -2,8 +2,6 @@ import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 
-import 'package:final_project/objects/group.dart';
-
 class MasterPage extends StatefulWidget {
   const MasterPage({Key? key}) : super(key: key);
 
