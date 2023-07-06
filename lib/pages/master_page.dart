@@ -15,11 +15,8 @@ class _MasterPageState extends State<MasterPage> {
   Future<void> masterPush() async {
     await Navigator.pushNamed(context, '/calendarPage',
         arguments: CalendarArguments(
-          group:
-              const Group(name: "Admin", color: Color(0xFFFFFFFF), age: 99999),
-          title: "Master",
-          isUser: true,
-          master: true,
+          title: "Master Calendar",
+          isUser: false,
         ));
   }
 

@@ -27,14 +27,14 @@ class _GroupPageState extends State<GroupPage> {
 
   Future<void> userPush(Group group) async {
     await Navigator.pushNamed(context, '/calendarPage',
-        arguments: CalendarArguments(
-            title: group.name, group: group, isUser: true, master: false));
+        arguments:
+            CalendarArguments(title: group.name, group: group, isUser: true));
   }
 
   Future<void> adminPush(Group group) async {
     await Navigator.pushNamed(context, '/calendarPage',
-        arguments: CalendarArguments(
-            title: group.name, group: group, isUser: false, master: false));
+        arguments:
+            CalendarArguments(title: group.name, group: group, isUser: false));
   }
 
   void _checkAuth(Group group) async {

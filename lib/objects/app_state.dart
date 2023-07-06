@@ -236,22 +236,6 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Returns all of the [Appointment]s that the given group is assigned to.
-  ///
-  /// The group name is taken as a [String]. Note that the returned appointments
-  /// are of the [Appointment] type used by the calendar, not the [LakeAppointment]
-  /// used elsewhere.
-  // List<Appointment> appointmentsByGroup(String group) {
-  //   List<Appointment> apps = [];
-  //   for (LakeAppointment app in _appointments) {
-  //     if (app.group == group) {
-  //       apps.add(createAppointment(
-  //           app.startTime, app.endTime, app.color, app.subject));
-  //     }
-  //   }
-  //   return apps;
-  // }
-
   /// Returns the [LakeAppointment]s of the given activity type.
   List<LakeAppointment> lakeAppointmentsByActivity(String activity) {
     List<LakeAppointment> apps = [];
@@ -267,54 +251,46 @@ class AppState extends ChangeNotifier {
   ///
   /// If either of the lists of [Activity]s or [Group]s are empty, that filter is
   /// not applied.
-  // List<Appointment> allAppointments(
-  //     List<Group> selectedGroups, List<String> selectedActivities) {
-  //   List<Appointment> apps = [];
-  //   if (selectedGroups.isEmpty && selectedActivities.isEmpty) {
-  //     if (_appointments.isNotEmpty) {
-  //       for (LakeAppointment app in _appointments) {
-  //         apps.add(createAppointment(
-  //             app.startTime, app.endTime, app.color, app.subject));
-  //       }
-  //     }
-  //   } else if (selectedGroups.isNotEmpty && selectedActivities.isNotEmpty) {
-  //     if (_appointments.isNotEmpty) {
-  //       var groupNames = [];
-  //       for (Group group in selectedGroups) {
-  //         groupNames.add(group.name);
-  //       }
-  //       for (LakeAppointment app in _appointments) {
-  //         if (groupNames.contains(app.group) &&
-  //             selectedActivities.contains(app.subject)) {
-  //           apps.add(createAppointment(
-  //               app.startTime, app.endTime, app.color, app.subject));
-  //         }
-  //       }
-  //     }
-  //   } else if (selectedGroups.isNotEmpty) {
-  //     if (_appointments.isNotEmpty) {
-  //       var groupNames = [];
-  //       for (Group group in selectedGroups) {
-  //         groupNames.add(group.name);
-  //       }
-  //       for (LakeAppointment app in _appointments) {
-  //         if (groupNames.contains(app.group)) {
-  //           apps.add(createAppointment(
-  //               app.startTime, app.endTime, app.color, app.subject));
-  //         }
-  //       }
-  //     }
-  //   } else {
-  //     for (LakeAppointment app in _appointments) {
-  //       if (selectedActivities.contains(app.subject)) {
-  //         apps.add(createAppointment(
-  //             app.startTime, app.endTime, app.color, app.subject));
-  //       }
-  //     }
-  //   }
+  List<LakeAppointment> filterAppointments(
+      List<Group> selectedGroups, List<String> selectedActivities) {
+    List<LakeAppointment> apps = [];
+    if (selectedGroups.isEmpty && selectedActivities.isEmpty) {
+      apps.addAll(_appointments);
+    } else if (selectedGroups.isNotEmpty && selectedActivities.isNotEmpty) {
+      if (_appointments.isNotEmpty) {
+        var groupNames = [];
+        for (Group group in selectedGroups) {
+          groupNames.add(group.name);
+        }
+        for (LakeAppointment app in _appointments) {
+          if (groupNames.contains(app.group) &&
+              selectedActivities.contains(app.subject)) {
+            apps.add(app);
+          }
+        }
+      }
+    } else if (selectedGroups.isNotEmpty) {
+      if (_appointments.isNotEmpty) {
+        var groupNames = [];
+        for (Group group in selectedGroups) {
+          groupNames.add(group.name);
+        }
+        for (LakeAppointment app in _appointments) {
+          if (groupNames.contains(app.group)) {
+            apps.add(app);
+          }
+        }
+      }
+    } else {
+      for (LakeAppointment app in _appointments) {
+        if (selectedActivities.contains(app.subject)) {
+          apps.add(app);
+        }
+      }
+    }
 
-  //   return apps;
-  // }
+    return apps;
+  }
 
   /// Places appointments into the Firestore database.
   ///
@@ -342,20 +318,6 @@ class AppState extends ChangeNotifier {
     }
     return "$count/$total";
   }
-
-  /// Creates an [Appointment] from the relevant data.
-  ///
-  /// Effectively the same as the [Appointment] constructor, but with additional
-  /// logic to convert the color field from a string if necessary.
-  // Appointment createAppointment(startTime, endTime, color, subject) {
-  //   if (color.runtimeType == String) {
-  //     String valueString = color.split("(0x")[1].split(")")[0];
-  //     int value = int.parse(valueString, radix: 16);
-  //     color = Color(value);
-  //   }
-  //   return Appointment(
-  //       startTime: startTime, endTime: endTime, color: color, subject: subject);
-  // }
 
   /// Checks if adding [Group]s to an [Activity] would exceed its capacity.
   ///

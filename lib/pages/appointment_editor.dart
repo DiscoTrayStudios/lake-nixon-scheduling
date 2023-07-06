@@ -103,12 +103,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     });
   }
 
-  void onAllDaySwitchFlipped(bool value) {
-    setState(() {
-      _isAllDay = value;
-    });
-  }
-
   /// Creates a datepicker, and sets the [_startDate] to the result of the picker.
   ///
   /// Also adjusts the [_endDate] so that they are the same.
