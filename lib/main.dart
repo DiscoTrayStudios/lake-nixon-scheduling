@@ -1,4 +1,6 @@
+import 'package:calendar_view/calendar_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/activity_editor.dart';
 import 'package:final_project/pages/appointment_editor.dart';
@@ -25,20 +27,19 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(ChangeNotifierProvider(
-    create: ((context) =>
-        AppState(FirebaseFirestore.instance, FirebaseAuth.instance)),
-    child: const MyApp(),
-  ));
+      create: ((context) =>
+          AppState(FirebaseFirestore.instance, FirebaseAuth.instance)),
+      child: const LakeNixonApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class LakeNixonApp extends StatelessWidget {
+  const LakeNixonApp({super.key});
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Flutter Demo',
         theme: lakeNixonTheme(),
-        home: checkLogin(Provider.of<AppState>(context).auth),
+        home: checkLogin(Provider.of<AppState>(context, listen: false).auth),
         routes: {
           '/groupsPage': (context) => const GroupPage(title: 'List of Groups'),
           '/masterPage': (context) => const MasterPage(),
@@ -59,10 +60,7 @@ class MyApp extends StatelessWidget {
             final args =
                 ModalRoute.of(context)!.settings.arguments as CalendarArguments;
             return CalendarPage(
-                title: args.title,
-                group: args.group,
-                isUser: args.isUser,
-                master: args.master);
+                title: args.title, group: args.group, isUser: args.isUser);
           },
           '/forgotPasswordPage': (context) => const ForgotPassword(),
           '/authSplashPage': (context) => const AuthSplashScreen(),

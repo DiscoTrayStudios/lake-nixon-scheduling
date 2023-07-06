@@ -24,13 +24,8 @@ class AppointmentSelectorArguments {
 /// A class to store arguments for the calendar screen.
 class CalendarArguments {
   final String title;
-  final Group group;
+  final Group? group;
   final bool isUser;
-  final bool master;
 
-  CalendarArguments(
-      {required this.title,
-      required this.group,
-      required this.isUser,
-      required this.master});
+  CalendarArguments({required this.title, this.group, required this.isUser});
 }
