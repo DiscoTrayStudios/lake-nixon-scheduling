@@ -2,12 +2,10 @@ import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/widgets/appt_selector_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
 import 'appt_selector_item_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<NavigatorObserver>()])
 void main() {
   testWidgets('widget displays appointment info', (tester) async {
     await tester.pumpWidget(MaterialApp(
