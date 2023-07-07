@@ -50,7 +50,7 @@ class _ActivityEditorState extends State<ActivityEditor> {
         context, 'Delete Activity?', 'Deleted activities cannot be recovered.',
         (context) async {
       List<LakeAppointment> apps =
-          appState.lakeAppointmentsByActivity(activity.name);
+          appState.filterAppointments([], [activity.name]);
 
       for (LakeAppointment app in apps) {
         appState.deleteAppt(

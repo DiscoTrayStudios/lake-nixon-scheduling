@@ -236,18 +236,7 @@ class AppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Returns the [LakeAppointment]s of the given activity type.
-  List<LakeAppointment> lakeAppointmentsByActivity(String activity) {
-    List<LakeAppointment> apps = [];
-    for (LakeAppointment app in _appointments) {
-      if (app.subject == activity) {
-        apps.add(app);
-      }
-    }
-    return apps;
-  }
-
-  /// Filters [Appointment] by the given [Group]s and [Activity]s.
+  /// Filters [LakeAppointment] by the given [Group]s and [Activity]s.
   ///
   /// If either of the lists of [Activity]s or [Group]s are empty, that filter is
   /// not applied.
