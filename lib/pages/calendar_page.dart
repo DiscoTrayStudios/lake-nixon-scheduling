@@ -1,8 +1,4 @@
 import 'package:calendar_view/calendar_view.dart';
-import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/objects/lake_event_arranger.dart';
-import 'package:final_project/objects/multi_select_dialog_helpers.dart';
-import 'package:final_project/objects/screen_arguments.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
@@ -11,6 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/group.dart';
 import 'package:final_project/objects/theme.dart';
+import 'package:final_project/widgets/appointment_info_popup.dart';
+import 'package:final_project/objects/lake_appointment.dart';
+import 'package:final_project/objects/lake_event_arranger.dart';
+import 'package:final_project/objects/multi_select_dialog_helpers.dart';
+import 'package:final_project/objects/screen_arguments.dart';
 
 //late bool isUser;
 
@@ -65,6 +66,13 @@ class _CalendarPageState extends State<CalendarPage> {
     super.initState();
   }
 
+  /// A callback for when an empty space is tapped.
+  ///
+  /// If the user an admin, it checks if there are any appointments in the
+  /// selected timeslot and sends the user to the appointment selector. Otherwise,
+  /// the user is sent to the appointment editor.
+  ///
+  /// If the user is not an admin, it does nothing.
   void Function(DateTime) onTapEmpty(AppState appState) {
     return ((DateTime date) {
       if (date.hour >= 7 && date.hour < 18 && !widget.isUser) {
@@ -92,6 +100,10 @@ class _CalendarPageState extends State<CalendarPage> {
     });
   }
 
+  /// A callback for when an event is tapped.
+  ///
+  /// If the user is an admin, they are sent to the appointment selector. Otherwise,
+  /// they are shown a popup with info about the event.
   void Function(List<CalendarEventData<LakeAppointment>>, DateTime) onTapEvent(
       AppState appState) {
     return ((List<CalendarEventData<LakeAppointment>> selectedEvents,
@@ -110,6 +122,8 @@ class _CalendarPageState extends State<CalendarPage> {
                       ? appState.groups
                       : _selectedGroups));
         });
+      } else {
+        appointmentInfoPopup(context, selectedEvents[0].event!);
       }
     });
   }
@@ -131,7 +145,9 @@ class _CalendarPageState extends State<CalendarPage> {
               date: app.startTime!,
               startTime: app.startTime!,
               endTime: app.endTime!,
-              color: app.color!,
+              color: widget.group == null
+                  ? app.color!
+                  : Theme.of(context).colorScheme.nixonBrown,
               description: app.notes!,
               event: app);
       out.add(event);

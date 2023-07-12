@@ -24,14 +24,14 @@ class ApptSelectorItem extends StatelessWidget {
           side: BorderSide(
               color: Color.lerp(appointment.color!, Colors.black, 0.3)!,
               width: 3),
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
           shape: RoundedRectangleBorder(
             side: BorderSide(
                 color: Color.lerp(appointment.color!, Colors.black, 0.3)!,
                 width: 3),
-            borderRadius: BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(10),
           ),
           title: Text(appointment.subject!,
               style: Theme.of(context).textTheme.titleLarge),
