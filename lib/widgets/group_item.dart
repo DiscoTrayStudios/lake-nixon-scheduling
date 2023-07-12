@@ -23,14 +23,14 @@ class GroupItem extends StatelessWidget {
       shape: RoundedRectangleBorder(
         side: BorderSide(
             color: Color.lerp(group.color, Colors.black, 0.3)!, width: 3),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
         //group.color
         tileColor: group.color,
         iconColor: Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(10),
         ),
         onTap: () {
           onTap(group);

@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  'Don\'t have account?',
+                                  'Need an account?',
                                   style: Theme.of(context).textTheme.bodyMedium,
                                 ),
                                 TextButton(

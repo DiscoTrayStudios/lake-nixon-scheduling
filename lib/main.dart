@@ -1,6 +1,4 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/objects/lake_appointment.dart';
 import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/pages/activity_editor.dart';
 import 'package:final_project/pages/appointment_editor.dart';
@@ -17,7 +15,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/pages/admin_home_page.dart';
 import 'package:final_project/firebase_options.dart';
 import 'package:final_project/pages/login_page.dart';
 import 'package:final_project/objects/theme.dart';
@@ -67,7 +64,6 @@ class LakeNixonApp extends StatelessWidget {
           '/userSplashPage': (context) => const UserHomePage(),
           '/signupPage': (context) => const SignupScreen(),
           '/activityEditorPage': (context) => const ActivityEditor(),
-          '/startPage': (context) => const AdminHomePage()
         });
   }
 }

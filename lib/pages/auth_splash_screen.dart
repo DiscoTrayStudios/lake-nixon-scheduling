@@ -28,7 +28,7 @@ class _AuthSplashScreenState extends State<AuthSplashScreen> {
   }
 
   Future<void> startPagePush() async {
-    await Navigator.pushReplacementNamed(context, '/startPage');
+    await Navigator.pushReplacementNamed(context, '/masterPage');
   }
 
   void _checkAuth(BuildContext context) async {

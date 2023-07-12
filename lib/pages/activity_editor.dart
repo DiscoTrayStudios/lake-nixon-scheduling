@@ -110,12 +110,14 @@ class _ActivityEditorState extends State<ActivityEditor> {
             ),
           ),
           actions: <Widget>[
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              key: const Key("OKButton"),
+            ElevatedButton(
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  )),
+                  backgroundColor: MaterialStatePropertyAll<Color>(
+                      Theme.of(context).colorScheme.nixonGreen)),
               onPressed: () async {
                 // This is how you get the database from Firebase
 
@@ -143,7 +145,23 @@ class _ActivityEditorState extends State<ActivityEditor> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text('Add'),
+              child:
+                  Text('Add', style: Theme.of(context).textTheme.smallButton),
+            ),
+            const SizedBox(width: 10),
+            ElevatedButton(
+              style: ButtonStyle(
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                  )),
+                  backgroundColor: MaterialStatePropertyAll<Color>(
+                      Theme.of(context).colorScheme.nixonGreen)),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel',
+                  style: Theme.of(context).textTheme.smallButton),
             ),
           ],
         );
