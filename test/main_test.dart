@@ -1,7 +1,7 @@
+import 'package:final_project/pages/master_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:final_project/pages/admin_home_page.dart';
 import 'package:final_project/pages/login_page.dart';
 
 import 'package:final_project/main.dart';
@@ -19,6 +19,6 @@ void main() {
 
     Widget nextPage = checkLogin(auth);
 
-    expect(nextPage, isInstanceOf<AdminHomePage>());
+    expect(nextPage, isInstanceOf<MasterPage>());
   });
 }
