@@ -1,6 +1,8 @@
+import 'package:final_project/objects/app_state.dart';
 import 'package:final_project/objects/screen_arguments.dart';
 import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MasterPage extends StatefulWidget {
   const MasterPage({Key? key}) : super(key: key);
@@ -78,6 +80,32 @@ class _MasterPageState extends State<MasterPage> {
                     },
                   ),
                 ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: const EdgeInsets.fromLTRB(10, 40, 10, 0),
+                  child: ElevatedButton(
+                    key: const Key('logOutNavButton'),
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(40.0),
+                        )),
+                        backgroundColor: MaterialStatePropertyAll<Color>(
+                            Theme.of(context).colorScheme.nixonBrown)),
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(10, 6, 10, 10),
+                      child: Text("Log Out",
+                          style: Theme.of(context).textTheme.smallButton),
+                    ),
+                    onPressed: () {
+                      Provider.of<AppState>(context, listen: false)
+                          .auth
+                          .signOut();
+                      Navigator.of(context).pushReplacementNamed('/loginPage');
+                    },
+                  ),
+                )
               ],
             )));
   }
