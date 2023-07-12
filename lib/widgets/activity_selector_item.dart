@@ -44,7 +44,7 @@ class ActivitySelectorItem extends StatelessWidget {
               color: Color.lerp(
                   Theme.of(context).colorScheme.nixonBrown, Colors.white, 0.3)!,
               width: 3),
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
           padding: const EdgeInsets.all(10),
