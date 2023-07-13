@@ -3,12 +3,12 @@ import 'package:final_project/objects/multi_select_dialog_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
-// Should be stateless
+typedef OnConfirmCallback = Function(List<Group>);
 
 /// A multi select menu with a chip display to select groups.
 ///
 /// Can take filtered lists of groups, as well as default selections.
-class GroupSelector extends StatefulWidget {
+class GroupSelector extends StatelessWidget {
   /// A multi select menu with a chip display to select groups.
   ///
   /// [this.availableGroups] should be a list of all groups available in a particular
@@ -28,13 +28,6 @@ class GroupSelector extends StatefulWidget {
   final OnConfirmCallback onConfirm;
 
   @override
-  State<GroupSelector> createState() => _GroupSelectorState();
-}
-
-typedef OnConfirmCallback = Function(List<Group>);
-
-class _GroupSelectorState extends State<GroupSelector> {
-  @override
   Widget build(BuildContext context) {
     return ListTile(
       contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
@@ -50,14 +43,14 @@ class _GroupSelectorState extends State<GroupSelector> {
             textStyle: TextStyle(
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Theme.of(context).colorScheme.onPrimary)),
-        items: createCheckboxGroups(widget.availableGroups),
+        items: createCheckboxGroups(availableGroups),
         itemsTextStyle: Theme.of(context).textTheme.bodyMedium,
         selectedItemsTextStyle: Theme.of(context).textTheme.bodyMedium,
-        initialValue: widget.selectedGroups,
+        initialValue: selectedGroups,
         confirmText: Text('Ok', style: Theme.of(context).textTheme.bodyLarge),
         cancelText:
             Text('Cancel', style: Theme.of(context).textTheme.bodyLarge),
-        onConfirm: (results) => widget.onConfirm(results),
+        onConfirm: (results) => onConfirm(results),
       ),
     );
   }

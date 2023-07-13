@@ -2,10 +2,12 @@ import 'package:final_project/widgets/time_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// Should be stateless.
+// typedef OnAllDaySwitcCallback = void Function(bool);
+typedef OnTapCallback = void Function();
+typedef OnTimePickedCallback = void Function(TimeOfDay);
 
 /// A widget to select the date and start and end time for an appointment.
-class TimeSelector extends StatefulWidget {
+class TimeSelector extends StatelessWidget {
   /// A widget to select the date and start and end time for an appointment.
   ///
   /// Takes a default [this.startDate] and [this.endDate], as well as callbacks
@@ -51,15 +53,6 @@ class TimeSelector extends StatefulWidget {
   final TimeOfDay rangeEndTime;
 
   @override
-  State<TimeSelector> createState() => _TimeSelectorState();
-}
-
-// typedef OnAllDaySwitcCallback = void Function(bool);
-typedef OnTapCallback = void Function();
-typedef OnTimePickedCallback = void Function(TimeOfDay);
-
-class _TimeSelectorState extends State<TimeSelector> {
-  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -70,9 +63,8 @@ class _TimeSelectorState extends State<TimeSelector> {
               Expanded(
                 flex: 7,
                 child: GestureDetector(
-                  onTap: () async => widget.onStartDatePicked(),
-                  child: Text(
-                      DateFormat('EEE, MMM dd yyyy').format(widget.startDate),
+                  onTap: () async => onStartDatePicked(),
+                  child: Text(DateFormat('EEE, MMM dd yyyy').format(startDate),
                       textAlign: TextAlign.left,
                       style: Theme.of(context).textTheme.bodyMedium),
                 ),
@@ -80,12 +72,11 @@ class _TimeSelectorState extends State<TimeSelector> {
               Expanded(
                   flex: 4,
                   child: TimeSelectorDropdown(
-                      startTime: widget.rangeStartTime,
-                      endTime: TimeOfDay(
-                          hour: widget.rangeEndTime.hour - 1, minute: 0),
-                      initialTime:
-                          TimeOfDay(hour: widget.startDate.hour, minute: 0),
-                      onTimePicked: widget.onStartTimePicked)),
+                      startTime: rangeStartTime,
+                      endTime:
+                          TimeOfDay(hour: rangeEndTime.hour - 1, minute: 0),
+                      initialTime: TimeOfDay(hour: startDate.hour, minute: 0),
+                      onTimePicked: onStartTimePicked)),
             ])),
         ListTile(
             contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
@@ -95,12 +86,11 @@ class _TimeSelectorState extends State<TimeSelector> {
               Expanded(
                   flex: 4,
                   child: TimeSelectorDropdown(
-                      startTime: TimeOfDay(
-                          hour: widget.rangeStartTime.hour + 1, minute: 0),
-                      endTime: widget.rangeEndTime,
-                      initialTime:
-                          TimeOfDay(hour: widget.endDate.hour, minute: 0),
-                      onTimePicked: widget.onEndTimePicked)),
+                      startTime:
+                          TimeOfDay(hour: rangeStartTime.hour + 1, minute: 0),
+                      endTime: rangeEndTime,
+                      initialTime: TimeOfDay(hour: endDate.hour, minute: 0),
+                      onTimePicked: onEndTimePicked)),
             ])),
       ],
     );

@@ -4,8 +4,6 @@ import 'package:final_project/objects/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// Could be stateless
-
 /// A dropdown to select the activity for an appointment.
 ///
 /// Displays the activity name and the ratio of groups in the activty at the
