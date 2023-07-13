@@ -1,7 +1,7 @@
+import 'package:final_project/pages/auth_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:final_project/pages/admin_home_page.dart';
 import 'package:final_project/pages/login_page.dart';
 
 import 'package:final_project/main.dart';
@@ -14,11 +14,11 @@ void main() {
 
     expect(nextPage, isInstanceOf<LoginScreen>());
   });
-  test('checkLogin should return StartPage when signed in', () {
+  test('checkLogin should return AuthSplashScreen when signed in', () {
     final auth = MockFirebaseAuth(signedIn: true);
 
     Widget nextPage = checkLogin(auth);
 
-    expect(nextPage, isInstanceOf<AdminHomePage>());
+    expect(nextPage, isInstanceOf<AuthSplashScreen>());
   });
 }

@@ -4,8 +4,10 @@ import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 /// Creates checkboxes for each group in [groups].
 List<MultiSelectItem<Group>> createCheckboxGroups(List<Group> groups) {
-  var items =
-      groups.map((group) => MultiSelectItem<Group>(group, group.name)).toList();
+  var items = groups
+      .map((group) =>
+          MultiSelectItem<Group>(group, '${group.name} - Age ${group.age}'))
+      .toList();
   return items;
 }
 

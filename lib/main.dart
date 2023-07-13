@@ -15,7 +15,6 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/pages/admin_home_page.dart';
 import 'package:final_project/firebase_options.dart';
 import 'package:final_project/pages/login_page.dart';
 import 'package:final_project/objects/theme.dart';
@@ -65,7 +64,6 @@ class LakeNixonApp extends StatelessWidget {
           '/userSplashPage': (context) => const UserHomePage(),
           '/signupPage': (context) => const SignupScreen(),
           '/activityEditorPage': (context) => const ActivityEditor(),
-          '/startPage': (context) => const AdminHomePage()
         });
   }
 }

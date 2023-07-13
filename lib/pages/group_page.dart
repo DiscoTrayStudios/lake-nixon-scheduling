@@ -38,12 +38,14 @@ class _GroupPageState extends State<GroupPage> {
   }
 
   void _checkAuth(Group group) async {
-    User? user = FirebaseAuth.instance.currentUser;
+    User? user = Provider.of<AppState>(context, listen: false).auth.currentUser;
 
-    final DocumentSnapshot snap = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(user?.uid)
-        .get();
+    final DocumentSnapshot snap =
+        await Provider.of<AppState>(context, listen: false)
+            .firestore
+            .collection("users")
+            .doc(user?.uid)
+            .get();
 
     try {
       admin = snap['admin'];

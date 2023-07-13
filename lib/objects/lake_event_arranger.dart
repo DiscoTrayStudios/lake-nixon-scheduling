@@ -34,7 +34,9 @@ class LakeEventArranger<T extends Object?> extends EventArranger<T> {
           try {
             debugPrint("Start time or end time of an event can not be null. "
                 "This ${sideEvent.event} will be ignored.");
-          } catch (e) {} // Suppress exceptions.
+          } catch (e) {
+            // Suppress exceptions.
+          }
 
           return true;
         }(), "Can not add event in the list.");
