@@ -231,7 +231,54 @@ class _CalendarPageState extends State<CalendarPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (widget.group == null)
-                    Container(
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.nixonGreen,
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(30),
+                          ),
+                        ),
+                        padding: const EdgeInsets.fromLTRB(15, 8, 15, 5),
+                        constraints:
+                            const BoxConstraints(maxHeight: 60, maxWidth: 150),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          physics: const NeverScrollableScrollPhysics(),
+                          child: MultiSelectDialogField(
+                            decoration: const BoxDecoration(),
+                            colorator: (Group group) => group.color,
+                            title: Text("Filter Groups",
+                                style: Theme.of(context).textTheme.bodyLarge),
+                            items: createCheckboxGroups(appState.groups),
+                            itemsTextStyle:
+                                Theme.of(context).textTheme.bodyMedium,
+                            selectedItemsTextStyle:
+                                Theme.of(context).textTheme.bodyMedium,
+                            initialValue: _selectedGroups,
+                            chipDisplay: MultiSelectChipDisplay<Group>.none(),
+                            buttonIcon: const Icon(Icons.filter_list,
+                                color: Colors.white),
+                            buttonText: Text('Groups',
+                                style:
+                                    Theme.of(context).textTheme.appBarFilter),
+                            confirmText: Text('Ok',
+                                style: Theme.of(context).textTheme.bodyLarge),
+                            cancelText: Text('Cancel',
+                                style: Theme.of(context).textTheme.bodyLarge),
+                            onConfirm: (results) {
+                              setState(() {
+                                _selectedGroups = results;
+                                //assignments[widget.group] = _selectedGroups;
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  if (widget.group == null) const SizedBox(width: 5),
+                  Expanded(
+                    child: Container(
                       decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.nixonGreen,
                         borderRadius: const BorderRadius.all(
@@ -241,70 +288,38 @@ class _CalendarPageState extends State<CalendarPage> {
                       padding: const EdgeInsets.fromLTRB(15, 8, 15, 5),
                       constraints:
                           const BoxConstraints(maxHeight: 60, maxWidth: 150),
-                      child: MultiSelectDialogField(
-                        decoration: const BoxDecoration(),
-                        colorator: (Group group) => group.color,
-                        title: Text("Filter Groups",
-                            style: Theme.of(context).textTheme.bodyLarge),
-                        items: createCheckboxGroups(appState.groups),
-                        itemsTextStyle: Theme.of(context).textTheme.bodyMedium,
-                        selectedItemsTextStyle:
-                            Theme.of(context).textTheme.bodyMedium,
-                        initialValue: _selectedGroups,
-                        chipDisplay: MultiSelectChipDisplay<Group>.none(),
-                        buttonIcon:
-                            const Icon(Icons.filter_list, color: Colors.white),
-                        buttonText: Text('Groups',
-                            style: Theme.of(context).textTheme.appBarFilter),
-                        confirmText: Text('Ok',
-                            style: Theme.of(context).textTheme.bodyLarge),
-                        cancelText: Text('Cancel',
-                            style: Theme.of(context).textTheme.bodyLarge),
-                        onConfirm: (results) {
-                          setState(() {
-                            _selectedGroups = results;
-                            //assignments[widget.group] = _selectedGroups;
-                          });
-                        },
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        child: MultiSelectDialogField(
+                          decoration: const BoxDecoration(),
+                          colorator: (_) =>
+                              Theme.of(context).colorScheme.nixonGreen,
+                          title: Text("Filter Activities",
+                              style: Theme.of(context).textTheme.bodyLarge),
+                          items: createCheckboxActivities(appState.activities),
+                          itemsTextStyle:
+                              Theme.of(context).textTheme.bodyMedium,
+                          selectedItemsTextStyle:
+                              Theme.of(context).textTheme.bodyMedium,
+                          initialValue: _selectedActivities,
+                          chipDisplay: MultiSelectChipDisplay<String>.none(),
+                          buttonIcon: const Icon(Icons.filter_list,
+                              color: Colors.white),
+                          buttonText: Text('Activities',
+                              style: Theme.of(context).textTheme.appBarFilter),
+                          confirmText: Text('Ok',
+                              style: Theme.of(context).textTheme.bodyLarge),
+                          cancelText: Text('Cancel',
+                              style: Theme.of(context).textTheme.bodyLarge),
+                          onConfirm: (results) {
+                            setState(() {
+                              _selectedActivities = results;
+                              //assignments[widget.group] = _selectedGroups;
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                  if (widget.group == null) const SizedBox(width: 5),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.nixonGreen,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                    ),
-                    padding: const EdgeInsets.fromLTRB(15, 8, 15, 5),
-                    constraints:
-                        const BoxConstraints(maxHeight: 60, maxWidth: 150),
-                    child: MultiSelectDialogField(
-                      decoration: const BoxDecoration(),
-                      colorator: (_) =>
-                          Theme.of(context).colorScheme.nixonGreen,
-                      title: Text("Filter Activities",
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      items: createCheckboxActivities(appState.activities),
-                      itemsTextStyle: Theme.of(context).textTheme.bodyMedium,
-                      selectedItemsTextStyle:
-                          Theme.of(context).textTheme.bodyMedium,
-                      initialValue: _selectedActivities,
-                      chipDisplay: MultiSelectChipDisplay<String>.none(),
-                      buttonIcon:
-                          const Icon(Icons.filter_list, color: Colors.white),
-                      buttonText: Text('Activities',
-                          style: Theme.of(context).textTheme.appBarFilter),
-                      confirmText: Text('Ok',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      cancelText: Text('Cancel',
-                          style: Theme.of(context).textTheme.bodyLarge),
-                      onConfirm: (results) {
-                        setState(() {
-                          _selectedActivities = results;
-                          //assignments[widget.group] = _selectedGroups;
-                        });
-                      },
                     ),
                   ),
                   const SizedBox(width: 5),

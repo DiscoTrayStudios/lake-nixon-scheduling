@@ -34,11 +34,11 @@ void main() {
       ],
     ))));
 
-    expect(find.text('Group 2'), findsOneWidget);
+    expect(find.text('Group 2 - Age 10'), findsOneWidget);
 
-    expect(find.text('Group 3'), findsOneWidget);
+    expect(find.text('Group 3 - Age 10'), findsOneWidget);
 
-    expect(find.text('Group 1'), findsNothing);
+    expect(find.text('Group 1 - Age 10'), findsNothing);
   });
   testWidgets('selecting changes displayed widgets', (tester) async {
     await tester.pumpWidget(MaterialApp(
@@ -56,26 +56,26 @@ void main() {
       ],
     ))));
 
-    expect(find.text('Group 2'), findsOneWidget);
+    expect(find.text('Group 2 - Age 10'), findsOneWidget);
 
-    expect(find.text('Group 3'), findsOneWidget);
+    expect(find.text('Group 3 - Age 10'), findsOneWidget);
 
-    expect(find.text('Group 1'), findsNothing);
+    expect(find.text('Group 1 - Age 10'), findsNothing);
 
     await tester.tap(find.text('Assign Groups'));
     await tester.pump();
-    await tester.tap(find.text('Group 1'));
+    await tester.tap(find.text('Group 1 - Age 10'));
     await tester.pump();
-    await tester.tap(find.text('Group 2').last);
+    await tester.tap(find.text('Group 2 - Age 10').last);
     await tester.pump();
     await tester.tap(find.text('Ok'));
     await tester.pump();
 
-    expect(find.text('Group 2'), findsNothing);
+    expect(find.text('Group 2 - Age 10'), findsNothing);
 
-    expect(find.text('Group 3'), findsOneWidget);
+    expect(find.text('Group 3 - Age 10'), findsOneWidget);
 
-    expect(find.text('Group 1'), findsOneWidget);
+    expect(find.text('Group 1 - Age 10'), findsOneWidget);
   });
   testWidgets('onChangedcallback is called', (tester) async {
     bool hasChanged = false;
@@ -96,7 +96,7 @@ void main() {
 
     await tester.tap(find.text('Assign Groups'));
     await tester.pump();
-    await tester.tap(find.text('Group 1'));
+    await tester.tap(find.text('Group 1 - Age 10'));
     await tester.pump();
     await tester.tap(find.text('Ok'));
     await tester.pump();
