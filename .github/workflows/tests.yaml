@@ -1,10 +1,9 @@
 name: RUN APP UNIT TESTS
 
 on:
-  push:
-    pull_request:
-      branches:
-        - main
+  pull_request:
+    branches:
+      - main
 
 env:
   FLUTTER_VERSION: "3.10.5"
