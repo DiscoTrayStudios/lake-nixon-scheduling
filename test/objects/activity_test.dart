@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:final_project/objects/activity.dart';
+import 'package:lake_nixon_scheduling/objects/activity.dart';
 
 void main() {
   test('Activity .toString() returns name', () {

@@ -1,4 +1,4 @@
-import 'package:final_project/objects/screen_arguments.dart';
+import 'package:lake_nixon_scheduling/objects/screen_arguments.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
@@ -6,8 +6,8 @@ import 'package:provider/provider.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 
-import 'package:final_project/pages/group_page.dart';
-import 'package:final_project/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/pages/group_page.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
 
 import 'group_page_test.mocks.dart';
 

@@ -1,4 +1,4 @@
-import 'package:final_project/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
 import 'package:flutter/material.dart';
 
 typedef TileTappedCallback = Function(Group group);

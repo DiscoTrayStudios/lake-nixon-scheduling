@@ -1,9 +1,9 @@
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/objects/screen_arguments.dart';
-import 'package:final_project/objects/theme.dart';
-import 'package:final_project/widgets/appt_selector_item.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/objects/screen_arguments.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
+import 'package:lake_nixon_scheduling/widgets/appt_selector_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

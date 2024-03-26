@@ -1,4 +1,4 @@
-import 'package:final_project/widgets/confirm_popup_dialog.dart';
+import 'package:lake_nixon_scheduling/widgets/confirm_popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

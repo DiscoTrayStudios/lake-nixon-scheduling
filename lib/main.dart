@@ -1,24 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/objects/screen_arguments.dart';
-import 'package:final_project/pages/activity_editor.dart';
-import 'package:final_project/pages/appointment_editor.dart';
-import 'package:final_project/pages/appointment_selector.dart';
-import 'package:final_project/pages/calendar_page.dart';
-import 'package:final_project/pages/forgot_password_page.dart';
-import 'package:final_project/pages/master_page.dart';
-import 'package:final_project/pages/signup_page.dart';
-import 'package:final_project/pages/auth_splash_screen.dart';
-import 'package:final_project/pages/user_home_page.dart';
+import 'package:lake_nixon_scheduling/objects/screen_arguments.dart';
+import 'package:lake_nixon_scheduling/pages/activity_editor.dart';
+import 'package:lake_nixon_scheduling/pages/appointment_editor.dart';
+import 'package:lake_nixon_scheduling/pages/appointment_selector.dart';
+import 'package:lake_nixon_scheduling/pages/calendar_page.dart';
+import 'package:lake_nixon_scheduling/pages/forgot_password_page.dart';
+import 'package:lake_nixon_scheduling/pages/master_page.dart';
+import 'package:lake_nixon_scheduling/pages/signup_page.dart';
+import 'package:lake_nixon_scheduling/pages/auth_splash_screen.dart';
+import 'package:lake_nixon_scheduling/pages/user_home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/firebase_options.dart';
-import 'package:final_project/pages/login_page.dart';
-import 'package:final_project/objects/theme.dart';
-import 'package:final_project/pages/group_page.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/firebase_options.dart';
+import 'package:lake_nixon_scheduling/pages/login_page.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
+import 'package:lake_nixon_scheduling/pages/group_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

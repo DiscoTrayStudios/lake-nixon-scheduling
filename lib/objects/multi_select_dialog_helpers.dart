@@ -1,5 +1,5 @@
-import 'package:final_project/objects/activity.dart';
-import 'package:final_project/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/activity.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 /// Creates checkboxes for each group in [groups].

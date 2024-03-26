@@ -1,10 +1,10 @@
-import 'package:final_project/objects/theme.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-import 'package:final_project/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);

@@ -1,14 +1,14 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/activity.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/objects/activity.dart';
 
 Future<AppState> initializeAppStateTests(
     FakeFirebaseFirestore instance, MockFirebaseAuth auth) async {

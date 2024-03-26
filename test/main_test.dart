@@ -1,10 +1,10 @@
-import 'package:final_project/pages/auth_splash_screen.dart';
+import 'package:lake_nixon_scheduling/pages/auth_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
-import 'package:final_project/pages/login_page.dart';
+import 'package:lake_nixon_scheduling/pages/login_page.dart';
 
-import 'package:final_project/main.dart';
+import 'package:lake_nixon_scheduling/main.dart';
 
 void main() {
   test('checkLogin should return LoginScreen when signed out', () {

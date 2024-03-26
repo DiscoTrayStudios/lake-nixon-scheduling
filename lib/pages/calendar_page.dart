@@ -4,14 +4,14 @@ import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/theme.dart';
-import 'package:final_project/widgets/appointment_info_popup.dart';
-import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/objects/lake_event_arranger.dart';
-import 'package:final_project/objects/multi_select_dialog_helpers.dart';
-import 'package:final_project/objects/screen_arguments.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
+import 'package:lake_nixon_scheduling/widgets/appointment_info_popup.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/objects/lake_event_arranger.dart';
+import 'package:lake_nixon_scheduling/objects/multi_select_dialog_helpers.dart';
+import 'package:lake_nixon_scheduling/objects/screen_arguments.dart';
 
 //late bool isUser;
 

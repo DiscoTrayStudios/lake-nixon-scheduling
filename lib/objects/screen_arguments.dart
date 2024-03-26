@@ -1,5 +1,5 @@
-import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
 
 /// A class to store arguments for the appointment editor screen.
 class AppointmentEditorArguments {

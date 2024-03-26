@@ -72,7 +72,7 @@ class DefaultFirebaseOptions {
     storageBucket: 'testmanager-86d06.appspot.com',
     iosClientId:
         '497761986925-qde7rjbbhii4nja75r05iupdnlou36ch.apps.googleusercontent.com',
-    iosBundleId: 'com.example.finalProject',
+    iosBundleId: 'io.github.discotraystudios.lake_nixon_scheduling',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -84,6 +84,6 @@ class DefaultFirebaseOptions {
     storageBucket: 'testmanager-86d06.appspot.com',
     iosClientId:
         '497761986925-qde7rjbbhii4nja75r05iupdnlou36ch.apps.googleusercontent.com',
-    iosBundleId: 'com.example.finalProject',
+    iosBundleId: 'io.github.discotraystudios.lake_nixon_scheduling',
   );
 }

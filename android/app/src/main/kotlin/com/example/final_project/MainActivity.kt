@@ -1,4 +1,4 @@
-package com.example.final_project
+package io.github.discotraystudios.lake_nixon_scheduling
 
 import io.flutter.embedding.android.FlutterActivity
 

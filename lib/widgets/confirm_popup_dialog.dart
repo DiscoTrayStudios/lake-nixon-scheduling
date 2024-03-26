@@ -1,4 +1,4 @@
-import 'package:final_project/objects/theme.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
 import 'package:flutter/material.dart';
 
 void confirmNavPopup(BuildContext context, String title, String body,
