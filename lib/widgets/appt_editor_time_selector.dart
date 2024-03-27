@@ -1,4 +1,4 @@
-import 'package:final_project/widgets/time_selector_widget.dart';
+import 'package:lake_nixon_scheduling/widgets/time_selector_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

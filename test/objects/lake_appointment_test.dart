@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'dart:ui';
 
-import 'package:final_project/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
 
 void main() {
   test('LakeAppointment toString formats correctly', () {

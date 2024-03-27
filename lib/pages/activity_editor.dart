@@ -1,10 +1,10 @@
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/activity.dart';
-import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/objects/theme.dart';
-import 'package:final_project/widgets/activity_selector_item.dart';
-import 'package:final_project/widgets/confirm_popup_dialog.dart';
-import 'package:final_project/widgets/form_field_template.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/objects/activity.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
+import 'package:lake_nixon_scheduling/widgets/activity_selector_item.dart';
+import 'package:lake_nixon_scheduling/widgets/confirm_popup_dialog.dart';
+import 'package:lake_nixon_scheduling/widgets/form_field_template.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';

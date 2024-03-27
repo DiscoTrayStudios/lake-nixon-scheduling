@@ -1,12 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/screen_arguments.dart';
-import 'package:final_project/objects/theme.dart';
-import 'package:final_project/widgets/group_item.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/objects/screen_arguments.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
+import 'package:lake_nixon_scheduling/widgets/group_item.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:final_project/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
 import 'package:provider/provider.dart';
 
 class GroupPage extends StatefulWidget {

@@ -3,9 +3,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'package:final_project/objects/activity.dart';
-import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/activity.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
 
 /// The state of the app, containing globally used variables and functions.
 ///

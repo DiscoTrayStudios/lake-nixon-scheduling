@@ -1,9 +1,9 @@
-import 'package:final_project/objects/multi_select_dialog_helpers.dart';
+import 'package:lake_nixon_scheduling/objects/multi_select_dialog_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:final_project/objects/activity.dart';
-import 'package:final_project/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/activity.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 void main() {

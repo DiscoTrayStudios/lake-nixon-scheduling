@@ -1,5 +1,5 @@
-import 'package:final_project/objects/group.dart';
-import 'package:final_project/widgets/appt_editor_group_selector.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
+import 'package:lake_nixon_scheduling/widgets/appt_editor_group_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

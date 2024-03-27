@@ -1,5 +1,5 @@
-import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/widgets/appt_selector_item.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/widgets/appt_selector_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';

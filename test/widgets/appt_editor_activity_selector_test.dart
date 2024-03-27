@@ -1,6 +1,6 @@
-import 'package:final_project/objects/activity.dart';
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/widgets/appt_editor_activity_selector.dart';
+import 'package:lake_nixon_scheduling/objects/activity.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/widgets/appt_editor_activity_selector.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';

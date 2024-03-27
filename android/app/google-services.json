@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:497761986925:android:9e0eabfbf22600e358d264",
         "android_client_info": {
-          "package_name": "com.example.final_project"
+          "package_name": "io.github.discotraystudios.lake_nixon_scheduling"
         }
       },
       "oauth_client": [
@@ -35,7 +35,7 @@
               "client_id": "497761986925-qde7rjbbhii4nja75r05iupdnlou36ch.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.finalProject"
+                "bundle_id": "io.github.discotraystudios.lake_nixon_scheduling"
               }
             }
           ]

@@ -1,15 +1,15 @@
-import 'package:final_project/objects/lake_appointment.dart';
-import 'package:final_project/widgets/appt_editor_activity_selector.dart';
-import 'package:final_project/widgets/appt_editor_group_selector.dart';
-import 'package:final_project/widgets/appt_editor_time_selector.dart';
-import 'package:final_project/widgets/confirm_popup_dialog.dart';
+import 'package:lake_nixon_scheduling/objects/lake_appointment.dart';
+import 'package:lake_nixon_scheduling/widgets/appt_editor_activity_selector.dart';
+import 'package:lake_nixon_scheduling/widgets/appt_editor_group_selector.dart';
+import 'package:lake_nixon_scheduling/widgets/appt_editor_time_selector.dart';
+import 'package:lake_nixon_scheduling/widgets/confirm_popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import 'package:final_project/objects/app_state.dart';
-import 'package:final_project/objects/group.dart';
-import 'package:final_project/objects/theme.dart';
+import 'package:lake_nixon_scheduling/objects/app_state.dart';
+import 'package:lake_nixon_scheduling/objects/group.dart';
+import 'package:lake_nixon_scheduling/objects/theme.dart';
 
 Color theme = const Color(0xffffffff);
 
